@@ -2,10 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Services</title>
 </head>
 <body>
-    Result summaries for {{ search }} go here<br/>
-    {{ result_json }}
+    <form action="{% url 'result-summaries' %}" method="get">
+        <input type="text" name="search" id="search" value="{{ search }}"/>
+        <label for="search">Search a keyword</label>
+        <input type="submit" value="Search" />
+    </form>
+    <br/>
+    <br/>
+    {{ result_json | length }} Services<br/>
+    <br/>
+    {% for result in result_json %}
+        <a href="#">{{ result.organisation.name }}</a><br/>
+        {{ result.keywords }}<br/>
+{#        {{ result }}<br/>#}
+        <br/>
+    {% endfor %}
 </body>
 </html>

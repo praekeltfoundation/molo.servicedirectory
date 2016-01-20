@@ -1,4 +1,5 @@
 import base64
+import json
 import urllib2
 
 from django.shortcuts import render
@@ -35,13 +36,12 @@ def result_summaries(request):
 
     serialized_data = urllib2.urlopen(api_request).read()
 
+    search_results = json.loads(serialized_data)
 
     template = loader.get_template('servicedirectory/result_summaries.html')
     context = {
         'search': search_term,
-        'result_json': serialized_data,
+        'result_json': search_results,
     }
-
-
 
     return HttpResponse(template.render(context, request))
