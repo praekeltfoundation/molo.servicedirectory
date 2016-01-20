@@ -17,7 +17,7 @@ install:
 
 script:
   - flake8
-  - py.test --cov=molo_servicedirectory --cov-report=term
+  - py.test --cov=molo --cov-report=term
 
 after_success:
   - coveralls
