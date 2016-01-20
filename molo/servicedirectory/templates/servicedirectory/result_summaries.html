@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Services</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block content %}
+
     <form action="{% url 'result-summaries' %}" method="get">
         <input type="text" name="search" id="search" value="{{ search }}"/>
         <label for="search">Search a keyword</label>
@@ -20,5 +17,5 @@
 {#        {{ result }}<br/>#}
         <br/>
     {% endfor %}
-</body>
-</html>
+
+{% endblock %}

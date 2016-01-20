@@ -2,12 +2,10 @@ import base64
 import json
 import urllib2
 
-from django.shortcuts import render
-
-from django.template import loader
-
 from django.http import HttpResponse
+from django.template import loader
 from molo.servicedirectory import settings
+
 
 def get_json_request_from_servicedirectory(url):
     api_request = urllib2.Request(url)
@@ -24,15 +22,11 @@ def get_json_request_from_servicedirectory(url):
     return json_result
 
 
-def index(request):
-    template = loader.get_template('servicedirectory/index.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
-
 def home(request):
     template = loader.get_template('servicedirectory/home.html')
     context = {}
     return HttpResponse(template.render(context, request))
+
 
 def result_summaries(request):
     search_term = request.GET['search']
@@ -50,6 +44,7 @@ def result_summaries(request):
     }
 
     return HttpResponse(template.render(context, request))
+
 
 def service_detail(request, service_id):
 

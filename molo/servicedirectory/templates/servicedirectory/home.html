@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Service Directory Home</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block content %}
+
 Welcome to Service Directory
 <form action="{% url 'result-summaries' %}" method="get">
     <input type="text" name="search" id="search" />
     <label for="search">Search a keyword</label>
     <input type="submit" value="Search" />
 </form>
-</body>
-</html>
+
+{% endblock %}
