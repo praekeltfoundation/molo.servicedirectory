@@ -15,9 +15,9 @@
     {{ result_json | length }} Services<br/>
     <br/>
     {% for result in result_json %}
-        <a href="#">{{ result.organisation.name }}</a><br/>
+        <a href="{% url 'service-detail' result.id %}?search={{ search }}">{{ result.organisation.name }}</a><br/>
         {{ result.keywords }}<br/>
-{#        {{ result }}<br/>#}
+        {{ result }}<br/>
         <br/>
     {% endfor %}
 </body>
