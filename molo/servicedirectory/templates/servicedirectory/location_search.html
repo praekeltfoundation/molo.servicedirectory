@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1 class="sd-heading search">
+        In what area would you like to find a service?
+    </h1>
+
+    <form action="{% url 'location-results'  %}"
+          method="get" class="sd-search-form">
+
+        <input type="text" name="location" />
+        <input type="submit" value="Search" />
+
+        <input type="hidden" name="search" value="{{ search_term }}" />
+    </form>
+
+{% endblock %}

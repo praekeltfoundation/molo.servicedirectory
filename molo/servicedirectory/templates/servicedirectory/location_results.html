@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1 class="sd-heading search">
+        In what area would you like to find a service?
+    </h1>
+
+    <form action="{% url 'location-results'  %}"
+          method="get" class="sd-search-form">
+
+        <input type="text" name="location" value="{{ location_term }}"/>
+        <input type="submit" value="Search" />
+
+        <input type="hidden" name="search" value="{{ search_term }}" />
+
+    </form>
+
+    {% for prediction in autocomplete_suggestions.predictions %}
+        <a href="{% url 'result-summaries' %}?place_id={{ prediction.place_id }}&search={{ search_term }}">{{ prediction.description }}</a><br/>
+    {% endfor %}
+
+{% endblock %}

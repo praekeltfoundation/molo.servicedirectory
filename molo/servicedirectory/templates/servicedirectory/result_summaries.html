@@ -8,6 +8,12 @@
         <input type="text" name="search" value="{{ search_term }}" />
         <input type="submit" value="Search" />
 
+        <input type="hidden" name="place_id" value="{{ place_id }}" />
+
+        {% if place_latlng %}
+        <input type="hidden" name="place_latlng" value="{{ place_latlng }}">
+        {% endif %}
+
     </form>
 
     {{ search_results | length }} Services<br/>
@@ -17,7 +23,7 @@
     {% for service in search_results %}
 
         <a
-        href="{% url 'service-detail' service.id %}?search={{ search_term }}">
+        href="{% url 'service-detail' service.id %}?search={{ search_term }}">  {# TODO: add location #}
             <h1 class="sd-heading org-name">
                 {{ service.organisation.name }}
             </h1>
