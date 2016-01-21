@@ -76,8 +76,10 @@ def location_results(request):
 
 def result_summaries(request):
     search_term = request.GET['search']
+    location_term = request.GET['location']
     place_id = request.GET['place_id']
     place_latlng = request.GET.get('place_latlng', None)
+    place_formatted_address = request.GET.get('place_formatted_address', None)
 
     if place_latlng is None:
         google_query_parms = QueryDict('', mutable=True)
@@ -87,7 +89,10 @@ def result_summaries(request):
         url = 'https://maps.googleapis.com/maps/api/place/details/json'
         place_details = make_request_to_google_api(url, google_query_parms)
 
-        place_location = place_details.get('result', {}).get('geometry', {}).get('location', None)
+        place_details_result = place_details.get('result', {})
+
+        place_formatted_address = place_details_result.get('formatted_address', None)
+        place_location = place_details_result.get('geometry', {}).get('location', None)
 
         if place_location:
             place_latlng = '{0},{1}'.format(place_location['lat'], place_location['lng'])
@@ -101,11 +106,18 @@ def result_summaries(request):
     url = '{0}service_lookup/?{1}'.format(settings.SERVICE_DIRECTORY_API_BASE_URL, service_directory_query_parms.urlencode())
     search_results = get_json_request_from_servicedirectory(url)
 
+    location_query_parms = QueryDict('', mutable=True)
+    location_query_parms['location'] = location_term
+    location_query_parms['search'] = search_term
+
     template = loader.get_template('servicedirectory/result_summaries.html')
     context = {
         'search_term': search_term,
+        'location_term': location_term,
         'place_id': place_id,
         'place_latlng': place_latlng,
+        'place_formatted_address': place_formatted_address,
+        'change_location_url': '{0}?{1}'.format(reverse('location-results'), location_query_parms.urlencode()),
         'search_results': search_results,
     }
 

@@ -8,15 +8,26 @@
         <input type="text" name="search" value="{{ search_term }}" />
         <input type="submit" value="Search" />
 
+        <input type="hidden" name="location" value="{{ location_term }}" />
         <input type="hidden" name="place_id" value="{{ place_id }}" />
 
         {% if place_latlng %}
         <input type="hidden" name="place_latlng" value="{{ place_latlng }}">
         {% endif %}
 
+        {% if place_formatted_address %}
+        <input type="hidden" name="place_formatted_address" value="{{ place_formatted_address }}">
+        {% endif %}
+
     </form>
 
-    {{ search_results | length }} Services<br/>
+    <span class="sd-location">
+        {{ place_formatted_address }} <a href="{{ change_location_url }}">Change area</a>
+    </span>
+    <br/>
+
+    <span class="sd-num-results">{{ search_results | length }} Services</span>
+    <br/>
 
     <hr/>
 
