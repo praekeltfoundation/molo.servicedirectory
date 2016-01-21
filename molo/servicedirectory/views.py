@@ -38,9 +38,8 @@ def result_summaries(request):
 
     template = loader.get_template('servicedirectory/result_summaries.html')
     context = {
-        'search': search_term,
-        'result_json': search_results,
-        'service_directory_api_base_url': service_directory_api_base_url,
+        'search_term': search_term,
+        'search_results': search_results,
     }
 
     return HttpResponse(template.render(context, request))

@@ -2,11 +2,14 @@
 
 {% block content %}
 
-Welcome to Service Directory
-<form action="{% url 'result-summaries' %}" method="get">
-    <input type="text" name="search" id="search" />
-    <label for="search">Search a keyword</label>
-    <input type="submit" value="Search" />
-</form>
+    <h1 class="sd-heading search">What are you looking for?</h1>
+
+    <form action="{% url 'result-summaries' %}" method="get"
+          class="sd-search-form">
+
+        <input type="text" name="search" />
+        <input type="submit" value="Search" />
+
+    </form>
 
 {% endblock %}

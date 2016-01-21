@@ -1,9 +1,67 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
 
-    Here we see service detail<br/>
-    <br/>
-    {{ service }}
+    <h1 class="sd-heading org-name">{{ service.organisation.name }}</h1>
+
+    <div class="sd-service-categories">
+        {% for category in service.categories %}
+        <span class="category">
+            {{ category.name }}
+        </span><br/>
+        {% endfor %}
+    </div>
+
+    {% if service.age_range_min and service.age_range_max %}
+    <div class="sd-service-ages">
+        {{ service.age_range_min }}-{{ service.age_range_max }} years
+    </div>
+    {% endif %}
+
+    <hr style="clear: both;"/>
+
+    <h1 class="sd-heading service-keywords">What we do</h1>
+
+    <p class="sd-service-keywords">
+        {{ service.keywords }}
+    </p>
+
+    <hr/>
+
+    <h1 class="sd-heading org-contact">Contact</h1>
+
+    <p class="sd-org-contact">
+        {% if service.organisation.telephone %}
+        <span class="tel">
+            {{ service.organisation.telephone }}
+        </span><br/>
+        {% endif %}
+        {% if service.organisation.email %}
+        <span class="email">
+            {{ service.organisation.email }}
+        </span><br/>
+        {% endif %}
+        {% if service.organisation.web %}
+        <span class="web">
+            {{ service.organisation.web }}
+        </span>
+        {% endif %}
+    </p>
+
+    <hr/>
+
+    <h1 class="sd-heading service-tradinghours">Trading Hours</h1>
+
+    <p class="sd-service-tradinghours">
+        {{ service.availability_hours }}
+    </p>
+
+    <hr/>
+
+    <h1 class="sd-heading org-address">Address</h1>
+
+    <p class="sd-org-address">
+        {{ service.organisation.address }}
+    </p>
 
 {% endblock %}

@@ -2,20 +2,33 @@
 
 {% block content %}
 
-    <form action="{% url 'result-summaries' %}" method="get">
-        <input type="text" name="search" id="search" value="{{ search }}"/>
-        <label for="search">Search a keyword</label>
+    <form action="{% url 'result-summaries' %}" method="get"
+          class="sd-search-form">
+
+        <input type="text" name="search" value="{{ search_term }}" />
         <input type="submit" value="Search" />
+
     </form>
-    <br/>
-    <br/>
-    {{ result_json | length }} Services<br/>
-    <br/>
-    {% for result in result_json %}
-        <a href="{% url 'service-detail' result.id %}?search={{ search }}">{{ result.organisation.name }}</a><br/>
-        {{ result.keywords }}<br/>
-{#        {{ result }}<br/>#}
-        <br/>
+
+    {{ search_results | length }} Services<br/>
+
+    <hr/>
+
+    {% for service in search_results %}
+
+        <a
+        href="{% url 'service-detail' service.id %}?search={{ search_term }}">
+            <h1 class="sd-heading org-name">
+                {{ service.organisation.name }}
+            </h1>
+        </a>
+
+        <p class="sd-service-keywords">
+            {{ service.keywords }}
+        </p>
+
+        <hr/>
+
     {% endfor %}
 
 {% endblock %}
