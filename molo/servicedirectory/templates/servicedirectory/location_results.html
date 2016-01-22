@@ -16,8 +16,12 @@
 
     </form>
 
-    {% for prediction in autocomplete_suggestions.predictions %}
-        <a href="{% url 'result-summaries' %}?place_id={{ prediction.place_id }}&location={{ location_term }}&search={{ search_term }}">{{ prediction.description }}</a><br/>
-    {% endfor %}
+    <ul>
+        {% for prediction in autocomplete_suggestions.predictions %}
+            <li>
+                <a href="{% url 'result-summaries' %}?place_id={{ prediction.place_id }}&location={{ location_term }}&search={{ search_term }}">{{ prediction.description }}</a><br/>
+            </li>
+        {% endfor %}
+    </ul>
 
 {% endblock %}
