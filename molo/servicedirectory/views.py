@@ -3,7 +3,7 @@ import json
 import urllib2
 
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, QueryDict, HttpResponseRedirect
+from django.http import HttpResponse, QueryDict
 from django.template import loader
 from molo.servicedirectory import settings
 
@@ -13,7 +13,9 @@ def get_json_request_from_servicedirectory(url):
 
     basic_auth_username = settings.SERVICE_DIRECTORY_API_LOGIN['username']
     basic_auth_password = settings.SERVICE_DIRECTORY_API_LOGIN['password']
-    base64string = base64.encodestring('{0}:{1}'.format(basic_auth_username, basic_auth_password)).replace('\n', '')
+    base64string = base64.encodestring(
+        '{0}:{1}'.format(basic_auth_username, basic_auth_password)
+    ).replace('\n', '')
     api_request.add_header("Authorization", "Basic {0}".format(base64string))
 
     serialized_data = urllib2.urlopen(api_request).read()
@@ -62,7 +64,9 @@ def location_results(request):
 
     url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json'
 
-    autocomplete_suggestions = make_request_to_google_api(url, google_query_parms)
+    autocomplete_suggestions = make_request_to_google_api(
+        url, google_query_parms
+    )
 
     template = loader.get_template('servicedirectory/location_results.html')
     context = {
@@ -91,11 +95,17 @@ def result_summaries(request):
 
         place_details_result = place_details.get('result', {})
 
-        place_formatted_address = place_details_result.get('formatted_address', None)
-        place_location = place_details_result.get('geometry', {}).get('location', None)
+        place_formatted_address = place_details_result.get(
+            'formatted_address', None
+        )
+        place_location = place_details_result.get(
+            'geometry', {}
+        ).get('location', None)
 
         if place_location:
-            place_latlng = '{0},{1}'.format(place_location['lat'], place_location['lng'])
+            place_latlng = '{0},{1}'.format(
+                place_location['lat'], place_location['lng']
+            )
 
     service_directory_query_parms = QueryDict('', mutable=True)
     service_directory_query_parms['keyword'] = search_term
@@ -103,7 +113,10 @@ def result_summaries(request):
     if place_latlng is not None:
         service_directory_query_parms['near'] = place_latlng
 
-    url = '{0}service_lookup/?{1}'.format(settings.SERVICE_DIRECTORY_API_BASE_URL, service_directory_query_parms.urlencode())
+    url = '{0}service_lookup/?{1}'.format(
+        settings.SERVICE_DIRECTORY_API_BASE_URL,
+        service_directory_query_parms.urlencode()
+    )
     search_results = get_json_request_from_servicedirectory(url)
 
     location_query_parms = QueryDict('', mutable=True)
@@ -117,7 +130,9 @@ def result_summaries(request):
         'place_id': place_id,
         'place_latlng': place_latlng,
         'place_formatted_address': place_formatted_address,
-        'change_location_url': '{0}?{1}'.format(reverse('location-results'), location_query_parms.urlencode()),
+        'change_location_url': '{0}?{1}'.format(
+            reverse('location-results'), location_query_parms.urlencode()
+        ),
         'search_results': search_results,
     }
 
