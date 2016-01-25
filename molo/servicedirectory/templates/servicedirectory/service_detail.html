@@ -23,7 +23,10 @@
     <h1 class="sd-heading service-keywords">What we do</h1>
 
     <p class="sd-service-keywords">
-        {{ service.keywords|join:", " }}
+    {% for keyword in service.keywords %}
+        {{ keyword }}{% if not forloop.last %}, {% endif %}
+    {%  endfor %}
+
     </p>
 
     <hr/>
