@@ -24,7 +24,7 @@
 
     <p class="sd-service-keywords">
     {% for keyword in service.keywords %}
-        {{ keyword }}{% if not forloop.last %}, {% endif %}
+        {{ keyword.name }}{% if not forloop.last %}, {% endif %}
     {%  endfor %}
 
     </p>
