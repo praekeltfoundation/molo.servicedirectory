@@ -38,8 +38,17 @@ def make_request_to_google_api(url, querydict):
 
 
 def home(request):
+    categories_keywords_url = '{0}homepage_categories_keywords/'.format(
+        settings.SERVICE_DIRECTORY_API_BASE_URL
+    )
+    categories_keywords = get_json_request_from_servicedirectory(
+        categories_keywords_url
+    )
+
     template = loader.get_template('servicedirectory/home.html')
-    context = {}
+    context = {
+        'categories_keywords': categories_keywords,
+    }
     return HttpResponse(template.render(context, request))
 
 
@@ -140,7 +149,6 @@ def result_summaries(request):
 
 
 def service_detail(request, service_id):
-
     service_directory_api_base_url = settings.SERVICE_DIRECTORY_API_BASE_URL
 
     url = '{0}service/{1}/'.format(service_directory_api_base_url, service_id)

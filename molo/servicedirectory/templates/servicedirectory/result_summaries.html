@@ -2,8 +2,7 @@
 
 {% block content %}
 
-    <form action="{% url 'result-summaries' %}" method="get"
-          class="sd-search-form">
+    <form action="{% url 'result-summaries' %}" method="get" class="sd-search-form">
 
         <input type="text" name="search" value="{{ search_term }}" />
         <input type="submit" value="Search" />
@@ -33,8 +32,7 @@
 
     {% for service in search_results %}
 
-        <a
-        href="{% url 'service-detail' service.id %}?search={{ search_term }}">  {# TODO: add location #}
+        <a href="{% url 'service-detail' service.id %}">
             <h1 class="sd-heading org-name">
                 {{ service.organisation.name }}
             </h1>

@@ -6,8 +6,7 @@
         In what area would you like to find a service?
     </h1>
 
-    <form action="{% url 'location-results'  %}"
-          method="get" class="sd-search-form">
+    <form action="{% url 'location-results'  %}" method="get" class="sd-search-form">
 
         <input type="text" name="location" value="{{ location_term }}"/>
         <input type="submit" value="Search" />
@@ -19,7 +18,8 @@
     <ul>
         {% for prediction in autocomplete_suggestions.predictions %}
             <li>
-                <a href="{% url 'result-summaries' %}?place_id={{ prediction.place_id }}&location={{ location_term }}&search={{ search_term }}">{{ prediction.description }}</a><br/>
+                <a href="{% url 'result-summaries' %}?place_id={{ prediction.place_id }}&location={{ location_term }}&search={{ search_term }}">{{ prediction.description }}</a>
+                <br/>
             </li>
         {% endfor %}
     </ul>

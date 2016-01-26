@@ -4,12 +4,28 @@
 
     <h1 class="sd-heading search">What are you looking for?</h1>
 
-    <form action="{% url 'location-search' %}" method="get"
-          class="sd-search-form">
+    <form action="{% url 'location-search' %}" method="get" class="sd-search-form">
 
         <input type="text" name="search" />
         <input type="submit" value="Search" />
 
+        <br/>
+        <span class="sd-help-text search">Search something, or choose a category or keyword below:</span>
+
     </form>
+
+    <br/>
+
+    {% for category in categories_keywords.categories %}
+        <h1 class="sd-heading category-grouping">
+            <a href="{% url 'location-search' %}?search={{ category.name }}">{{ category.name }}</a>
+        </h1>
+        <div class="sd-category-keywords">
+        {% for keyword in category.keywords %}
+            <a href="{% url 'location-search' %}?search={{ keyword }}">{{ keyword }}</a>{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+        </div>
+        <hr>
+    {% endfor %}
 
 {% endblock %}
