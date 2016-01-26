@@ -16,7 +16,7 @@
 
     <br/>
 
-    {% for category in categories_keywords.categories %}
+    {% for category in categories_keywords %}
         <h1 class="sd-heading category-grouping">
             <a href="{% url 'location-search' %}?search={{ category.name }}">{{ category.name }}</a>
         </h1>
