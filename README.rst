@@ -1,6 +1,27 @@
 molo.servicedirectory
 =============================
 
+A molo module for calling service directory.
+
+The following keys should be set in the django projects settings file (the values are only examples):
+
+SERVICE_DIRECTORY_API_BASE_URL = 'http://0.0.0.0:8000/api/'
+
+SERVICE_DIRECTORY_API_LOGIN = {'username': 'root', 'password': 'admin'}
+
+GOOGLE_PLACES_API_SERVER_KEY = 'thisisnotarealkeyreplaceitwithyourown'
+
+ideally things like the passwords and api keys should be kept out of the repository and possibly included in the
+settings through importing from a secrets file that is ignored by the version control.
+
+eg in settings.py:
+
+try:
+    from secrets import *
+except ImportError:
+    raise
+
+
 .. image:: https://img.shields.io/travis/praekelt/molo.servicedirectory.svg
         :target: https://travis-ci.org/praekelt/molo.servicedirectory
 
@@ -14,3 +35,5 @@ molo.servicedirectory
 .. image:: https://readthedocs.org/projects/molo.servicedirectory/badge/?version=latest
     :target: https://molo.servicedirectory.readthedocs.org
     :alt: molo.servicedirectory Docs
+
+
