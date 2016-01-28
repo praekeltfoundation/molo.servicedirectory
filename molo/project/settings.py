@@ -103,11 +103,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-SERVICEDIRECTORY_BASE_URL = 'http://127.0.0.1:8000/'
+SERVICE_DIRECTORY_API_BASE_URL = 'http://0.0.0.0:8000/api/'
 
 try:
-    import secrets
+    from secrets import *
 except ImportError:
     raise
-else:
-    GOOGLE_PLACES_API_SERVER_KEY = secrets.GOOGLE_PLACES_API_SERVER_KEY
