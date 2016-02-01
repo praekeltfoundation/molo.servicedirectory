@@ -24,6 +24,9 @@
         {% for keyword in category.keywords %}
             <a href="{% url 'location-search' %}?search={{ keyword }}">{{ keyword }}</a>{% if not forloop.last %}, {% endif %}
         {% endfor %}
+        {% if and_more %}
+        <a href="{% url 'home' %}?category={{ category.name }}">And more...</a>
+        {% endif %}
         </div>
         <hr>
     {% endfor %}

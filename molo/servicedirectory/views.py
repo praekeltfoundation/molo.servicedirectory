@@ -38,17 +38,38 @@ def make_request_to_google_api(url, querydict):
 
 
 def home(request):
-    categories_keywords_url = '{0}homepage_categories_keywords/'.format(
-        settings.SERVICE_DIRECTORY_API_BASE_URL
-    )
-    categories_keywords = get_json_request_from_servicedirectory(
-        categories_keywords_url
-    )
+    category = request.GET.get('category', None)
+
+    if not category:
+        categories_keywords_url = '{0}homepage_categories_keywords/'.format(
+            settings.SERVICE_DIRECTORY_API_BASE_URL
+        )
+        categories_keywords = get_json_request_from_servicedirectory(
+            categories_keywords_url
+        )
+
+    else:
+        keywords_url = '{0}keywords/?{1}'.format(
+            settings.SERVICE_DIRECTORY_API_BASE_URL, category
+        )
+
+        keywords = get_json_request_from_servicedirectory(
+            keywords_url
+        )
+
+        categories_keywords = [
+            {
+                'name': category,
+                'keywords': [keyword['name'] for keyword in keywords]
+            }
+        ]
 
     template = loader.get_template('servicedirectory/home.html')
     context = {
         'categories_keywords': categories_keywords,
+        'and_more': not category,
     }
+
     return HttpResponse(template.render(context, request))
 
 
