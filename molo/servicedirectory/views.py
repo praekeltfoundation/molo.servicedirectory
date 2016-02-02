@@ -11,8 +11,8 @@ from molo.servicedirectory import settings
 def get_json_request_from_servicedirectory(url):
     api_request = urllib2.Request(url)
 
-    basic_auth_username = settings.SERVICE_DIRECTORY_API_LOGIN['username']
-    basic_auth_password = settings.SERVICE_DIRECTORY_API_LOGIN['password']
+    basic_auth_username = settings.SERVICE_DIRECTORY_API_USERNAME
+    basic_auth_password = settings.SERVICE_DIRECTORY_API_PASSWORD
     base64string = base64.encodestring(
         '{0}:{1}'.format(basic_auth_username, basic_auth_password)
     ).replace('\n', '')

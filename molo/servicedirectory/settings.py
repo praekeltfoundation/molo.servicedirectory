@@ -4,10 +4,12 @@ SERVICE_DIRECTORY_API_BASE_URL = getattr(
     settings, 'SERVICE_DIRECTORY_API_BASE_URL', 'http://0.0.0.0:8000/api/'
 )
 
-SERVICE_DIRECTORY_API_LOGIN = getattr(
-    settings, 'SERVICE_DIRECTORY_API_LOGIN', {
-        'username': 'root', 'password': 'adminadmin'
-    }
+SERVICE_DIRECTORY_API_USERNAME = getattr(
+    settings, 'SERVICE_DIRECTORY_API_USERNAME', 'root'
+)
+
+SERVICE_DIRECTORY_API_PASSWORD = getattr(
+    settings, 'SERVICE_DIRECTORY_API_PASSWORD', 'adminadmin'
 )
 
 GOOGLE_PLACES_API_SERVER_KEY = getattr(

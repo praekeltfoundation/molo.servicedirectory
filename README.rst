@@ -7,7 +7,8 @@ The following keys should be set in the django projects settings file (the value
 
 SERVICE_DIRECTORY_API_BASE_URL = 'http://0.0.0.0:8000/api/'
 
-SERVICE_DIRECTORY_API_LOGIN = {'username': 'root', 'password': 'admin'}
+SERVICE_DIRECTORY_API_USERNAME = 'root'
+SERVICE_DIRECTORY_API_PASSWORD = 'admin'
 
 GOOGLE_PLACES_API_SERVER_KEY = 'thisisnotarealkeyreplaceitwithyourown'
 
