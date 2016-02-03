@@ -108,7 +108,7 @@ def location_results(request):
     return HttpResponse(template.render(context, request))
 
 
-def result_summaries(request):
+def service_results(request):
     search_term = request.GET['search']
     location_term = request.GET['location']
     place_id = request.GET['place_id']
@@ -153,7 +153,7 @@ def result_summaries(request):
     location_query_parms['location'] = location_term
     location_query_parms['search'] = search_term
 
-    template = loader.get_template('servicedirectory/result_summaries.html')
+    template = loader.get_template('servicedirectory/service_results.html')
     context = {
         'search_term': search_term,
         'location_term': location_term,

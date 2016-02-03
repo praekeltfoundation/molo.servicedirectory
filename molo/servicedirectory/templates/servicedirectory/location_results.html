@@ -18,7 +18,7 @@
     <ul>
         {% for prediction in autocomplete_suggestions.predictions %}
             <li>
-                <a href="{% url 'result-summaries' %}?place_id={{ prediction.place_id }}&location={{ location_term }}&search={{ search_term }}">{{ prediction.description }}</a>
+                <a href="{% url 'service-results' %}?place_id={{ prediction.place_id }}&location={{ location_term }}&search={{ search_term }}">{{ prediction.description }}</a>
                 <br/>
             </li>
         {% endfor %}
