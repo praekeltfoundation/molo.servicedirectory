@@ -8,7 +8,7 @@ from django.template import loader
 from molo.servicedirectory import settings
 
 
-def get_json_request_from_servicedirectory(url):
+def make_request_to_servicedirectory_api(url):
     api_request = urllib2.Request(url)
 
     basic_auth_username = settings.SERVICE_DIRECTORY_API_USERNAME
@@ -44,7 +44,7 @@ def home(request):
         categories_keywords_url = '{0}homepage_categories_keywords/'.format(
             settings.SERVICE_DIRECTORY_API_BASE_URL
         )
-        categories_keywords = get_json_request_from_servicedirectory(
+        categories_keywords = make_request_to_servicedirectory_api(
             categories_keywords_url
         )
 
@@ -53,7 +53,7 @@ def home(request):
             settings.SERVICE_DIRECTORY_API_BASE_URL, category
         )
 
-        keywords = get_json_request_from_servicedirectory(
+        keywords = make_request_to_servicedirectory_api(
             keywords_url
         )
 
@@ -147,7 +147,7 @@ def service_results(request):
         settings.SERVICE_DIRECTORY_API_BASE_URL,
         service_directory_query_parms.urlencode()
     )
-    search_results = get_json_request_from_servicedirectory(url)
+    search_results = make_request_to_servicedirectory_api(url)
 
     location_query_parms = QueryDict('', mutable=True)
     location_query_parms['location'] = location_term
@@ -173,7 +173,7 @@ def service_detail(request, service_id):
     service_directory_api_base_url = settings.SERVICE_DIRECTORY_API_BASE_URL
 
     url = '{0}service/{1}/'.format(service_directory_api_base_url, service_id)
-    json_result = get_json_request_from_servicedirectory(url)
+    json_result = make_request_to_servicedirectory_api(url)
 
     template = loader.get_template('servicedirectory/service_detail.html')
     context = {
