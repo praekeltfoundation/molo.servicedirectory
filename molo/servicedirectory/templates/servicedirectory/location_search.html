@@ -2,19 +2,6 @@
 
 {% block content %}
 
-    <h1 class="sd-heading search">
-        In which area would you like to find a service?
-    </h1>
-
-    <form action="{% url 'location-results'  %}" method="get" class="sd-search-form">
-
-        <input type="text" name="location" />
-        <input type="submit" value="Search" />
-
-        <input type="hidden" name="search" value="{{ search_term }}" />
-
-    </form>
-
-    {# TODO: turn everything above into an include, to be reused in location_results.html #}
+    {% include 'servicedirectory/includes/location_search_form.html' %}
 
 {% endblock %}
