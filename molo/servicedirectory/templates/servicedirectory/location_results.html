@@ -17,6 +17,18 @@
 
     {# TODO: turn everything above into an include, to be reused in location_search.html #}
 
+    {% if autocomplete_suggestions.status != 'OK' %}
+
+        <p class="sd-message{% if autocomplete_suggestions.status != 'ZERO_RESULTS' %} error{% endif %}">
+        {% if autocomplete_suggestions.status == 'ZERO_RESULTS' %}
+            No results. Please try changing your search.
+        {% else %}
+            {{ autocomplete_suggestions.error_message }}
+        {% endif %}
+        </p>
+
+    {% endif %}
+
     <ul>
         {% for prediction in autocomplete_suggestions.predictions %}
             <li>
