@@ -3,7 +3,7 @@
 {% block content %}
 
     <h1 class="sd-heading search">
-        In what area would you like to find a service?
+        In which area would you like to find a service?
     </h1>
 
     <form action="{% url 'location-results'  %}" method="get" class="sd-search-form">
@@ -14,6 +14,8 @@
         <input type="hidden" name="search" value="{{ search_term }}" />
 
     </form>
+
+    {# TODO: turn everything above into an include, to be reused in location_search.html #}
 
     <ul>
         {% for prediction in autocomplete_suggestions.predictions %}
