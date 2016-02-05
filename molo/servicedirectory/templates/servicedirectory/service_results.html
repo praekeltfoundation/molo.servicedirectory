@@ -30,6 +30,13 @@
 
     <hr/>
 
+    {% if not service_results %}
+        <span class="sd-no-search-results">
+            We're sorry, but we couldn't find any services related to your search.
+            Please <a href="{% url 'home' %}">click here</a> to see example keywords and categories, or change your search and try again.
+        </span>
+    {% endif %}
+
     {% for service in search_results %}
 
         <a href="{% url 'service-detail' service.id %}">
