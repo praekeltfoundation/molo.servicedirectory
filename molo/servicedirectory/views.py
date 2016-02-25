@@ -3,9 +3,8 @@ import json
 import urllib2
 
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, QueryDict, HttpResponseRedirect
-from django.template import loader
-from django.views.decorators.http import require_POST
+from django.http import QueryDict, HttpResponseRedirect
+from django.views.generic import TemplateView, View
 from molo.servicedirectory import settings
 
 
@@ -42,164 +41,182 @@ def make_request_to_google_api(url, querydict):
     return json_result
 
 
-def home(request):
-    category = request.GET.get('category', None)
+class HomeView(TemplateView):
+    template_name = 'servicedirectory/home.html'
 
-    if not category:
-        categories_keywords_url = '{0}homepage_categories_keywords/'.format(
-            settings.SERVICE_DIRECTORY_API_BASE_URL
-        )
-        categories_keywords = make_request_to_servicedirectory_api(
-            categories_keywords_url
-        )
+    def get_context_data(self, **kwargs):
+        context = super(HomeView, self).get_context_data(**kwargs)
 
-    else:
-        keywords_url = '{0}keywords/?{1}'.format(
-            settings.SERVICE_DIRECTORY_API_BASE_URL, category
-        )
+        category = self.request.GET.get('category', None)
 
-        keywords = make_request_to_servicedirectory_api(
-            keywords_url
-        )
+        if not category:
+            categories_keywords_url = '{0}homepage_categories_keywords/'\
+                .format(settings.SERVICE_DIRECTORY_API_BASE_URL)
 
-        categories_keywords = [
-            {
-                'name': category,
-                'keywords': [keyword['name'] for keyword in keywords]
-            }
-        ]
-
-    template = loader.get_template('servicedirectory/home.html')
-    context = {
-        'categories_keywords': categories_keywords,
-        'and_more': not category,
-    }
-
-    return HttpResponse(template.render(context, request))
-
-
-def location_search(request):
-    search_term = request.GET['search']
-
-    template = loader.get_template('servicedirectory/location_search.html')
-    context = {
-        'search_term': search_term,
-    }
-    return HttpResponse(template.render(context, request))
-
-
-def location_results(request):
-    search_term = request.GET['search']
-    location_term = request.GET['location']
-
-    google_query_parms = QueryDict('', mutable=True)
-    google_query_parms['input'] = location_term
-    google_query_parms['types'] = 'geocode'
-    google_query_parms['key'] = settings.GOOGLE_PLACES_API_SERVER_KEY
-
-    url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json'
-
-    autocomplete_suggestions = make_request_to_google_api(
-        url, google_query_parms
-    )
-
-    template = loader.get_template('servicedirectory/location_results.html')
-    context = {
-        'search_term': search_term,
-        'location_term': location_term,
-        'autocomplete_suggestions': autocomplete_suggestions,
-
-    }
-    return HttpResponse(template.render(context, request))
-
-
-def service_results(request):
-    search_term = request.GET['search']
-    location_term = request.GET['location']
-    place_id = request.GET['place_id']
-    place_latlng = request.GET.get('place_latlng', None)
-    place_formatted_address = request.GET.get('place_formatted_address', None)
-
-    if place_latlng is None:
-        google_query_parms = QueryDict('', mutable=True)
-        google_query_parms['placeid'] = place_id
-        google_query_parms['key'] = settings.GOOGLE_PLACES_API_SERVER_KEY
-
-        url = 'https://maps.googleapis.com/maps/api/place/details/json'
-        place_details = make_request_to_google_api(url, google_query_parms)
-
-        place_details_result = place_details.get('result', {})
-
-        place_formatted_address = place_details_result.get(
-            'formatted_address', None
-        )
-        place_location = place_details_result.get(
-            'geometry', {}
-        ).get('location', None)
-
-        if place_location:
-            place_latlng = '{0},{1}'.format(
-                place_location['lat'], place_location['lng']
+            categories_keywords = make_request_to_servicedirectory_api(
+                categories_keywords_url
             )
 
-    service_directory_query_parms = QueryDict('', mutable=True)
-    service_directory_query_parms['keyword'] = search_term
+        else:
+            keywords_url = '{0}keywords/?{1}'.format(
+                settings.SERVICE_DIRECTORY_API_BASE_URL, category
+            )
 
-    if place_latlng is not None:
-        service_directory_query_parms['near'] = place_latlng
+            keywords = make_request_to_servicedirectory_api(
+                keywords_url
+            )
 
-    url = '{0}service_lookup/?{1}'.format(
-        settings.SERVICE_DIRECTORY_API_BASE_URL,
-        service_directory_query_parms.urlencode()
-    )
-    search_results = make_request_to_servicedirectory_api(url)
+            categories_keywords = [
+                {
+                    'name': category,
+                    'keywords': [keyword['name'] for keyword in keywords]
+                }
+            ]
 
-    location_query_parms = QueryDict('', mutable=True)
-    location_query_parms['location'] = location_term
-    location_query_parms['search'] = search_term
+        context['categories_keywords'] = categories_keywords
+        context['and_more'] = not category
 
-    template = loader.get_template('servicedirectory/service_results.html')
-    context = {
-        'search_term': search_term,
-        'location_term': location_term,
-        'place_id': place_id,
-        'place_latlng': place_latlng,
-        'place_formatted_address': place_formatted_address,
-        'change_location_url': '{0}?{1}'.format(
+        return context
+
+
+class LocationSearchView(TemplateView):
+    template_name = 'servicedirectory/location_search.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(LocationSearchView, self).get_context_data(**kwargs)
+
+        search_term = self.request.GET['search']
+        context['search_term'] = search_term
+
+        return context
+
+
+class LocationResultsView(TemplateView):
+    template_name = 'servicedirectory/location_results.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(LocationResultsView, self).get_context_data(**kwargs)
+
+        search_term = self.request.GET['search']
+        location_term = self.request.GET['location']
+
+        google_query_parms = QueryDict('', mutable=True)
+        google_query_parms['input'] = location_term
+        google_query_parms['types'] = 'geocode'
+        google_query_parms['key'] = settings.GOOGLE_PLACES_API_SERVER_KEY
+
+        url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json'
+
+        autocomplete_suggestions = make_request_to_google_api(
+            url, google_query_parms
+        )
+
+        context['search_term'] = search_term
+        context['location_term'] = location_term
+        context['autocomplete_suggestions'] = autocomplete_suggestions
+
+        return context
+
+
+class ServiceResultsView(TemplateView):
+    template_name = 'servicedirectory/service_results.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ServiceResultsView, self).get_context_data(**kwargs)
+
+        search_term = self.request.GET['search']
+        location_term = self.request.GET['location']
+        place_id = self.request.GET['place_id']
+        place_latlng = self.request.GET.get('place_latlng', None)
+        place_formatted_address = self.request.GET.get(
+            'place_formatted_address', None
+        )
+
+        if place_latlng is None:
+            google_query_parms = QueryDict('', mutable=True)
+            google_query_parms['placeid'] = place_id
+            google_query_parms['key'] = settings.GOOGLE_PLACES_API_SERVER_KEY
+
+            url = 'https://maps.googleapis.com/maps/api/place/details/json'
+            place_details = make_request_to_google_api(url, google_query_parms)
+
+            place_details_result = place_details.get('result', {})
+
+            place_formatted_address = place_details_result.get(
+                'formatted_address', None
+            )
+            place_location = place_details_result.get(
+                'geometry', {}
+            ).get('location', None)
+
+            if place_location:
+                place_latlng = '{0},{1}'.format(
+                    place_location['lat'], place_location['lng']
+                )
+
+        service_directory_query_parms = QueryDict('', mutable=True)
+        service_directory_query_parms['keyword'] = search_term
+
+        if place_latlng is not None:
+            service_directory_query_parms['near'] = place_latlng
+
+        url = '{0}service_lookup/?{1}'.format(
+            settings.SERVICE_DIRECTORY_API_BASE_URL,
+            service_directory_query_parms.urlencode()
+        )
+        search_results = make_request_to_servicedirectory_api(url)
+
+        location_query_parms = QueryDict('', mutable=True)
+        location_query_parms['location'] = location_term
+        location_query_parms['search'] = search_term
+
+        context['search_term'] = search_term
+        context['location_term'] = location_term
+        context['place_id'] = place_id
+        context['place_latlng'] = place_latlng
+        context['place_formatted_address'] = place_formatted_address
+        context['change_location_url'] = '{0}?{1}'.format(
             reverse('location-results'), location_query_parms.urlencode()
-        ),
-        'search_results': search_results,
-    }
+        )
+        context['search_results'] = search_results
 
-    return HttpResponse(template.render(context, request))
-
-
-def service_detail(request, service_id):
-    service_directory_api_base_url = settings.SERVICE_DIRECTORY_API_BASE_URL
-
-    url = '{0}service/{1}/'.format(service_directory_api_base_url, service_id)
-    json_result = make_request_to_servicedirectory_api(url)
-
-    template = loader.get_template('servicedirectory/service_detail.html')
-    context = {
-        'service': json_result
-    }
-
-    return HttpResponse(template.render(context, request))
+        return context
 
 
-@require_POST
-def service_report_incorrect_information(request, service_id):
-    service_directory_api_base_url = settings.SERVICE_DIRECTORY_API_BASE_URL
+class ServiceDetailView(TemplateView):
+    template_name = 'servicedirectory/service_detail.html'
 
-    url = '{0}service/{1}/report/'.format(service_directory_api_base_url,
-                                          service_id)
+    def get_context_data(self, **kwargs):
+        context = super(ServiceDetailView, self).get_context_data(**kwargs)
 
-    data = request.POST.dict()
+        service_directory_api_base_url =\
+            settings.SERVICE_DIRECTORY_API_BASE_URL
+        service_id = self.kwargs['service_id']
 
-    make_request_to_servicedirectory_api(url, data=data)
+        url = '{0}service/{1}/'.format(service_directory_api_base_url,
+                                       service_id)
 
-    # TODO: show result message on service detail page (based on API response)
-    return HttpResponseRedirect(redirect_to=reverse(
-        'service-detail', kwargs={'service_id': service_id})
-    )
+        json_result = make_request_to_servicedirectory_api(url)
+
+        context['service'] = json_result
+
+        return context
+
+
+class ServiceReportIncorrectInformationView(View):
+    def post(self, request, *args, **kwargs):
+        service_directory_api_base_url =\
+            settings.SERVICE_DIRECTORY_API_BASE_URL
+        service_id = kwargs['service_id']
+
+        url = '{0}service/{1}/report/'.format(service_directory_api_base_url,
+                                              service_id)
+
+        data = request.POST.dict()
+
+        make_request_to_servicedirectory_api(url, data=data)
+
+        # TODO: show result message on service detail page
+        # (based on API response)
+        return HttpResponseRedirect(redirect_to=reverse(
+            'service-detail', kwargs={'service_id': service_id}))

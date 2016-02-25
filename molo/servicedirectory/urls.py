@@ -3,22 +3,27 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.home,
+    url(r'^$',
+        views.HomeView.as_view(),
         name='home'),
 
-    url(r'^location-search/$', views.location_search,
+    url(r'^location-search/$',
+        views.LocationSearchView.as_view(),
         name='location-search'),
 
-    url(r'^location-results/$', views.location_results,
+    url(r'^location-results/$',
+        views.LocationResultsView.as_view(),
         name='location-results'),
 
-    url(r'^service-results/$', views.service_results,
+    url(r'^service-results/$',
+        views.ServiceResultsView.as_view(),
         name='service-results'),
 
-    url(r'^service-detail/(?P<service_id>[0-9]+)/$', views.service_detail,
+    url(r'^service-detail/(?P<service_id>[0-9]+)/$',
+        views.ServiceDetailView.as_view(),
         name='service-detail'),
 
     url(r'^service/(?P<service_id>[0-9]+)/report/$',
-        views.service_report_incorrect_information,
+        views.ServiceReportIncorrectInformationView.as_view(),
         name='service-report'),
 ]
