@@ -3,13 +3,17 @@ import json
 import urllib2
 
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, QueryDict
+from django.http import HttpResponse, QueryDict, HttpResponseRedirect
 from django.template import loader
+from django.views.decorators.http import require_POST
 from molo.servicedirectory import settings
 
 
-def make_request_to_servicedirectory_api(url):
-    api_request = urllib2.Request(url)
+def make_request_to_servicedirectory_api(url, data=None):
+    if data is not None:
+        data = json.dumps(data)
+
+    api_request = urllib2.Request(url, data=data)
 
     basic_auth_username = settings.SERVICE_DIRECTORY_API_USERNAME
     basic_auth_password = settings.SERVICE_DIRECTORY_API_PASSWORD
@@ -17,10 +21,11 @@ def make_request_to_servicedirectory_api(url):
         '{0}:{1}'.format(basic_auth_username, basic_auth_password)
     ).replace('\n', '')
     api_request.add_header("Authorization", "Basic {0}".format(base64string))
+    api_request.add_header("Content-Type", "application/json")
 
-    serialized_data = urllib2.urlopen(api_request).read()
+    response = urllib2.urlopen(api_request).read()
 
-    json_result = json.loads(serialized_data)
+    json_result = json.loads(response)
 
     return json_result
 
@@ -181,3 +186,20 @@ def service_detail(request, service_id):
     }
 
     return HttpResponse(template.render(context, request))
+
+
+@require_POST
+def service_report_incorrect_information(request, service_id):
+    service_directory_api_base_url = settings.SERVICE_DIRECTORY_API_BASE_URL
+
+    url = '{0}service/{1}/report/'.format(service_directory_api_base_url,
+                                          service_id)
+
+    data = request.POST.dict()
+
+    make_request_to_servicedirectory_api(url, data=data)
+
+    # TODO: show result message on service detail page (based on API response)
+    return HttpResponseRedirect(redirect_to=reverse(
+        'service-detail', kwargs={'service_id': service_id})
+    )

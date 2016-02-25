@@ -17,4 +17,8 @@ urlpatterns = [
 
     url(r'^service-detail/(?P<service_id>[0-9]+)/$', views.service_detail,
         name='service-detail'),
+
+    url(r'^service/(?P<service_id>[0-9]+)/report/$',
+        views.service_report_incorrect_information,
+        name='service-report'),
 ]
