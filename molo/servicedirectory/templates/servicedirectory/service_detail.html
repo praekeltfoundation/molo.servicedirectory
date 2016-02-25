@@ -67,4 +67,8 @@
         {{ service.organisation.address }}
     </p>
 
+    <hr/>
+
+    <a href="{% url 'service-report' service.id %}">Report incorrect info</a>
+
 {% endblock %}
