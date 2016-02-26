@@ -230,10 +230,16 @@ class ServiceReportIncorrectInformationView(TemplateView):
 
         make_request_to_servicedirectory_api(url, data=data)
 
-        # TODO: show result message on service detail page
-        # (based on API response)
-        return HttpResponseRedirect(redirect_to=reverse(
-            'service-detail', kwargs={'service_id': service_id}))
+        query_params = QueryDict('', mutable=True)
+        query_params['msg'] = 'Thanks! We\'ve received your report and will' \
+                              ' look into it.'
+
+        redirect_url = '{0}?{1}'.format(
+            reverse('service-detail', kwargs={'service_id': service_id}),
+            query_params.urlencode()
+        )
+
+        return HttpResponseRedirect(redirect_to=redirect_url)
 
 
 class ServiceRateView(View):
