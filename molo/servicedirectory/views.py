@@ -199,6 +199,7 @@ class ServiceDetailView(TemplateView):
         json_result = make_request_to_servicedirectory_api(url)
 
         context['service'] = json_result
+        context['message'] = self.request.GET.get('msg', None)
 
         return context
 
@@ -250,7 +251,14 @@ class ServiceRateView(View):
 
         make_request_to_servicedirectory_api(url, data=data)
 
-        # TODO: show result message on service detail page
-        # (based on API response)
-        return HttpResponseRedirect(redirect_to=reverse(
-            'service-detail', kwargs={'service_id': service_id}))
+        query_params = QueryDict('', mutable=True)
+        query_params['msg'] = 'Thanks for telling us how helpful this service'\
+                              ' was. You can always update your response when'\
+                              ' you change your mind.'
+
+        redirect_url = '{0}?{1}'.format(
+            reverse('service-detail', kwargs={'service_id': service_id}),
+            query_params.urlencode()
+        )
+
+        return HttpResponseRedirect(redirect_to=redirect_url)

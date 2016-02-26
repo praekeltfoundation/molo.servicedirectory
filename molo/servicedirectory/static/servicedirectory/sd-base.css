@@ -1,3 +1,10 @@
+.sd-msg {
+    border: 1px solid #dceab8;
+    background-color: #f0f5df;
+    padding: 5px;
+}
+
+/* ref: https://www.wirehive.net/blog/2014/08/12/pure-css */
 button.smiley {
     position: relative;
     width: 64px;

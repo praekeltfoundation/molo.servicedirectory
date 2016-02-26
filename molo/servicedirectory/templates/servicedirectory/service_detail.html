@@ -8,6 +8,12 @@
 
 {% block content %}
 
+    {% if message %}
+    <div class="sd-msg">
+        {{ message }}
+    </div>
+    {% endif %}
+
     <h1 class="sd-heading org-name">{{ service.organisation.name }}</h1>
 
     <div class="sd-service-categories">
