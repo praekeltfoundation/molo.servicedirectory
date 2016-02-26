@@ -4,7 +4,7 @@ import urllib2
 
 from django.core.urlresolvers import reverse
 from django.http import QueryDict, HttpResponseRedirect
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View
 from molo.servicedirectory import settings
 
 
@@ -224,7 +224,29 @@ class ServiceReportIncorrectInformationView(TemplateView):
                                               service_id)
 
         data = request.POST.dict()
-        data.pop('csrfmiddlewaretoken')  # no point passing this to the API
+        if 'csrfmiddlewaretoken' in data:
+            data.pop('csrfmiddlewaretoken')  # no point passing this to the API
+
+        make_request_to_servicedirectory_api(url, data=data)
+
+        # TODO: show result message on service detail page
+        # (based on API response)
+        return HttpResponseRedirect(redirect_to=reverse(
+            'service-detail', kwargs={'service_id': service_id}))
+
+
+class ServiceRateView(View):
+    def post(self, request, *args, **kwargs):
+        service_directory_api_base_url =\
+            settings.SERVICE_DIRECTORY_API_BASE_URL
+        service_id = kwargs['service_id']
+
+        url = '{0}service/{1}/rate/'.format(service_directory_api_base_url,
+                                            service_id)
+
+        data = request.POST.dict()
+        if 'csrfmiddlewaretoken' in data:
+            data.pop('csrfmiddlewaretoken')  # no point passing this to the API
 
         make_request_to_servicedirectory_api(url, data=data)
 

@@ -26,4 +26,8 @@ urlpatterns = [
     url(r'^service/(?P<service_id>[0-9]+)/report/$',
         views.ServiceReportIncorrectInformationView.as_view(),
         name='service-report'),
+
+    url(r'^service/(?P<service_id>[0-9]+)/rate/$',
+        views.ServiceRateView.as_view(),
+        name='service-rate')
 ]

@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 
+{% load staticfiles %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'servicedirectory/sd-base.css' %}"/>
+{% endblock %}
+
 {% block content %}
 
     <h1 class="sd-heading org-name">{{ service.organisation.name }}</h1>
@@ -66,6 +72,17 @@
     <p class="sd-org-address">
         {{ service.organisation.address }}
     </p>
+
+    <hr/>
+
+    <h1 class="sd-heading service-rating">How helpful was this?</h1>
+
+    <form method="post" action="{% url 'service-rate' service.id %}">
+        {% csrf_token %}
+        <button type="submit" name="rating" value="poor" class="smiley sad"></button>
+        <button type="submit" name="rating" value="average" class="smiley neutral"></button>
+        <button type="submit" name="rating" value="good" class="smiley happy"></button>
+    </form>
 
     <hr/>
 
