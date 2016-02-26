@@ -69,6 +69,6 @@
 
     <hr/>
 
-    <a href="{% url 'service-report' service.id %}">Report incorrect info</a>
+    <a href="{% url 'service-report' service.id %}?org_name={{ service.organisation.name | urlencode }}">Report incorrect info</a>
 
 {% endblock %}

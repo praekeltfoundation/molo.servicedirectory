@@ -4,7 +4,7 @@ import urllib2
 
 from django.core.urlresolvers import reverse
 from django.http import QueryDict, HttpResponseRedirect
-from django.views.generic import TemplateView, View
+from django.views.generic import TemplateView
 from molo.servicedirectory import settings
 
 
@@ -203,7 +203,18 @@ class ServiceDetailView(TemplateView):
         return context
 
 
-class ServiceReportIncorrectInformationView(View):
+class ServiceReportIncorrectInformationView(TemplateView):
+    template_name = 'servicedirectory/service_report.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ServiceReportIncorrectInformationView, self).\
+            get_context_data(**kwargs)
+
+        organisation_name = self.request.GET['org_name']
+        context['organisation_name'] = organisation_name
+
+        return context
+
     def post(self, request, *args, **kwargs):
         service_directory_api_base_url =\
             settings.SERVICE_DIRECTORY_API_BASE_URL
@@ -213,6 +224,7 @@ class ServiceReportIncorrectInformationView(View):
                                               service_id)
 
         data = request.POST.dict()
+        data.pop('csrfmiddlewaretoken')  # no point passing this to the API
 
         make_request_to_servicedirectory_api(url, data=data)
 
