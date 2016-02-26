@@ -19,7 +19,7 @@ urlpatterns = [
         views.ServiceResultsView.as_view(),
         name='service-results'),
 
-    url(r'^service-detail/(?P<service_id>[0-9]+)/$',
+    url(r'^service/(?P<service_id>[0-9]+)/$',
         views.ServiceDetailView.as_view(),
         name='service-detail'),
 
