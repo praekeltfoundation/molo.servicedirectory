@@ -211,7 +211,10 @@ class ServiceReportIncorrectInformationView(TemplateView):
         context = super(ServiceReportIncorrectInformationView, self).\
             get_context_data(**kwargs)
 
+        service_name = self.request.GET['service_name']
         organisation_name = self.request.GET['org_name']
+
+        context['service_name'] = service_name
         context['organisation_name'] = organisation_name
 
         return context

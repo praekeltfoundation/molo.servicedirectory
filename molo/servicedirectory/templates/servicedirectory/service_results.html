@@ -40,8 +40,8 @@
     {% for service in search_results %}
 
         <a href="{% url 'service-detail' service.id %}">
-            <h1 class="sd-heading org-name">
-                {{ service.organisation.name }}
+            <h1 class="sd-heading svc-org-name">
+                {{ service.name }} - {{ service.organisation.name }}
             </h1>
         </a>
 

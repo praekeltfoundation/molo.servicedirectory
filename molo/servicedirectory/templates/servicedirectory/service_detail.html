@@ -14,7 +14,7 @@
     </div>
     {% endif %}
 
-    <h1 class="sd-heading org-name">{{ service.organisation.name }}</h1>
+    <h1 class="sd-heading svc-org-name">{{ service.name }} - {{ service.organisation.name }}</h1>
 
     <div class="sd-service-categories">
         {% for category in service.categories %}
@@ -92,6 +92,6 @@
 
     <hr/>
 
-    <a href="{% url 'service-report' service.id %}?org_name={{ service.organisation.name | urlencode }}">Report incorrect info</a>
+    <a href="{% url 'service-report' service.id %}?service_name={{ service.name | urlencode }}&org_name={{ service.organisation.name | urlencode }}">Report incorrect info</a>
 
 {% endblock %}
