@@ -1,0 +1,24 @@
+{% extends 'servicedirectory/content_base.html' %}
+
+{% block inner_content %}
+
+    <h1 class="sd-heading send-sms">
+        Who do you want to send this service to? (It's free!)
+    </h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="sd-input">
+            <label for="your_name">Your Name</label>
+            <input type="text" id="your_name" name="your_name"/>
+            <span class="sd-input-sub">So they know who sent the message</span>
+        </div>
+        <div class="sd-input">
+            <label for="cell_number">Other person's cell number</label>
+            <input type="number" id="cell_number" name="cell_number"/>
+            <span class="sd-input-sub">This number is safe with us</span>
+        </div>
+        <button type="submit">Send to Someone</button>
+    </form>
+
+{% endblock %}
