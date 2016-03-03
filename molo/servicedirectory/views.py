@@ -164,6 +164,10 @@ class ServiceResultsView(TemplateView):
         if place_latlng is not None:
             service_directory_query_parms['near'] = place_latlng
 
+        if place_formatted_address is not None:
+            service_directory_query_parms['place_name'] =\
+                place_formatted_address
+
         url = '{0}service_lookup/?{1}'.format(
             settings.SERVICE_DIRECTORY_API_BASE_URL,
             service_directory_query_parms.urlencode()
