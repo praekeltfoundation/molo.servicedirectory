@@ -29,5 +29,9 @@ urlpatterns = [
 
     url(r'^service/(?P<service_id>[0-9]+)/rate/$',
         views.ServiceRateView.as_view(),
-        name='service-rate')
+        name='service-rate'),
+
+    url(r'^service/(?P<service_id>[0-9]+)/sms/$',
+        views.ServiceSendSMSView.as_view(),
+        name='service-sms')
 ]

@@ -271,3 +271,33 @@ class ServiceRateView(View):
         )
 
         return HttpResponseRedirect(redirect_to=redirect_url)
+
+
+class ServiceSendSMSView(TemplateView):
+    template_name = 'servicedirectory/service_sms.html'
+
+    def post(self, request, *args, **kwargs):
+        service_directory_api_base_url =\
+            settings.SERVICE_DIRECTORY_API_BASE_URL
+        service_id = kwargs['service_id']
+
+        url = '{0}service/sms/'.format(service_directory_api_base_url)
+
+        data = request.POST.dict()
+        data['service_url'] = request.build_absolute_uri(reverse('service-detail', kwargs={'service_id': service_id}))
+
+        if 'csrfmiddlewaretoken' in data:
+            data.pop('csrfmiddlewaretoken')  # no point passing this to the API
+
+        make_request_to_servicedirectory_api(url, data=data)
+
+        query_params = QueryDict('', mutable=True)
+        query_params['msg'] = 'Thanks! We''ve sent an SMS with a'\
+                              ' link of this service to {0}.'.format(data['cell_number'])
+
+        redirect_url = '{0}?{1}'.format(
+            reverse('service-detail', kwargs={'service_id': service_id}),
+            query_params.urlencode()
+        )
+
+        return HttpResponseRedirect(redirect_to=redirect_url)
