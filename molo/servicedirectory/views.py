@@ -300,7 +300,9 @@ class ServiceSendSMSView(TemplateView):
         url = '{0}service/sms/'.format(service_directory_api_base_url)
 
         data = request.POST.dict()
-        data['service_url'] = request.build_absolute_uri(reverse('service-detail', kwargs={'service_id': service_id}))
+        data['service_url'] = request.build_absolute_uri(
+            reverse('service-detail', kwargs={'service_id': service_id})
+        )
 
         if 'csrfmiddlewaretoken' in data:
             data.pop('csrfmiddlewaretoken')  # no point passing this to the API
@@ -308,8 +310,9 @@ class ServiceSendSMSView(TemplateView):
         make_request_to_servicedirectory_api(url, data=data)
 
         query_params = QueryDict('', mutable=True)
-        query_params['msg'] = 'Thanks! We''ve sent an SMS with a'\
-                              ' link of this service to {0}.'.format(data['cell_number'])
+        query_params['msg'] = 'Thanks! We''ve sent an SMS with a link for' \
+                              ' this service to {0}.'.format(
+            data['cell_number'])
 
         redirect_url = '{0}?{1}'.format(
             reverse('service-detail', kwargs={'service_id': service_id}),
