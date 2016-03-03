@@ -41,7 +41,7 @@ button.smiley.sad:after {
     border-radius: 15px 15px 0 0;
 }
 
-button.smiley.sad:hover {
+button.smiley.sad:hover, button.smiley.sad:hover:before, button.smiley.sad:hover:after {
     border-color: #ff0000;
 }
 
@@ -56,7 +56,11 @@ button.smiley.neutral:after {
     background-color: #000;
 }
 
-button.smiley.neutral:hover {
+button.smiley.neutral:hover:after {
+    background-color: #ffcc00;
+}
+
+button.smiley.neutral:hover, button.smiley.neutral:hover:before {
     border-color: #ffcc00;
 }
 
@@ -74,6 +78,6 @@ button.smiley.happy:after {
     border-radius: 0 0 15px 15px;
 }
 
-button.smiley.happy:hover {
+button.smiley.happy:hover, button.smiley.happy:hover:before, button.smiley.happy:hover:after {
     border-color: #008000;
 }
