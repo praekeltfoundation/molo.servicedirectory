@@ -58,8 +58,12 @@ class HomeView(TemplateView):
             )
 
         else:
+            service_directory_query_parms = QueryDict('', mutable=True)
+            service_directory_query_parms['category'] = category
+
             keywords_url = '{0}keywords/?{1}'.format(
-                settings.SERVICE_DIRECTORY_API_BASE_URL, category
+                settings.SERVICE_DIRECTORY_API_BASE_URL,
+                service_directory_query_parms.urlencode()
             )
 
             keywords = make_request_to_servicedirectory_api(
@@ -166,6 +170,17 @@ class ServiceResultsView(TemplateView):
         )
         search_results = make_request_to_servicedirectory_api(url)
 
+        categories_keywords = []
+        if not search_results:
+            # TODO: consider caching the categories and keywords when we fetch
+            # them for the home page, then retrieving them from the cache here
+            categories_keywords_url = '{0}homepage_categories_keywords/'\
+                .format(settings.SERVICE_DIRECTORY_API_BASE_URL)
+
+            categories_keywords = make_request_to_servicedirectory_api(
+                categories_keywords_url
+            )
+
         location_query_parms = QueryDict('', mutable=True)
         location_query_parms['location'] = location_term
         location_query_parms['search'] = search_term
@@ -179,6 +194,7 @@ class ServiceResultsView(TemplateView):
             reverse('location-results'), location_query_parms.urlencode()
         )
         context['search_results'] = search_results
+        context['categories_keywords'] = categories_keywords
 
         return context
 
