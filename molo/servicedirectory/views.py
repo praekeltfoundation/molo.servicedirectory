@@ -58,8 +58,12 @@ class HomeView(TemplateView):
             )
 
         else:
+            service_directory_query_parms = QueryDict('', mutable=True)
+            service_directory_query_parms['category'] = category
+
             keywords_url = '{0}keywords/?{1}'.format(
-                settings.SERVICE_DIRECTORY_API_BASE_URL, category
+                settings.SERVICE_DIRECTORY_API_BASE_URL,
+                service_directory_query_parms.urlencode()
             )
 
             keywords = make_request_to_servicedirectory_api(
