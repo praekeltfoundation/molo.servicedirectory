@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends 'servicedirectory/content_base.html' %}
 
 {% load staticfiles %}
 
@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{% static 'servicedirectory/sd-base.css' %}"/>
 {% endblock %}
 
-{% block content %}
+{% block inner_content %}
 
     {% if message %}
     <div class="sd-msg">
@@ -41,6 +41,8 @@
 
     </p>
 
+    <hr/>
+        <a href="{% url 'service-sms' service.id %}" class="sd-sms-button">Send to Someone</a>
     <hr/>
 
     <h1 class="sd-heading org-contact">Contact</h1>
