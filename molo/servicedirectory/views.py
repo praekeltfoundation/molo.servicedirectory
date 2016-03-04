@@ -330,7 +330,9 @@ class ServiceSelfSendSMSView(TemplateView):
     template_name = 'servicedirectory/service_self_sms.html'
 
     def get_context_data(self, **kwargs):
-        context = super(ServiceSelfSendSMSView, self).get_context_data(**kwargs)
-        context['service_id'] = self.kwargs['service_id']
+        context = super(ServiceSelfSendSMSView, self).get_context_data(
+            **kwargs
+        )
+        context['service_id'] = kwargs['service_id']
 
         return context
