@@ -22,13 +22,13 @@
         </h1>
         <div class="sd-category-keywords">
         {% for keyword in category.keywords %}
-            <a href="{% url 'location-search' %}?search={{ keyword }}">{{ keyword }}</a>{% if not forloop.last %}, {% endif %}
+            <a href="{% url 'location-search' %}?search={{ keyword }}">{{ keyword }}</a>{% if not forloop.last or and_more %}, {% endif %}
         {% endfor %}
         {% if and_more %}
-        <a href="{% url 'home' %}?category={{ category.name }}">And more...</a>
+            <a href="{% url 'home' %}?category={{ category.name }}">and more...</a>
         {% endif %}
         </div>
-        <hr>
+        <hr/>
     {% endfor %}
 
 {% endblock %}
