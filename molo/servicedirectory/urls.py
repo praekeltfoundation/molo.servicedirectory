@@ -33,5 +33,9 @@ urlpatterns = [
 
     url(r'^service/(?P<service_id>[0-9]+)/sms/$',
         views.ServiceSendSMSView.as_view(),
-        name='service-sms')
+        name='service-sms'),
+
+    url(r'^service/(?P<service_id>[0-9]+)/sms-self/$',
+        views.ServiceSelfSendSMSView.as_view(),
+        name='service-sms-self')
 ]
