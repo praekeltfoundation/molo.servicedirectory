@@ -14,7 +14,7 @@
     </div>
     {% endif %}
 
-    <h1 class="sd-heading svc-org-name">{{ service.name }} - {{ service.organisation.name }}</h1>
+    <h1 class="sd-heading svc-org-name">{{ service.organisation.name }}</h1>
 
     <div class="sd-service-categories">
         {% for category in service.categories %}
@@ -43,47 +43,56 @@
 
     <hr/>
 
-    <h1 class="sd-heading org-contact">Contact</h1>
+    {% if service.organisation.telephone or service.organisation.email or service.organisation.web %}
 
-    <p class="sd-org-contact">
-        {% if service.organisation.telephone %}
-        <span class="tel">
-            {{ service.organisation.telephone }}
-        </span><br/>
-        {% endif %}
-        {% if service.organisation.email %}
-        <span class="email">
-            {{ service.organisation.email }}
-        </span><br/>
-        {% endif %}
-        {% if service.organisation.web %}
-        <span class="web">
-            {{ service.organisation.web }}
-        </span>
-        {% endif %}
-    </p>
+        <h1 class="sd-heading org-contact">Contact</h1>
 
-    <hr/>
+        <p class="sd-org-contact">
+            {% if service.organisation.telephone %}
+            <span class="tel">
+                <a href="tel:{{ service.organisation.telephone }}">{{ service.organisation.telephone }}</a>
+            </span><br/>
+            {% endif %}
+            {% if service.organisation.email %}
+            <span class="email">
+                <a href="mailto:{{ service.organisation.email }}">{{ service.organisation.email }}</a>
+            </span><br/>
+            {% endif %}
+            {% if service.organisation.web %}
+            <span class="web">
+                <a href="{{ service.organisation.web }}" target="_blank">{{ service.organisation.web }}</a>
+            </span>
+            {% endif %}
+        </p>
+
+        <hr/>
+
+    {% endif %}
 
     <a href="{% url 'service-sms' service.id %}" class="sd-sms-button">Send Service to Someone</a>
 
     <hr/>
 
-    <h1 class="sd-heading service-tradinghours">Trading Hours</h1>
+    {% if service.availability_hours %}
+        <h1 class="sd-heading service-tradinghours">Trading Hours</h1>
 
-    <p class="sd-service-tradinghours">
-        {{ service.availability_hours }}
-    </p>
+        <p class="sd-service-tradinghours">
+            {{ service.availability_hours }}
+        </p>
 
-    <hr/>
+        <hr/>
+    {% endif %}
 
-    <h1 class="sd-heading org-address">Address</h1>
 
-    <p class="sd-org-address">
-        {{ service.organisation.address }}
-    </p>
+    {% if service.organisation.address %}
+        <h1 class="sd-heading org-address">Address</h1>
 
-    <hr/>
+        <p class="sd-org-address">
+            {{ service.organisation.address }}
+        </p>
+
+        <hr/>
+    {% endif %}
 
     <p class="sd-self-sms">Want to find this service easily again?</p>
     <a href="{% url 'service-sms-self' service.id %}" class="sd-sms-button">Send This Service to Yourself</a>
@@ -101,6 +110,6 @@
 
     <hr/>
 
-    <a href="{% url 'service-report' service.id %}?service_name={{ service.name | urlencode }}&org_name={{ service.organisation.name | urlencode }}">Report incorrect info</a>
+    <a class="sd-report-link" href="{% url 'service-report' service.id %}?service_name={{ service.name | urlencode }}&org_name={{ service.organisation.name | urlencode }}">Report incorrect info</a>
 
 {% endblock %}

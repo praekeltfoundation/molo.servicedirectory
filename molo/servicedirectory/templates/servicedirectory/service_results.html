@@ -2,6 +2,8 @@
 
 {% block inner_content %}
 
+    <p class="sd-back"><a href="{{ change_location_url }}">< Back</a></p>
+
     <form action="{% url 'service-results' %}" method="get" class="sd-search-form">
 
         <input type="text" name="search" value="{{ search_term }}" />
@@ -20,22 +22,22 @@
 
     </form>
 
-    <span class="sd-location">
-        {{ place_formatted_address }} <a href="{{ change_location_url }}">Change area</a>
-    </span>
-    <br/>
-
-    <span class="sd-num-results">{{ search_results | length }} Services</span>
+    <div class="sd-location">
+        <p class="sd-current-address">{{ place_formatted_address }}</p>
+        <a class="sd-change-area" href="{{ change_location_url }}">Change area</a>
+    </div>
     <br/>
 
     <hr/>
 
     {% for service in search_results %}
-
-        <a href="{% url 'service-detail' service.id %}">
+        <a href="{% url 'service-detail' service.id %}" class="sd-service-result">
             <h1 class="sd-heading svc-org-name">
                 {{ service.name }} - {{ service.organisation.name }}
             </h1>
+            {% if service.verified_as %}
+                <span class="sd-verified">[ Verified ]</span>
+            {% endif %}
         </a>
 
         <p class="sd-service-keywords">
@@ -43,10 +45,10 @@
         </p>
 
         <p class="sd-service-location">
-            {{ service.organisation.address }} | {{ service.distance }}
+            {{ service.organisation.address }}
         </p>
 
-        <hr/>
+        <p class="sd-service-distance">{{ service.distance }}</p>
 
     {% empty %}
 
@@ -76,5 +78,7 @@
         </div>
 
     {% endfor %}
+
+    <hr>
 
 {% endblock %}

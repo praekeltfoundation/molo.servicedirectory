@@ -14,9 +14,13 @@
         {% endif %}
         </p>
 
+    {% else %}
+        <hr>
+        <h6 class="sd-heading choose-location">Choose a location:</h6>
     {% endif %}
 
-    <ul>
+
+    <ul class="sd-search-results">
         {% for prediction in autocomplete_suggestions.predictions %}
             <li>
                 <a href="{% url 'service-results' %}?place_id={{ prediction.place_id }}&location={{ location_term }}&search={{ search_term }}">{{ prediction.description }}</a>
