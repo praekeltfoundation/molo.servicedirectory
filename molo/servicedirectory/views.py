@@ -159,10 +159,10 @@ class ServiceResultsView(TemplateView):
                 )
 
         service_directory_query_parms = QueryDict('', mutable=True)
-        service_directory_query_parms['keyword'] = search_term
+        service_directory_query_parms['search_term'] = search_term
 
         if place_latlng is not None:
-            service_directory_query_parms['near'] = place_latlng
+            service_directory_query_parms['location'] = place_latlng
 
         if place_formatted_address is not None:
             service_directory_query_parms['place_name'] =\
