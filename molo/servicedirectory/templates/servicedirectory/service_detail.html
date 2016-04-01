@@ -14,19 +14,19 @@
     </div>
     {% endif %}
 
-    <h1 class="sd-heading svc-org-name">{{ service.organisation.name }}</h1>
+    <h1 class="sd-heading svc-org-name">{{ organisation.name }}</h1>
 
     <div class="sd-service-categories">
-        {% for category in service.categories %}
+        {% for category in organisation.categories %}
         <span class="category">
             {{ category.name }}
         </span><br/>
         {% endfor %}
     </div>
 
-    {% if service.age_range_min and service.age_range_max %}
+    {% if organisation.age_range_min and organisation.age_range_max %}
     <div class="sd-service-ages">
-        {{ service.age_range_min }}-{{ service.age_range_max }} years
+        {{ organisation.age_range_min }}-{{ organisation.age_range_max }} years
     </div>
     {% endif %}
 
@@ -35,32 +35,35 @@
     <h1 class="sd-heading service-keywords">What we do</h1>
 
     <p class="sd-service-keywords">
-    {% for keyword in service.keywords %}
-        {{ keyword.name }}{% if not forloop.last %}, {% endif %}
-    {%  endfor %}
+     {{ organisation.about }}
 
     </p>
 
     <hr/>
 
-    {% if service.organisation.telephone or service.organisation.email or service.organisation.web %}
+    {% if organisation.telephone or organisation.email or organisation.web %}
 
         <h1 class="sd-heading org-contact">Contact</h1>
 
         <p class="sd-org-contact">
-            {% if service.organisation.telephone %}
+            {% if organisation.telephone %}
             <span class="tel">
-                <a href="tel:{{ service.organisation.telephone }}">{{ service.organisation.telephone }}</a>
+                <a href="tel:{{ organisation.telephone }}">{{ organisation.telephone }}</a>
             </span><br/>
             {% endif %}
-            {% if service.organisation.email %}
+            {% if organisation.emergency_telephone %}
+            <span class="tel">
+                <a href="tel:{{ organisation.emergency_telephone }}" target="_blank">{{ organisation.emergency_telephone }}</a>
+            </span><br/>
+            {% endif %}
+            {% if organisation.email %}
             <span class="email">
-                <a href="mailto:{{ service.organisation.email }}">{{ service.organisation.email }}</a>
+                <a href="mailto:{{ organisation.email }}">{{ organisation.email }}</a>
             </span><br/>
             {% endif %}
-            {% if service.organisation.web %}
+            {% if organisation.web %}
             <span class="web">
-                <a href="{{ service.organisation.web }}" target="_blank">{{ service.organisation.web }}</a>
+                <a href="{{ organisation.web }}" target="_blank">{{ organisation.web }}</a>
             </span>
             {% endif %}
         </p>
@@ -69,39 +72,39 @@
 
     {% endif %}
 
-    <a href="{% url 'service-sms' service.id %}" class="sd-sms-button">Send Service to Someone</a>
+    <a href="{% url 'service-sms' organisation.id %}" class="sd-sms-button">Send Service to Someone</a>
 
     <hr/>
 
-    {% if service.availability_hours %}
+    {% if organisation.availability_hours %}
         <h1 class="sd-heading service-tradinghours">Trading Hours</h1>
 
         <p class="sd-service-tradinghours">
-            {{ service.availability_hours }}
+            {{ organisation.availability_hours }}
         </p>
 
         <hr/>
     {% endif %}
 
 
-    {% if service.organisation.address %}
+    {% if organisation.address %}
         <h1 class="sd-heading org-address">Address</h1>
 
         <p class="sd-org-address">
-            {{ service.organisation.address }}
+            {{ organisation.address }}
         </p>
 
         <hr/>
     {% endif %}
 
     <p class="sd-self-sms">Want to find this service easily again?</p>
-    <a href="{% url 'service-sms-self' service.id %}" class="sd-sms-button">Send This Service to Yourself</a>
+    <a href="{% url 'service-sms-self' organisation.id %}" class="sd-sms-button">Send This Service to Yourself</a>
 
     <hr/>
 
     <h1 class="sd-heading service-rating">How helpful was this?</h1>
 
-    <form method="post" action="{% url 'service-rate' service.id %}">
+    <form method="post" action="{% url 'service-rate' organisation.id %}">
         {% csrf_token %}
         <button type="submit" name="rating" value="poor" class="smiley sad"></button>
         <button type="submit" name="rating" value="average" class="smiley neutral"></button>
@@ -110,6 +113,6 @@
 
     <hr/>
 
-    <a class="sd-report-link" href="{% url 'service-report' service.id %}?service_name={{ service.name | urlencode }}&org_name={{ service.organisation.name | urlencode }}">Report incorrect info</a>
+    <a class="sd-report-link" href="{% url 'service-report' organisation.id %}?service_name={{ organisation.name | urlencode }}&org_name={{ organisation.name | urlencode }}">Report incorrect info</a>
 
 {% endblock %}

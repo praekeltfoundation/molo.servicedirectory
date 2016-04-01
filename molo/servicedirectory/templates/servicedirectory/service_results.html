@@ -30,26 +30,28 @@
 
     <hr/>
 
-    {% for service in search_results %}
-        <a href="{% url 'service-detail' service.id %}" class="sd-service-result">
+    {% for organisation in search_results %}
+        <a href="{% url 'service-detail' organisation.id %}" class="sd-service-result">
             <h1 class="sd-heading svc-org-name">
-                {{ service.name }} - {{ service.organisation.name }}
+                {{ organisation.name }}
             </h1>
-            {% if service.verified_as %}
+            {% if organisation.verified_as %}
                 <span class="sd-verified">[ Verified ]</span>
             {% endif %}
         </a>
 
         <p class="sd-service-keywords">
-            {{ service.keywords|join:", " }}
+            {{ organisation.keywords|join:", " }}
         </p>
 
         <p class="sd-service-location">
-            {{ service.organisation.address }}
+            {{ organisation.address }}
         </p>
 
-        <p class="sd-service-distance">{{ service.distance }}</p>
+        <p class="sd-service-distance">{{ organisation.distance }}</p>
         <div style="clear:both"></div>
+
+
 
     {% empty %}
 

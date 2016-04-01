@@ -168,7 +168,7 @@ class ServiceResultsView(TemplateView):
             service_directory_query_parms['place_name'] =\
                 place_formatted_address
 
-        url = '{0}service_lookup/?{1}'.format(
+        url = '{0}search/?{1}'.format(
             settings.SERVICE_DIRECTORY_API_BASE_URL,
             service_directory_query_parms.urlencode()
         )
@@ -213,12 +213,12 @@ class ServiceDetailView(TemplateView):
             settings.SERVICE_DIRECTORY_API_BASE_URL
         service_id = self.kwargs['service_id']
 
-        url = '{0}service/{1}/'.format(service_directory_api_base_url,
+        url = '{0}organisation/{1}/'.format(service_directory_api_base_url,
                                        service_id)
 
         json_result = make_request_to_servicedirectory_api(url)
 
-        context['service'] = json_result
+        context['organisation'] = json_result
         context['message'] = self.request.GET.get('msg', None)
 
         return context
@@ -244,7 +244,7 @@ class ServiceReportIncorrectInformationView(TemplateView):
             settings.SERVICE_DIRECTORY_API_BASE_URL
         service_id = kwargs['service_id']
 
-        url = '{0}service/{1}/report/'.format(service_directory_api_base_url,
+        url = '{0}organisation/{1}/report/'.format(service_directory_api_base_url,
                                               service_id)
 
         data = request.POST.dict()
@@ -271,7 +271,7 @@ class ServiceRateView(View):
             settings.SERVICE_DIRECTORY_API_BASE_URL
         service_id = kwargs['service_id']
 
-        url = '{0}service/{1}/rate/'.format(service_directory_api_base_url,
+        url = '{0}organisation/{1}/rate/'.format(service_directory_api_base_url,
                                             service_id)
 
         data = request.POST.dict()
@@ -301,7 +301,7 @@ class ServiceSendSMSView(TemplateView):
             settings.SERVICE_DIRECTORY_API_BASE_URL
         service_id = kwargs['service_id']
 
-        url = '{0}service/sms/'.format(service_directory_api_base_url)
+        url = '{0}organisation/sms/'.format(service_directory_api_base_url)
 
         data = request.POST.dict()
         data['service_url'] = request.build_absolute_uri(
