@@ -214,7 +214,7 @@ class ServiceDetailView(TemplateView):
         service_id = self.kwargs['service_id']
 
         url = '{0}organisation/{1}/'.format(service_directory_api_base_url,
-                                       service_id)
+                                            service_id)
 
         json_result = make_request_to_servicedirectory_api(url)
 
@@ -244,8 +244,10 @@ class ServiceReportIncorrectInformationView(TemplateView):
             settings.SERVICE_DIRECTORY_API_BASE_URL
         service_id = kwargs['service_id']
 
-        url = '{0}organisation/{1}/report/'.format(service_directory_api_base_url,
-                                              service_id)
+        url = '{0}organisation/{1}/report/'.format(
+            service_directory_api_base_url,
+            service_id
+        )
 
         data = request.POST.dict()
         if 'csrfmiddlewaretoken' in data:
@@ -271,8 +273,10 @@ class ServiceRateView(View):
             settings.SERVICE_DIRECTORY_API_BASE_URL
         service_id = kwargs['service_id']
 
-        url = '{0}organisation/{1}/rate/'.format(service_directory_api_base_url,
-                                            service_id)
+        url = '{0}organisation/{1}/rate/'.format(
+            service_directory_api_base_url,
+            service_id
+        )
 
         data = request.POST.dict()
         if 'csrfmiddlewaretoken' in data:
