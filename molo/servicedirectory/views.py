@@ -126,7 +126,9 @@ class OrganisationResultsView(TemplateView):
     template_name = 'servicedirectory/organisation_results.html'
 
     def get_context_data(self, **kwargs):
-        context = super(OrganisationResultsView, self).get_context_data(**kwargs)
+        context = super(OrganisationResultsView, self).get_context_data(
+            **kwargs
+        )
 
         search_term = self.request.GET['search']
         location_term = self.request.GET['location']
@@ -207,7 +209,9 @@ class OrganisationDetailView(TemplateView):
     template_name = 'servicedirectory/organisation_detail.html'
 
     def get_context_data(self, **kwargs):
-        context = super(OrganisationDetailView, self).get_context_data(**kwargs)
+        context = super(OrganisationDetailView, self).get_context_data(
+            **kwargs
+        )
 
         service_directory_api_base_url =\
             settings.SERVICE_DIRECTORY_API_BASE_URL
@@ -258,7 +262,8 @@ class OrganisationReportIncorrectInformationView(TemplateView):
                               ' look into it.'
 
         redirect_url = '{0}?{1}'.format(
-            reverse('organisation-detail', kwargs={'organisation_id': organisation_id}),
+            reverse('organisation-detail',
+                    kwargs={'organisation_id': organisation_id}),
             query_params.urlencode()
         )
 
@@ -288,7 +293,8 @@ class OrganisationRateView(View):
                               ' you change your mind.'
 
         redirect_url = '{0}?{1}'.format(
-            reverse('organisation-detail', kwargs={'organisation_id': organisation_id}),
+            reverse('organisation-detail',
+                    kwargs={'organisation_id': organisation_id}),
             query_params.urlencode()
         )
 
@@ -307,7 +313,8 @@ class OrganisationSendSmsView(TemplateView):
 
         data = request.POST.dict()
         data['organisation_url'] = request.build_absolute_uri(
-            reverse('organisation-detail', kwargs={'organisation_id': organisation_id})
+            reverse('organisation-detail',
+                    kwargs={'organisation_id': organisation_id})
         )
 
         if 'csrfmiddlewaretoken' in data:
@@ -321,7 +328,8 @@ class OrganisationSendSmsView(TemplateView):
             data['cell_number'])
 
         redirect_url = '{0}?{1}'.format(
-            reverse('organisation-detail', kwargs={'organisation_id': organisation_id}),
+            reverse('organisation-detail',
+                    kwargs={'organisation_id': organisation_id}),
             query_params.urlencode()
         )
 
