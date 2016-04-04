@@ -4,7 +4,7 @@
 
     <p class="sd-back"><a href="{{ change_location_url }}">< Back</a></p>
 
-    <form action="{% url 'service-results' %}" method="get" class="sd-search-form">
+    <form action="{% url 'organisation-results' %}" method="get" class="sd-search-form">
 
         <input type="text" name="search" value="{{ search_term }}" />
         <input type="submit" value="Search" />
@@ -31,7 +31,7 @@
     <hr/>
 
     {% for organisation in search_results %}
-        <a href="{% url 'service-detail' organisation.id %}" class="sd-service-result">
+        <a href="{% url 'organisation-detail' organisation.id %}" class="sd-service-result">
             <h1 class="sd-heading svc-org-name">
                 {{ organisation.name }}
             </h1>
@@ -69,7 +69,7 @@
                     <li>
                         Search a category:
                         {% for category in categories_keywords %}
-                            <a href="{% url 'service-results' %}?search={{ category.name }}&location={{ location_term }}&place_id={{ place_id }}{% if place_latlng %}&place_latlng={{ place_latlng }}{% endif %}{% if place_formatted_address %}&place_formatted_address={{ place_formatted_address }}{% endif %}">
+                            <a href="{% url 'organisation-results' %}?search={{ category.name }}&location={{ location_term }}&place_id={{ place_id }}{% if place_latlng %}&place_latlng={{ place_latlng }}{% endif %}{% if place_formatted_address %}&place_formatted_address={{ place_formatted_address }}{% endif %}">
                                 {{ category.name }}
                             </a>{% if not forloop.last %}, {% endif %}
                         {% endfor %}

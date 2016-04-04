@@ -122,11 +122,11 @@ class LocationResultsView(TemplateView):
         return context
 
 
-class ServiceResultsView(TemplateView):
-    template_name = 'servicedirectory/service_results.html'
+class OrganisationResultsView(TemplateView):
+    template_name = 'servicedirectory/organisation_results.html'
 
     def get_context_data(self, **kwargs):
-        context = super(ServiceResultsView, self).get_context_data(**kwargs)
+        context = super(OrganisationResultsView, self).get_context_data(**kwargs)
 
         search_term = self.request.GET['search']
         location_term = self.request.GET['location']
@@ -203,18 +203,18 @@ class ServiceResultsView(TemplateView):
         return context
 
 
-class ServiceDetailView(TemplateView):
-    template_name = 'servicedirectory/service_detail.html'
+class OrganisationDetailView(TemplateView):
+    template_name = 'servicedirectory/organisation_detail.html'
 
     def get_context_data(self, **kwargs):
-        context = super(ServiceDetailView, self).get_context_data(**kwargs)
+        context = super(OrganisationDetailView, self).get_context_data(**kwargs)
 
         service_directory_api_base_url =\
             settings.SERVICE_DIRECTORY_API_BASE_URL
-        service_id = self.kwargs['service_id']
+        organisation_id = self.kwargs['organisation_id']
 
         url = '{0}organisation/{1}/'.format(service_directory_api_base_url,
-                                            service_id)
+                                            organisation_id)
 
         json_result = make_request_to_servicedirectory_api(url)
 
@@ -224,17 +224,15 @@ class ServiceDetailView(TemplateView):
         return context
 
 
-class ServiceReportIncorrectInformationView(TemplateView):
-    template_name = 'servicedirectory/service_report.html'
+class OrganisationReportIncorrectInformationView(TemplateView):
+    template_name = 'servicedirectory/organisation_report.html'
 
     def get_context_data(self, **kwargs):
-        context = super(ServiceReportIncorrectInformationView, self).\
+        context = super(OrganisationReportIncorrectInformationView, self).\
             get_context_data(**kwargs)
 
-        service_name = self.request.GET['service_name']
         organisation_name = self.request.GET['org_name']
 
-        context['service_name'] = service_name
         context['organisation_name'] = organisation_name
 
         return context
@@ -242,11 +240,11 @@ class ServiceReportIncorrectInformationView(TemplateView):
     def post(self, request, *args, **kwargs):
         service_directory_api_base_url =\
             settings.SERVICE_DIRECTORY_API_BASE_URL
-        service_id = kwargs['service_id']
+        organisation_id = kwargs['organisation_id']
 
         url = '{0}organisation/{1}/report/'.format(
             service_directory_api_base_url,
-            service_id
+            organisation_id
         )
 
         data = request.POST.dict()
@@ -260,22 +258,22 @@ class ServiceReportIncorrectInformationView(TemplateView):
                               ' look into it.'
 
         redirect_url = '{0}?{1}'.format(
-            reverse('service-detail', kwargs={'service_id': service_id}),
+            reverse('organisation-detail', kwargs={'organisation_id': organisation_id}),
             query_params.urlencode()
         )
 
         return HttpResponseRedirect(redirect_to=redirect_url)
 
 
-class ServiceRateView(View):
+class OrganisationRateView(View):
     def post(self, request, *args, **kwargs):
         service_directory_api_base_url =\
             settings.SERVICE_DIRECTORY_API_BASE_URL
-        service_id = kwargs['service_id']
+        organisation_id = kwargs['organisation_id']
 
         url = '{0}organisation/{1}/rate/'.format(
             service_directory_api_base_url,
-            service_id
+            organisation_id
         )
 
         data = request.POST.dict()
@@ -290,26 +288,26 @@ class ServiceRateView(View):
                               ' you change your mind.'
 
         redirect_url = '{0}?{1}'.format(
-            reverse('service-detail', kwargs={'service_id': service_id}),
+            reverse('organisation-detail', kwargs={'organisation_id': organisation_id}),
             query_params.urlencode()
         )
 
         return HttpResponseRedirect(redirect_to=redirect_url)
 
 
-class ServiceSendSMSView(TemplateView):
-    template_name = 'servicedirectory/service_sms.html'
+class OrganisationSendSmsView(TemplateView):
+    template_name = 'servicedirectory/organisation_sms.html'
 
     def post(self, request, *args, **kwargs):
         service_directory_api_base_url =\
             settings.SERVICE_DIRECTORY_API_BASE_URL
-        service_id = kwargs['service_id']
+        organisation_id = kwargs['organisation_id']
 
         url = '{0}organisation/sms/'.format(service_directory_api_base_url)
 
         data = request.POST.dict()
-        data['service_url'] = request.build_absolute_uri(
-            reverse('service-detail', kwargs={'service_id': service_id})
+        data['organisation_url'] = request.build_absolute_uri(
+            reverse('organisation-detail', kwargs={'organisation_id': organisation_id})
         )
 
         if 'csrfmiddlewaretoken' in data:
@@ -323,20 +321,20 @@ class ServiceSendSMSView(TemplateView):
             data['cell_number'])
 
         redirect_url = '{0}?{1}'.format(
-            reverse('service-detail', kwargs={'service_id': service_id}),
+            reverse('organisation-detail', kwargs={'organisation_id': organisation_id}),
             query_params.urlencode()
         )
 
         return HttpResponseRedirect(redirect_to=redirect_url)
 
 
-class ServiceSelfSendSMSView(TemplateView):
-    template_name = 'servicedirectory/service_self_sms.html'
+class OrganisationSelfSendSMSView(TemplateView):
+    template_name = 'servicedirectory/organisation_self_sms.html'
 
     def get_context_data(self, **kwargs):
-        context = super(ServiceSelfSendSMSView, self).get_context_data(
+        context = super(OrganisationSelfSendSMSView, self).get_context_data(
             **kwargs
         )
-        context['service_id'] = kwargs['service_id']
+        context['organisation_id'] = kwargs['organisation_id']
 
         return context

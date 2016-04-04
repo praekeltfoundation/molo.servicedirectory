@@ -6,7 +6,7 @@
         SMS this service to yourself (It's free!)
     </h1>
 
-    <form action="{% url 'service-sms' service_id %}" method="post">
+    <form action="{% url 'organisation-sms' organisation_id %}" method="post">
         {% csrf_token %}
         <div class="sd-input">
             <label for="cell_number">Your cell number</label>

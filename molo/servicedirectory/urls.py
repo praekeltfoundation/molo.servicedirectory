@@ -15,27 +15,27 @@ urlpatterns = [
         views.LocationResultsView.as_view(),
         name='location-results'),
 
-    url(r'^service-results/$',
-        views.ServiceResultsView.as_view(),
-        name='service-results'),
+    url(r'^organisation-results/$',
+        views.OrganisationResultsView.as_view(),
+        name='organisation-results'),
 
-    url(r'^service/(?P<service_id>[0-9]+)/$',
-        views.ServiceDetailView.as_view(),
-        name='service-detail'),
+    url(r'^organisation/(?P<organisation_id>[0-9]+)/$',
+        views.OrganisationDetailView.as_view(),
+        name='organisation-detail'),
 
-    url(r'^service/(?P<service_id>[0-9]+)/report/$',
-        views.ServiceReportIncorrectInformationView.as_view(),
-        name='service-report'),
+    url(r'^organisation/(?P<organisation_id>[0-9]+)/report/$',
+        views.OrganisationReportIncorrectInformationView.as_view(),
+        name='organisation-report'),
 
-    url(r'^service/(?P<service_id>[0-9]+)/rate/$',
-        views.ServiceRateView.as_view(),
-        name='service-rate'),
+    url(r'^organisation/(?P<organisation_id>[0-9]+)/rate/$',
+        views.OrganisationRateView.as_view(),
+        name='organisation-rate'),
 
-    url(r'^service/(?P<service_id>[0-9]+)/sms/$',
-        views.ServiceSendSMSView.as_view(),
-        name='service-sms'),
+    url(r'^organisation/(?P<organisation_id>[0-9]+)/sms/$',
+        views.OrganisationSendSmsView.as_view(),
+        name='organisation-sms'),
 
-    url(r'^service/(?P<service_id>[0-9]+)/sms-self/$',
-        views.ServiceSelfSendSMSView.as_view(),
-        name='service-sms-self')
+    url(r'^organisation/(?P<organisation_id>[0-9]+)/sms-self/$',
+        views.OrganisationSelfSendSMSView.as_view(),
+        name='organisation-sms-self')
 ]

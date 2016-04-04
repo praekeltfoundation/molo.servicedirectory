@@ -72,7 +72,7 @@
 
     {% endif %}
 
-    <a href="{% url 'service-sms' organisation.id %}" class="sd-sms-button">Send Service to Someone</a>
+    <a href="{% url 'organisation-sms' organisation.id %}" class="sd-sms-button">Send Service to Someone</a>
 
     <hr/>
 
@@ -98,13 +98,13 @@
     {% endif %}
 
     <p class="sd-self-sms">Want to find this service easily again?</p>
-    <a href="{% url 'service-sms-self' organisation.id %}" class="sd-sms-button">Send This Service to Yourself</a>
+    <a href="{% url 'organisation-sms-self' organisation.id %}" class="sd-sms-button">Send This Service to Yourself</a>
 
     <hr/>
 
     <h1 class="sd-heading service-rating">How helpful was this?</h1>
 
-    <form method="post" action="{% url 'service-rate' organisation.id %}">
+    <form method="post" action="{% url 'organisation-rate' organisation.id %}">
         {% csrf_token %}
         <button type="submit" name="rating" value="poor" class="smiley sad"></button>
         <button type="submit" name="rating" value="average" class="smiley neutral"></button>
@@ -113,6 +113,6 @@
 
     <hr/>
 
-    <a class="sd-report-link" href="{% url 'service-report' organisation.id %}?service_name={{ organisation.name | urlencode }}&org_name={{ organisation.name | urlencode }}">Report incorrect info</a>
+    <a class="sd-report-link" href="{% url 'organisation-report' organisation.id %}?org_name={{ organisation.name | urlencode }}">Report incorrect info</a>
 
 {% endblock %}
