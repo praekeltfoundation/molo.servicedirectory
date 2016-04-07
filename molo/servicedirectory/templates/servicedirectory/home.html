@@ -15,11 +15,14 @@
     <div class="sd-categories">
         {% for category in categories_keywords %}
             <h1 class="sd-heading category-grouping">
-                <a href="{% url 'location-search' %}?search={{ category.name }}">{{ category.name }}.</a>
+                <a href="{% url 'location-search' %}?search={{ category.name }}">{{ category.name }}</a>
                 <br>
                 {% for keyword in category.keywords %}
-                    <a href="{% url 'location-search' %}?search={{ keyword }}" class="sd-cat-keyword">{{ keyword }}.</a>
+                    <a href="{% url 'location-search' %}?search={{ keyword }}" class="sd-cat-keyword">{{ keyword }}</a>{% if not forloop.last or and_more %}, {% endif %}
                 {% endfor %}
+                {% if and_more %}
+                    <a href="{% url 'home' %}?category={{ category.name }}" class="sd-cat-keyword">and more...</a>
+                {% endif %}
             </h1>
         {% endfor %}
         <div style="clear: both"></div>
