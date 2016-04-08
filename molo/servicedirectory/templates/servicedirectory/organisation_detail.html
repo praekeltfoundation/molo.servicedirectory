@@ -15,7 +15,7 @@
     {% endif %}
 
     <h1 class="sd-heading svc-org-name">{{ organisation.name }}</h1>
-
+    <h1 class="sd-heading org-services">Services</h1>
     <div class="sd-service-categories">
         {% for category in organisation.categories %}
         <span class="category">
@@ -24,22 +24,11 @@
         {% endfor %}
     </div>
 
-    {% if organisation.age_range_min and organisation.age_range_max %}
-    <div class="sd-service-ages">
-        {{ organisation.age_range_min }}-{{ organisation.age_range_max }} years
-    </div>
-    {% endif %}
-
-    <hr style="clear: both;"/>
-
     <h1 class="sd-heading service-keywords">What we do</h1>
 
     <p class="sd-service-keywords">
      {{ organisation.about }}
-
     </p>
-
-    <hr/>
 
     {% if organisation.telephone or organisation.email or organisation.web %}
 
@@ -68,24 +57,7 @@
             {% endif %}
         </p>
 
-        <hr/>
-
     {% endif %}
-
-    <a href="{% url 'organisation-sms' organisation.id %}" class="sd-sms-button">Send Service to Someone</a>
-
-    <hr/>
-
-    {% if organisation.availability_hours %}
-        <h1 class="sd-heading service-tradinghours">Trading Hours</h1>
-
-        <p class="sd-service-tradinghours">
-            {{ organisation.availability_hours }}
-        </p>
-
-        <hr/>
-    {% endif %}
-
 
     {% if organisation.address %}
         <h1 class="sd-heading org-address">Address</h1>
@@ -94,11 +66,28 @@
             {{ organisation.address }}
         </p>
 
-        <hr/>
     {% endif %}
 
-    <p class="sd-self-sms">Want to find this service easily again?</p>
-    <a href="{% url 'organisation-sms-self' organisation.id %}" class="sd-sms-button">Send This Service to Yourself</a>
+    {% if organisation.availability_hours %}
+        <h1 class="sd-heading service-tradinghours">Trading Hours</h1>
+
+        <p class="sd-service-tradinghours">
+            {{ organisation.availability_hours }}
+        </p>
+
+    {% endif %}
+
+    {% if organisation.age_range_min and organisation.age_range_max %}
+        <div class="sd-service-ages">
+            {{ organisation.age_range_min }}-{{ organisation.age_range_max }} years
+        </div>
+    {% endif %}
+
+    <a class="sd-report-link" href="{% url 'organisation-report' organisation.id %}?org_name={{ organisation.name | urlencode }}">Report incorrect info</a>
+
+    <a href="{% url 'organisation-sms' organisation.id %}" class="sd-sms-button primary">Send Service to Someone</a>
+
+    <a href="{% url 'organisation-sms-self' organisation.id %}" class="sd-sms-button secondary">Send This Service to Yourself</a>
 
     <hr/>
 
@@ -106,13 +95,20 @@
 
     <form method="post" action="{% url 'organisation-rate' organisation.id %}">
         {% csrf_token %}
-        <button type="submit" name="rating" value="poor" class="smiley sad"></button>
-        <button type="submit" name="rating" value="average" class="smiley neutral"></button>
-        <button type="submit" name="rating" value="good" class="smiley happy"></button>
+        <div class="org-rate-container">
+            <div class="org-rate-faces">
+                <button type="submit" name="rating" value="good" class="smiley happy"></button>
+                <span>Very helpful</span>
+            </div>
+            <div class="org-rate-faces">
+                <button type="submit" name="rating" value="average" class="smiley neutral"></button>
+                <span>I'm neutral</span>
+            </div>
+            <div class="org-rate-faces">
+                <button type="submit" name="rating" value="poor" class="smiley sad"></button>
+                <span>Not helpful</span>
+            </div>
+        </div>
     </form>
-
-    <hr/>
-
-    <a class="sd-report-link" href="{% url 'organisation-report' organisation.id %}?org_name={{ organisation.name | urlencode }}">Report incorrect info</a>
 
 {% endblock %}
