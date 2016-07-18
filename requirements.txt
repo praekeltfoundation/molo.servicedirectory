@@ -1,2 +1,4 @@
 molo.core
 django-geojson [field]
+django-leaflet==0.18.0
+django-import-export

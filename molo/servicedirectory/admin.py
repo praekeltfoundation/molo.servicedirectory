@@ -1,12 +1,13 @@
-from django.contrib.gis import admin
+from admin_import_export import CountryResource, OrganisationResource, \
+    CategoryResource, KeywordResource, \
+    OrganisationIncorrectInformationReportResource, OrganisationRatingResource
+from admin_model_forms import OrganisationModelForm
+from django.contrib import admin
 from import_export.admin import ImportExportMixin, ExportMixin
+from leaflet.admin import LeafletGeoAdmin
 from models import Country, Organisation, Category, Keyword, \
     OrganisationIncorrectInformationReport, OrganisationRating, \
     KeywordCategory, OrganisationCategory, OrganisationKeyword
-from service_directory.api.admin_import_export import CountryResource, \
-    OrganisationResource, CategoryResource, KeywordResource, \
-    OrganisationIncorrectInformationReportResource, OrganisationRatingResource
-from service_directory.api.admin_model_forms import OrganisationModelForm
 
 
 class CountryModelAdmin(ImportExportMixin, admin.ModelAdmin):
@@ -40,7 +41,7 @@ class OrganisationKeywordInlineModelAdmin(admin.TabularInline):
     extra = 1
 
 
-class OrganisationModelAdmin(ImportExportMixin, admin.OSMGeoAdmin):
+class OrganisationModelAdmin(ImportExportMixin, LeafletGeoAdmin):
     form = OrganisationModelForm
     list_display = ('name', 'country')
     resource_class = OrganisationResource

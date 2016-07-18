@@ -7,3 +7,5 @@ pytest-cov==2.2.0
 
 molo.core
 django-geojson [field]
+django-leaflet==0.18.0
+django-import-export

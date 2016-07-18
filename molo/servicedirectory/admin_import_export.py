@@ -4,8 +4,8 @@ from django.utils.encoding import force_text
 from import_export import fields as import_export_fields
 from import_export import resources
 from import_export.widgets import ManyToManyWidget, ForeignKeyWidget, Widget
-from service_directory.api.models import Category, Keyword, Country, \
-    Organisation, OrganisationIncorrectInformationReport, OrganisationRating
+from models import Category, Keyword, Country, Organisation, \
+    OrganisationIncorrectInformationReport, OrganisationRating
 
 
 # We're defining our own Field and ModelResource classes here to handle

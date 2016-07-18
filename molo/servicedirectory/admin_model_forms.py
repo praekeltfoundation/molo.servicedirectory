@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.gis.geos import Point
 from django.core.exceptions import ValidationError
 from django.forms.utils import ErrorList
-from service_directory.api.models import Organisation
+from models import Organisation
 
 
 class OrganisationModelForm(forms.ModelForm):

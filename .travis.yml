@@ -19,6 +19,7 @@ script:
   - flake8 molo
   - molo scaffold testapp --include molo.servicedirectory ^servicedirectory/
   - flake8 testapp
+  - cp test_settings.py testapp/testapp/settings/local.py
   - pip install -e testapp
   - py.test --cov=molo --cov-report=term
 
