@@ -1,4 +1,5 @@
 from django.db import models
+from djgeojson.fields import PointField
 
 
 class CaseInsensitiveTextField(models.TextField):
@@ -83,7 +84,7 @@ class Organisation(models.Model):
 
     country = models.ForeignKey(Country, on_delete=models.PROTECT)
 
-    location = PointField(srid=4326)
+    location = PointField()
 
     categories = models.ManyToManyField(Category,
                                         through='OrganisationCategory')
@@ -96,7 +97,7 @@ class Organisation(models.Model):
         return self.name
 
     @property
-    def location_coords(self):
+    def location_coords(self):  # TODO: check usages, fix up
         return '{0}, {1}'.format(self.location.y, self.location.x)
 
     def formatted_categories(self):
