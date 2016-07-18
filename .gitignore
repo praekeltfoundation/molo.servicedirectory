@@ -55,3 +55,5 @@ ve/
 
 # Secret API keys etc
 secrets.py
+
+testapp
