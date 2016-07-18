@@ -101,8 +101,10 @@ class Organisation(models.Model):
         return self.name
 
     @property
-    def location_coords(self):  # TODO: check usages, fix up
-        return '{0}, {1}'.format(self.location.y, self.location.x)
+    def location_coords(self):
+        return '{0}, {1}'.format(
+            self.location['coordinates'][1], self.location['coordinates'][0]
+        )
 
     def formatted_categories(self):
         categories = [
