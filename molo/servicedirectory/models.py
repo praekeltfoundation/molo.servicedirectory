@@ -7,9 +7,13 @@ class CaseInsensitiveTextField(models.TextField):
     See
     http://stackoverflow.com/a/26192509
     http://www.postgresql.org/docs/9.5/static/citext.html
+    https://docs.djangoproject.com/en/1.9/howto/custom-model-fields/#custom-database-types
     """
     def db_type(self, connection):
-        return 'citext'
+        if connection.settings_dict['ENGINE'] == 'django.db.backends.postgresql':
+            return 'citext'
+        else:
+            return super(CaseInsensitiveTextField, self).db_type(connection)
 
 
 class Country(models.Model):
