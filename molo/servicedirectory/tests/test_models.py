@@ -1,9 +1,10 @@
+import json
 from datetime import datetime, timedelta
 
 from django.contrib.gis.geos import Point
 from django.test import TestCase
 from pytz import utc
-from service_directory.api.models import Country, Organisation, Category,\
+from molo.servicedirectory.models import Country, Organisation, Category,\
     Keyword, OrganisationIncorrectInformationReport, OrganisationRating, \
     KeywordCategory, OrganisationCategory, OrganisationKeyword
 
@@ -130,7 +131,9 @@ class OrganisationTestCase(TestCase):
         org = Organisation.objects.create(
             name='Test Org',
             country=self.country,
-            location=Point(18.505496, -33.891937, srid=4326)
+            location=json.loads(
+                Point(18.505496, -33.891937, srid=4326).geojson
+            )
         )
         org.full_clean()  # force model validation to happen
 
@@ -190,7 +193,9 @@ class OrganisationIncorrectInformationReportTestCase(TestCase):
         self.organisation = Organisation.objects.create(
             name='Test Org',
             country=self.country,
-            location=Point(18.505496, -33.891937, srid=4326)
+            location=json.loads(
+                Point(18.505496, -33.891937, srid=4326).geojson
+            )
         )
         self.organisation.full_clean()  # force model validation to happen
 
@@ -265,7 +270,9 @@ class OrganisationRatingTestCase(TestCase):
         self.organisation = Organisation.objects.create(
             name='Test Org',
             country=self.country,
-            location=Point(18.505496, -33.891937, srid=4326)
+            location=json.loads(
+                Point(18.505496, -33.891937, srid=4326).geojson
+            )
         )
         self.organisation.full_clean()  # force model validation to happen
 
