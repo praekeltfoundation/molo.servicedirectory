@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.gis.geos import Point
 from django.core.exceptions import ValidationError
 from django.utils.encoding import force_text
@@ -115,10 +117,15 @@ class PointWidget(Widget):
                 ' latitude,longitude decimals, eg: "-33.921124,18.417313"'
             )
 
-        return point
+        return json.loads(point.geojson)
 
     def render(self, value):
-        return force_text('{0},{1}'.format(value.y, value.x))
+        if not value:
+            return ''
+
+        return force_text(
+            '{0},{1}'.format(value['coordinates'][1], value['coordinates'][0])
+        )
 
 
 class CountryResource(resources.ModelResource):
