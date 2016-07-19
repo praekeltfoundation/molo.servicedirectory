@@ -1,5 +1,7 @@
+import json
+
 from django import forms
-from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import Point, GEOSGeometry
 from django.core.exceptions import ValidationError
 from django.forms.utils import ErrorList
 from models import Organisation
@@ -59,11 +61,10 @@ class OrganisationModelForm(forms.ModelForm):
         # only override location if location_coords is a valid Point and does
         # not match the current location
         if isinstance(location_coords, Point) and \
-                location_coords != self.instance.location:
+                location_coords != self._convertGeoJsonToPoint(
+                    self.instance.location):
 
-            self.cleaned_data['location'] = self.cleaned_data.get(
-                'location_coords'
-            )
+            self.cleaned_data['location'] = json.loads(location_coords.geojson)
 
             # if location_coords is a valid Point then we can ignore errors
             # about the location field (eg: 'Delete all Features' is used to
@@ -71,3 +72,11 @@ class OrganisationModelForm(forms.ModelForm):
             # the location_coords field)
             if self.has_error('location'):
                 del self.errors['location']
+
+    @staticmethod
+    def _convertGeoJsonToPoint(location):
+        try:
+            pnt = GEOSGeometry(json.dumps(location))
+            return pnt
+        except ValueError:
+            return None
