@@ -1,3 +1,2 @@
 [run]
-omit = ve/*
-omit = ve/*, molo/manage.py, molo/project/*, molo/servicedirectory/migrations/*
+omit = ve/*, molo/manage.py, molo/project/*, molo/servicedirectory/migrations/*, molo/servicedirectory/tests/*
