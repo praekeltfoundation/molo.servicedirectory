@@ -1,4 +1,8 @@
+import json
+
+from django.contrib.gis.geos import GEOSGeometry
 from django.db import models
+from django.utils.functional import cached_property
 from djgeojson.fields import PointField
 
 
@@ -101,11 +105,20 @@ class Organisation(models.Model):
     def __unicode__(self):
         return self.name
 
+    @cached_property
+    def location_point(self):
+        try:
+            point = GEOSGeometry(json.dumps(self.location))
+            return point
+        except ValueError:
+            return None
+
     @property
     def location_coords(self):
-        return '{0}, {1}'.format(
-            self.location['coordinates'][1], self.location['coordinates'][0]
-        )
+        if not self.location_point:
+            return ''
+
+        return '{0}, {1}'.format(self.location_point.y, self.location_point.x)
 
     def formatted_categories(self):
         categories = [
