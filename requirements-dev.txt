@@ -10,3 +10,7 @@ molo.core
 django-geojson [field]
 django-leaflet==0.18.0
 django-import-export
+
+elasticsearch<2.0.0
+django-haystack==2.4.1
+geopy==1.11.0
