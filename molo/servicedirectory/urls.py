@@ -8,7 +8,7 @@ urlpatterns = [
         views.HomeView.as_view(),
         name='home'),
 
-    url(r'^location-search/$',
+    url(r'^location/$',
         views.LocationSearchView.as_view(),
         name='location-search'),
 
