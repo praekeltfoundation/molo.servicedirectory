@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 
 from . import views
 
@@ -38,5 +38,7 @@ urlpatterns = [
 
     url(r'^organisation/(?P<organisation_id>[0-9]+)/sms-self/$',
         views.OrganisationSelfSendSMSView.as_view(),
-        name='organisation-sms-self')
+        name='organisation-sms-self'),
+
+    url(r'^search_form/', include('haystack.urls')),
 ]

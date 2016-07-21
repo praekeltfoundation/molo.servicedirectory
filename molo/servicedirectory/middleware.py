@@ -1,5 +1,6 @@
 import warnings
-from haystack import signal_processor
+
+from django.apps import apps
 
 
 # Ref: http://stackoverflow.com/a/31642337
@@ -11,6 +12,7 @@ class HaystackBatchFlushMiddleware(object):
     (so that it runs last).
     """
     def process_response(self, request, response):
+        signal_processor = apps.get_app_config('haystack').signal_processor
         try:
             signal_processor.flush_changes()
         except AttributeError:
