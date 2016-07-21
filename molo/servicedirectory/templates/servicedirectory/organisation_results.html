@@ -4,7 +4,7 @@
 
     <p class="sd-back"><a href="{{ change_location_url }}">< Back</a></p>
 
-    <form action="{% url 'organisation-results' %}" method="get" class="sd-search-form">
+    <form action="{% url 'molo.servicedirectory:organisation-results' %}" method="get" class="sd-search-form">
 
         <input type="text" name="search" value="{{ search_term }}" />
         <input type="submit" value="Search" />
@@ -31,7 +31,7 @@
     <hr/>
 
     {% for organisation in search_results %}
-        <a href="{% url 'organisation-detail' organisation.id %}" class="sd-service-result">
+        <a href="{% url 'molo.servicedirectory:organisation-detail' organisation.id %}" class="sd-service-result">
             <h1 class="sd-heading svc-org-name">
                 {{ organisation.name }}
             </h1>
@@ -41,7 +41,7 @@
         </a>
 
         <p class="sd-service-keywords">
-            {{ organisation.keywords|join:", " }}
+            {{ organisation.keywords.all|join:", " }}
         </p>
 
         <p class="sd-service-location">
@@ -64,12 +64,12 @@
                         Check your spelling
                     </li>
                     <li>
-                        <a href="{% url 'home' %}">Search for something else</a>
+                        <a href="{% url 'molo.servicedirectory:home' %}">Search for something else</a>
                     </li>
                     <li>
                         Search a category:
                         {% for category in categories_keywords %}
-                            <a href="{% url 'organisation-results' %}?q={{ category.name }}&location={{ location_term }}&place_id={{ place_id }}{% if place_latlng %}&place_latlng={{ place_latlng }}{% endif %}{% if place_formatted_address %}&place_formatted_address={{ place_formatted_address }}{% endif %}">
+                            <a href="{% url 'molo.servicedirectory:organisation-results' %}?q={{ category.name }}&location={{ location_term }}&place_id={{ place_id }}{% if place_latlng %}&place_latlng={{ place_latlng }}{% endif %}{% if place_formatted_address %}&place_formatted_address={{ place_formatted_address }}{% endif %}">
                                 {{ category.name }}
                             </a>{% if not forloop.last %}, {% endif %}
                         {% endfor %}

@@ -145,36 +145,19 @@ class OrganisationResultsView(TemplateView):
                     place_location['lat'], place_location['lng']
                 )
 
-        service_directory_query_parms = QueryDict('', mutable=True)
-        service_directory_query_parms['search_term'] = search_term
-
-        if place_latlng is not None:
-            service_directory_query_parms['location'] = place_latlng
-
-        if place_formatted_address is not None:
-            service_directory_query_parms['place_name'] =\
-                place_formatted_address
-
-        url = '{0}search/?{1}'.format(
-            settings.SERVICE_DIRECTORY_API_BASE_URL,
-            service_directory_query_parms.urlencode()
+        search_results = api.search(
+            search_term, place_latlng, place_formatted_address
         )
-        search_results = make_request_to_servicedirectory_api(url)
 
         categories_keywords = []
         if not search_results:
             # TODO: consider caching the categories and keywords when we fetch
             # them for the home page, then retrieving them from the cache here
-            categories_keywords_url = '{0}homepage_categories_keywords/'\
-                .format(settings.SERVICE_DIRECTORY_API_BASE_URL)
-
-            categories_keywords = make_request_to_servicedirectory_api(
-                categories_keywords_url
-            )
+            categories_keywords = api.get_home_page_categories_with_keywords()
 
         location_query_parms = QueryDict('', mutable=True)
         location_query_parms['location'] = location_term
-        location_query_parms['search'] = search_term
+        location_query_parms['q'] = search_term
 
         context['search_term'] = search_term
         context['location_term'] = location_term
@@ -182,7 +165,8 @@ class OrganisationResultsView(TemplateView):
         context['place_latlng'] = place_latlng
         context['place_formatted_address'] = place_formatted_address
         context['change_location_url'] = '{0}?{1}'.format(
-            reverse('location-results'), location_query_parms.urlencode()
+            reverse('molo.servicedirectory:location-results'),
+            location_query_parms.urlencode()
         )
         context['search_results'] = search_results
         context['categories_keywords'] = categories_keywords
