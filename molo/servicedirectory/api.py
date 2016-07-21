@@ -133,3 +133,21 @@ def search(search_term=None, location=None, place_name=None):
         return services
 
     return []
+
+
+def get_organisation(organisation_id):
+    """
+    Retrieve organisation details
+    """
+    # TODO: prefetch categories - currently this happens in the template
+    organisation = Organisation.objects.get(pk=organisation_id)
+
+    # TODO: enable tracking
+    # send_ga_tracking_event(
+    #     request._request.path,
+    #     'View',
+    #     'Organisation',
+    #     organisation.name
+    # )
+
+    return organisation
