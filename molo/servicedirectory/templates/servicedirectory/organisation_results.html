@@ -69,7 +69,7 @@
                     <li>
                         Search a category:
                         {% for category in categories_keywords %}
-                            <a href="{% url 'organisation-results' %}?search={{ category.name }}&location={{ location_term }}&place_id={{ place_id }}{% if place_latlng %}&place_latlng={{ place_latlng }}{% endif %}{% if place_formatted_address %}&place_formatted_address={{ place_formatted_address }}{% endif %}">
+                            <a href="{% url 'organisation-results' %}?q={{ category.name }}&location={{ location_term }}&place_id={{ place_id }}{% if place_latlng %}&place_latlng={{ place_latlng }}{% endif %}{% if place_formatted_address %}&place_formatted_address={{ place_formatted_address }}{% endif %}">
                                 {{ category.name }}
                             </a>{% if not forloop.last %}, {% endif %}
                         {% endfor %}
