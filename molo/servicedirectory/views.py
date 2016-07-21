@@ -5,7 +5,7 @@ import urllib2
 from django.core.urlresolvers import reverse
 from django.http import QueryDict, HttpResponseRedirect
 from django.views.generic import TemplateView, View
-from molo.servicedirectory import settings
+from molo.servicedirectory import settings, api
 
 
 def make_request_to_servicedirectory_api(url, data=None):
@@ -50,30 +50,15 @@ class HomeView(TemplateView):
         category = self.request.GET.get('category', None)
 
         if not category:
-            categories_keywords_url = '{0}homepage_categories_keywords/'\
-                .format(settings.SERVICE_DIRECTORY_API_BASE_URL)
-
-            categories_keywords = make_request_to_servicedirectory_api(
-                categories_keywords_url
-            )
+            categories_keywords = api.get_home_page_categories_with_keywords()
 
         else:
-            service_directory_query_parms = QueryDict('', mutable=True)
-            service_directory_query_parms['category'] = category
-
-            keywords_url = '{0}keywords/?{1}'.format(
-                settings.SERVICE_DIRECTORY_API_BASE_URL,
-                service_directory_query_parms.urlencode()
-            )
-
-            keywords = make_request_to_servicedirectory_api(
-                keywords_url
-            )
+            keywords = api.get_keywords([category])
 
             categories_keywords = [
                 {
                     'name': category,
-                    'keywords': [keyword['name'] for keyword in keywords]
+                    'filtered_keywords': [keyword.name for keyword in keywords]
                 }
             ]
 
@@ -89,7 +74,7 @@ class LocationSearchView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(LocationSearchView, self).get_context_data(**kwargs)
 
-        search_term = self.request.GET['search']
+        search_term = self.request.GET['q']
         context['search_term'] = search_term
 
         return context
@@ -101,7 +86,7 @@ class LocationResultsView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(LocationResultsView, self).get_context_data(**kwargs)
 
-        search_term = self.request.GET['search']
+        search_term = self.request.GET['q']
         location_term = self.request.GET['location']
 
         google_query_parms = QueryDict('', mutable=True)
@@ -130,7 +115,7 @@ class OrganisationResultsView(TemplateView):
             **kwargs
         )
 
-        search_term = self.request.GET['search']
+        search_term = self.request.GET['q']
         location_term = self.request.GET['location']
         place_id = self.request.GET['place_id']
         place_latlng = self.request.GET.get('place_latlng', None)

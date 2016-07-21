@@ -2,6 +2,7 @@ from django.conf.urls import url
 
 from . import views
 
+app_name = 'molo.servicedirectory'
 urlpatterns = [
     url(r'^$',
         views.HomeView.as_view(),
