@@ -22,3 +22,5 @@ HAYSTACK_CONNECTIONS = {
 
 HAYSTACK_SIGNAL_PROCESSOR = 'molo.servicedirectory.signal_processors' \
                             '.BatchingSignalProcessor'
+
+GOOGLE_PLACES_API_SERVER_KEY = 'AIzaSyCAqZ-dr0pUNEe1TrV7jFLjD6-IXb8xCJI'
