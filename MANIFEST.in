@@ -9,7 +9,6 @@ recursive-include tests *
 recursive-include docs *.rst conf.py
 
 recursive-include molo/servicedirectory *
-recursive-exclude molo/project *
 
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
