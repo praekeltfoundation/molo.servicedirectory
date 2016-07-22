@@ -1,4 +1,3 @@
-import base64
 import json
 import urllib2
 
@@ -6,27 +5,6 @@ from django.core.urlresolvers import reverse
 from django.http import QueryDict, HttpResponseRedirect
 from django.views.generic import TemplateView, View
 from molo.servicedirectory import settings, api
-
-
-def make_request_to_servicedirectory_api(url, data=None):
-    if data is not None:
-        data = json.dumps(data)
-
-    api_request = urllib2.Request(url, data=data)
-
-    basic_auth_username = settings.SERVICE_DIRECTORY_API_USERNAME
-    basic_auth_password = settings.SERVICE_DIRECTORY_API_PASSWORD
-    base64string = base64.encodestring(
-        '{0}:{1}'.format(basic_auth_username, basic_auth_password)
-    ).replace('\n', '')
-    api_request.add_header("Authorization", "Basic {0}".format(base64string))
-    api_request.add_header("Content-Type", "application/json")
-
-    response = urllib2.urlopen(api_request).read()
-
-    json_result = json.loads(response)
-
-    return json_result
 
 
 def make_request_to_google_api(url, querydict):
