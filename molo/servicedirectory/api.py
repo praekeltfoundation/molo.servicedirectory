@@ -4,7 +4,8 @@ from django.contrib.gis.geos import Point
 from django.db.models.query import Prefetch
 from molo.servicedirectory.haystack_elasticsearch_raw_query.\
     custom_elasticsearch import ConfigurableSearchQuerySet
-from molo.servicedirectory.models import Keyword, Category, Organisation
+from molo.servicedirectory.models import Keyword, Category, Organisation, \
+    OrganisationIncorrectInformationReport
 
 
 def get_home_page_categories_with_keywords():
@@ -151,3 +152,30 @@ def get_organisation(organisation_id):
     # )
 
     return organisation
+
+
+def report_organisation(organisation_id, contact_details, address,
+                        trading_hours, other, other_detail):
+    """
+    Report incorrect information for an organisation
+    """
+    organisation = Organisation.objects.get(pk=organisation_id)
+
+    report = OrganisationIncorrectInformationReport.objects.create(
+        organisation=organisation,
+        contact_details=contact_details,
+        address=address,
+        trading_hours=trading_hours,
+        other=other,
+        other_detail=other_detail
+    )
+
+    # TODO: enable tracking
+    # send_ga_tracking_event(
+    #     request._request.path,
+    #     'Feedback',
+    #     'OrganisationIncorrectInformationReport',
+    #     organisation.name
+    # )
+
+    return report

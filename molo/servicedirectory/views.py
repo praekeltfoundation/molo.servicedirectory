@@ -205,27 +205,21 @@ class OrganisationReportIncorrectInformationView(TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        service_directory_api_base_url =\
-            settings.SERVICE_DIRECTORY_API_BASE_URL
         organisation_id = kwargs['organisation_id']
 
-        url = '{0}organisation/{1}/report/'.format(
-            service_directory_api_base_url,
-            organisation_id
-        )
-
-        data = request.POST.dict()
-        if 'csrfmiddlewaretoken' in data:
-            data.pop('csrfmiddlewaretoken')  # no point passing this to the API
-
-        make_request_to_servicedirectory_api(url, data=data)
+        api.report_organisation(organisation_id,
+                                request.POST.get('contact_details', None),
+                                request.POST.get('address', None),
+                                request.POST.get('trading_hours', None),
+                                request.POST.get('other', None),
+                                request.POST.get('other_detail', None))
 
         query_params = QueryDict('', mutable=True)
         query_params['msg'] = 'Thanks! We\'ve received your report and will' \
                               ' look into it.'
 
         redirect_url = '{0}?{1}'.format(
-            reverse('organisation-detail',
+            reverse('molo.servicedirectory:organisation-detail',
                     kwargs={'organisation_id': organisation_id}),
             query_params.urlencode()
         )
