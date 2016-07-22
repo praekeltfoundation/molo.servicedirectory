@@ -1,5 +1,6 @@
 import logging
 
+from UniversalAnalytics import Tracker
 from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.db.models.query import Prefetch
@@ -8,6 +9,25 @@ from molo.servicedirectory.haystack_elasticsearch_raw_query.\
     custom_elasticsearch import ConfigurableSearchQuerySet
 from molo.servicedirectory.models import Keyword, Category, Organisation, \
     OrganisationIncorrectInformationReport, OrganisationRating
+
+
+google_analytics_tracker = Tracker.create(
+    settings.GOOGLE_ANALYTICS_TRACKING_ID,
+    client_id='SERVICE-DIRECTORY-API'
+)
+
+
+def send_ga_tracking_event(path, category, action, label):
+    try:
+        google_analytics_tracker.send(
+            'event',
+            path=path,
+            ec=category,
+            ea=action,
+            el=label
+        )
+    except:
+        logging.warn("Google Analytics call failed", exc_info=True)
 
 
 def get_home_page_categories_with_keywords():
@@ -37,7 +57,7 @@ def get_home_page_categories_with_keywords():
     return home_page_categories_with_keywords
 
 
-def get_keywords(categories=None):
+def get_keywords(request_path, categories=None):
     """
     List keywords, optionally filtering by one or more categories
     """
@@ -51,17 +71,15 @@ def get_keywords(categories=None):
             # send a tracking event for the first one as generally only one
             # will be supplied (and we don't want to block the response
             # because of a large number of tracking calls)
-            # TODO: enable tracking
-            pass
-            # send_ga_tracking_event(
-            #     self.request._request.path, 'View', 'KeywordsInCategory',
-            #     category_list[0]
-            # )
+            send_ga_tracking_event(
+                request_path, 'View', 'KeywordsInCategory',
+                categories[0]
+            )
 
     return keywords
 
 
-def search(search_term=None, location=None, place_name=None):
+def search(request_path, search_term=None, location=None, place_name=None):
     """
     Search for organisations by search term and/or location.
     If location coordinates are supplied then results are ordered ascending
@@ -82,13 +100,12 @@ def search(search_term=None, location=None, place_name=None):
     if place_name:
         place_name = place_name.strip()
 
-    # TODO: enable tracking
-    # send_ga_tracking_event(
-    #     request._request.path,
-    #     'Search',
-    #     search_term or '',
-    #     place_name or ''
-    # )
+    send_ga_tracking_event(
+        request_path,
+        'Search',
+        search_term or '',
+        place_name or ''
+    )
 
     sqs = ConfigurableSearchQuerySet().models(Organisation)
 
@@ -138,26 +155,25 @@ def search(search_term=None, location=None, place_name=None):
     return []
 
 
-def get_organisation(organisation_id):
+def get_organisation(request_path, organisation_id):
     """
     Retrieve organisation details
     """
     # TODO: prefetch categories - currently this happens in the template
     organisation = Organisation.objects.get(pk=organisation_id)
 
-    # TODO: enable tracking
-    # send_ga_tracking_event(
-    #     request._request.path,
-    #     'View',
-    #     'Organisation',
-    #     organisation.name
-    # )
+    send_ga_tracking_event(
+        request_path,
+        'View',
+        'Organisation',
+        organisation.name
+    )
 
     return organisation
 
 
-def report_organisation(organisation_id, contact_details, address,
-                        trading_hours, other, other_detail):
+def report_organisation(request_path, organisation_id, contact_details,
+                        address, trading_hours, other, other_detail):
     """
     Report incorrect information for an organisation
     """
@@ -172,18 +188,17 @@ def report_organisation(organisation_id, contact_details, address,
         other_detail=other_detail
     )
 
-    # TODO: enable tracking
-    # send_ga_tracking_event(
-    #     request._request.path,
-    #     'Feedback',
-    #     'OrganisationIncorrectInformationReport',
-    #     organisation.name
-    # )
+    send_ga_tracking_event(
+        request_path,
+        'Feedback',
+        'OrganisationIncorrectInformationReport',
+        organisation.name
+    )
 
     return report
 
 
-def rate_organisation(organisation_id, rating):
+def rate_organisation(request_path, organisation_id, rating):
     """
     Rate the quality of an organisation
     """
@@ -194,18 +209,18 @@ def rate_organisation(organisation_id, rating):
         rating=rating
     )
 
-    # TODO: enable tracking
-    # send_ga_tracking_event(
-    #     request._request.path,
-    #     'Feedback',
-    #     'OrganisationRating',
-    #     organisation.name
-    # )
+    send_ga_tracking_event(
+        request_path,
+        'Feedback',
+        'OrganisationRating',
+        organisation.name
+    )
 
     return rating
 
 
-def sms_organisation(cell_number, organisation_url, your_name=None):
+def sms_organisation(request_path, cell_number, organisation_url,
+                     your_name=None):
     """
     Send an SMS to a supplied cell_number with a supplied organisation_url
     """
@@ -238,12 +253,11 @@ def sms_organisation(cell_number, organisation_url, your_name=None):
     except:
         logging.error("Failed to send SMS", exc_info=True)
 
-    # TODO: enable tracking
-    # send_ga_tracking_event(
-    #     request._request.path,
-    #     'SMS',
-    #     request_serializer.validated_data['organisation_url'],
-    #     analytics_label
-    # )
+    send_ga_tracking_event(
+        request_path,
+        'SMS',
+        organisation_url,
+        analytics_label
+    )
 
     return result

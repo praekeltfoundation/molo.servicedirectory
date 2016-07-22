@@ -31,7 +31,7 @@ class HomeView(TemplateView):
             categories_keywords = api.get_home_page_categories_with_keywords()
 
         else:
-            keywords = api.get_keywords([category])
+            keywords = api.get_keywords(self.request.path, [category])
 
             categories_keywords = [
                 {
@@ -124,7 +124,8 @@ class OrganisationResultsView(TemplateView):
                 )
 
         search_results = api.search(
-            search_term, place_latlng, place_formatted_address
+            self.request.path, search_term, place_latlng,
+            place_formatted_address
         )
 
         categories_keywords = []
@@ -161,7 +162,7 @@ class OrganisationDetailView(TemplateView):
         )
 
         organisation_id = self.kwargs['organisation_id']
-        organisation = api.get_organisation(organisation_id)
+        organisation = api.get_organisation(self.request.path, organisation_id)
 
         context['organisation'] = organisation
         context['message'] = self.request.GET.get('msg', None)
@@ -185,7 +186,7 @@ class OrganisationReportIncorrectInformationView(TemplateView):
     def post(self, request, *args, **kwargs):
         organisation_id = kwargs['organisation_id']
 
-        api.report_organisation(organisation_id,
+        api.report_organisation(request.path, organisation_id,
                                 request.POST.get('contact_details', None),
                                 request.POST.get('address', None),
                                 request.POST.get('trading_hours', None),
@@ -209,7 +210,8 @@ class OrganisationRateView(View):
     def post(self, request, *args, **kwargs):
         organisation_id = kwargs['organisation_id']
 
-        api.rate_organisation(organisation_id, request.POST['rating'])
+        api.rate_organisation(request.path, organisation_id,
+                              request.POST['rating'])
 
         query_params = QueryDict('', mutable=True)
         query_params['msg'] = 'Thanks for telling us how helpful this service'\
@@ -236,7 +238,8 @@ class OrganisationSendSmsView(TemplateView):
                     kwargs={'organisation_id': organisation_id})
         )
 
-        api.sms_organisation(request.POST['cell_number'],
+        api.sms_organisation(request.path,
+                             request.POST['cell_number'],
                              organisation_url,
                              request.POST.get('your_name', None))
 
