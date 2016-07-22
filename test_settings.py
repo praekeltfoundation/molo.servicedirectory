@@ -24,3 +24,8 @@ HAYSTACK_SIGNAL_PROCESSOR = 'molo.servicedirectory.signal_processors' \
                             '.BatchingSignalProcessor'
 
 GOOGLE_PLACES_API_SERVER_KEY = 'AIzaSyCAqZ-dr0pUNEe1TrV7jFLjD6-IXb8xCJI'
+
+VUMI_GO_ACCOUNT_KEY = '32bbb5f26d724c4f9b9a79b230aaab6c'
+VUMI_GO_CONVERSATION_KEY = '14a978cf775946eaab275736d55439fe'
+VUMI_GO_API_TOKEN = '5532BED691D5FCF4A5DCBF177F64E'
+VUMI_GO_API_URL = 'http://go.vumi.org/api/v1/go/http_api_nostream'

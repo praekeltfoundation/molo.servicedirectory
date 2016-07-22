@@ -251,30 +251,24 @@ class OrganisationSendSmsView(TemplateView):
     template_name = 'servicedirectory/organisation_sms.html'
 
     def post(self, request, *args, **kwargs):
-        service_directory_api_base_url =\
-            settings.SERVICE_DIRECTORY_API_BASE_URL
         organisation_id = kwargs['organisation_id']
 
-        url = '{0}organisation/sms/'.format(service_directory_api_base_url)
-
-        data = request.POST.dict()
-        data['organisation_url'] = request.build_absolute_uri(
-            reverse('organisation-detail',
+        organisation_url = request.build_absolute_uri(
+            reverse('molo.servicedirectory:organisation-detail',
                     kwargs={'organisation_id': organisation_id})
         )
 
-        if 'csrfmiddlewaretoken' in data:
-            data.pop('csrfmiddlewaretoken')  # no point passing this to the API
-
-        make_request_to_servicedirectory_api(url, data=data)
+        api.sms_organisation(request.POST['cell_number'],
+                             organisation_url,
+                             request.POST.get('your_name', None))
 
         query_params = QueryDict('', mutable=True)
         query_params['msg'] = 'Thanks! We''ve sent an SMS with a link for' \
                               ' this service to {0}.'.format(
-            data['cell_number'])
+            request.POST['cell_number'])
 
         redirect_url = '{0}?{1}'.format(
-            reverse('organisation-detail',
+            reverse('molo.servicedirectory:organisation-detail',
                     kwargs={'organisation_id': organisation_id}),
             query_params.urlencode()
         )

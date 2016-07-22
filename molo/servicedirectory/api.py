@@ -1,7 +1,9 @@
 import logging
 
+from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.db.models.query import Prefetch
+from go_http import HttpApiSender
 from molo.servicedirectory.haystack_elasticsearch_raw_query.\
     custom_elasticsearch import ConfigurableSearchQuerySet
 from molo.servicedirectory.models import Keyword, Category, Organisation, \
@@ -201,3 +203,47 @@ def rate_organisation(organisation_id, rating):
     # )
 
     return rating
+
+
+def sms_organisation(cell_number, organisation_url, your_name=None):
+    """
+    Send an SMS to a supplied cell_number with a supplied organisation_url
+    """
+    analytics_label = ''
+    result = False
+
+    try:
+        sender = HttpApiSender(
+            settings.VUMI_GO_ACCOUNT_KEY,
+            settings.VUMI_GO_CONVERSATION_KEY,
+            settings.VUMI_GO_API_TOKEN,
+            api_url=settings.VUMI_GO_API_URL
+        )
+
+        if your_name:
+            message = '{0} has sent you a link: {1}'.format(
+                your_name,
+                organisation_url
+            )
+            analytics_label = 'send'
+        else:
+            message = 'You have sent yourself a link: {0}'.format(
+                organisation_url
+            )
+            analytics_label = 'save'
+
+        sender.send_text(cell_number, message)
+
+        result = True
+    except:
+        logging.error("Failed to send SMS", exc_info=True)
+
+    # TODO: enable tracking
+    # send_ga_tracking_event(
+    #     request._request.path,
+    #     'SMS',
+    #     request_serializer.validated_data['organisation_url'],
+    #     analytics_label
+    # )
+
+    return result
