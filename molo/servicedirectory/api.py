@@ -121,7 +121,7 @@ def search(search_term=None, location=None, place_name=None):
                 result.distance if hasattr(result, 'distance') else None
             )
             for result in sqs
-            ]
+        ]
     except AttributeError:
         logging.warn('The ElasticSearch index is likely out of sync with'
                      ' the database. You should run the `rebuild_index`'
