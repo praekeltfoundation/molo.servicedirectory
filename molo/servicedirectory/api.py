@@ -5,7 +5,7 @@ from django.db.models.query import Prefetch
 from molo.servicedirectory.haystack_elasticsearch_raw_query.\
     custom_elasticsearch import ConfigurableSearchQuerySet
 from molo.servicedirectory.models import Keyword, Category, Organisation, \
-    OrganisationIncorrectInformationReport
+    OrganisationIncorrectInformationReport, OrganisationRating
 
 
 def get_home_page_categories_with_keywords():
@@ -179,3 +179,25 @@ def report_organisation(organisation_id, contact_details, address,
     # )
 
     return report
+
+
+def rate_organisation(organisation_id, rating):
+    """
+    Rate the quality of an organisation
+    """
+    organisation = Organisation.objects.get(pk=organisation_id)
+
+    rating = OrganisationRating.objects.create(
+        organisation=organisation,
+        rating=rating
+    )
+
+    # TODO: enable tracking
+    # send_ga_tracking_event(
+    #     request._request.path,
+    #     'Feedback',
+    #     'OrganisationRating',
+    #     organisation.name
+    # )
+
+    return rating
