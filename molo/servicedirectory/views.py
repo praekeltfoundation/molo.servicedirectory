@@ -238,6 +238,7 @@ class OrganisationSendSmsView(TemplateView):
                     kwargs={'organisation_id': organisation_id})
         )
 
+        # TODO: validate cell_number
         api.sms_organisation(request.path,
                              request.POST['cell_number'],
                              organisation_url,
