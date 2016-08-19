@@ -4,7 +4,7 @@
     In which area would you like to find a service?
 </p>
 
-<form action="{% url 'location-results'  %}" method="get" class="sd-search-form">
+<form action="{% url 'molo.servicedirectory:location-results'  %}" method="get" class="sd-search-form">
 
     <input type="text" name="location" value="{{ location_term }}"/>
     <input type="submit" value="Search" />
