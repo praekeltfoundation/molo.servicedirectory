@@ -1,10 +1,10 @@
-<p class="sd-back"><a href="{% url 'home' %}">< Back</a></p>
+<p class="sd-back"><a href="{% url 'molo.servicedirectory:home' %}">< Back</a></p>
 
 <p class="sd-heading search">
     In which area would you like to find a service?
 </p>
 
-<form action="{% url 'location-results'  %}" method="get" class="sd-search-form">
+<form action="{% url 'molo.servicedirectory:location-results'  %}" method="get" class="sd-search-form">
 
     <input type="text" name="location" value="{{ location_term }}"/>
     <input type="submit" value="Search" />
