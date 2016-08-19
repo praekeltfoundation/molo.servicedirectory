@@ -21,7 +21,7 @@
                     <a href="{% url 'molo.servicedirectory:location-search' %}?search={{ keyword }}" class="sd-cat-keyword">{{ keyword }}</a>{% if not forloop.last or and_more %}, {% endif %}
                 {% endfor %}
                 {% if and_more %}
-                    <a href="{% url 'home' %}?category={{ category.name }}" class="sd-cat-keyword">and more...</a>
+                    <a href="{% url 'molo.servicedirectory:home' %}?category={{ category.name }}" class="sd-cat-keyword">and more...</a>
                 {% endif %}
             </h1>
         {% endfor %}
