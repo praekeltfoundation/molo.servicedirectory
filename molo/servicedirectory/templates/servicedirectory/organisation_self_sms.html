@@ -1,0 +1,19 @@
+{% extends 'servicedirectory/content_base.html' %}
+
+{% block inner_content %}
+
+    <h1 class="sd-heading send-sms">
+        Do you want to send this service to yourself? It's free!
+    </h1>
+
+    <form action="{% url 'molo.servicedirectory:organisation-sms' organisation_id %}" method="post">
+        {% csrf_token %}
+        <div class="sd-input">
+            <label for="cell_number">Your cellphone number</label>
+            <input type="tel" id="cell_number" name="cell_number" required/>
+            <span class="sd-input-sub">*This number is safe with us</span>
+        </div>
+        <button type="submit" class="sd-sms-btn">Send</button>
+    </form>
+
+{% endblock %}

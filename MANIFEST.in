@@ -1,0 +1,15 @@
+include LICENSE
+include README.rst
+include VERSION
+include requirements.txt
+include requirements-dev.txt
+
+recursive-include tests *
+
+recursive-include docs *.rst conf.py
+
+recursive-include molo/servicedirectory *
+recursive-exclude molo/project *
+
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]

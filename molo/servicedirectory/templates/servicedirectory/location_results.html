@@ -1,0 +1,32 @@
+{% extends 'servicedirectory/content_base.html' %}
+
+{% block inner_content %}
+
+    {% include 'servicedirectory/includes/location_search_form.html' %}
+
+    {% if autocomplete_suggestions.status != 'OK' %}
+
+        <p class="sd-message{% if autocomplete_suggestions.status != 'ZERO_RESULTS' %} error{% endif %}">
+        {% if autocomplete_suggestions.status == 'ZERO_RESULTS' %}
+            No results. Please try changing your search.
+        {% else %}
+            {{ autocomplete_suggestions.error_message }}
+        {% endif %}
+        </p>
+
+    {% else %}
+        <hr>
+        <h6 class="sd-heading choose-location">Choose a location:</h6>
+    {% endif %}
+
+
+    <ul class="sd-search-results">
+        {% for prediction in autocomplete_suggestions.predictions %}
+            <li>
+                <a href="{% url 'molo.servicedirectory:organisation-results' %}?place_id={{ prediction.place_id }}&location={{ location_term }}&search={{ search_term }}">{{ prediction.description }}</a>
+                <br/>
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

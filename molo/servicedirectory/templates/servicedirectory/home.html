@@ -1,0 +1,30 @@
+{% extends 'servicedirectory/content_base.html' %}
+
+{% block inner_content %}
+
+    <p class="sd-help-text search">Search by typing something, or choose a category below:</p>
+
+    <form action="{% url 'molo.servicedirectory:location-search' %}" method="get" class="sd-search-form">
+
+        <input type="text" name="search" placeholder="I'm looking for..." />
+        <input type="submit" value="Search" />
+
+        <br/>
+    </form>
+
+    <div class="sd-categories">
+        {% for category in categories_keywords %}
+            <h1 class="sd-heading category-grouping">
+                <a href="{% url 'molo.servicedirectory:location-search' %}?search={{ category.name }}">{{ category.name }}</a>
+                <br>
+                {% for keyword in category.keywords %}
+                    <a href="{% url 'molo.servicedirectory:location-search' %}?search={{ keyword }}" class="sd-cat-keyword">{{ keyword }}</a>{% if not forloop.last or and_more %}, {% endif %}
+                {% endfor %}
+                {% if and_more %}
+                    <a href="{% url 'molo.servicedirectory:home' %}?category={{ category.name }}" class="sd-cat-keyword">and more...</a>
+                {% endif %}
+            </h1>
+        {% endfor %}
+        <div style="clear: both"></div>
+    </div>
+{% endblock %}
