@@ -197,7 +197,8 @@ class OrganisationResultsView(TemplateView):
         context['place_latlng'] = place_latlng
         context['place_formatted_address'] = place_formatted_address
         context['change_location_url'] = '{0}?{1}'.format(
-            reverse('location-results'), location_query_parms.urlencode()
+            reverse('molo.servicedirectory:location-results'),
+            location_query_parms.urlencode()
         )
         context['search_results'] = search_results
         context['categories_keywords'] = categories_keywords
@@ -262,7 +263,7 @@ class OrganisationReportIncorrectInformationView(TemplateView):
                               ' look into it.'
 
         redirect_url = '{0}?{1}'.format(
-            reverse('organisation-detail',
+            reverse('molo.servicedirectory:organisation-detail',
                     kwargs={'organisation_id': organisation_id}),
             query_params.urlencode()
         )
@@ -293,7 +294,7 @@ class OrganisationRateView(View):
                               ' you change your mind.'
 
         redirect_url = '{0}?{1}'.format(
-            reverse('organisation-detail',
+            reverse('molo.servicedirectory:organisation-detail',
                     kwargs={'organisation_id': organisation_id}),
             query_params.urlencode()
         )
@@ -313,7 +314,7 @@ class OrganisationSendSmsView(TemplateView):
 
         data = request.POST.dict()
         data['organisation_url'] = request.build_absolute_uri(
-            reverse('organisation-detail',
+            reverse('molo.servicedirectory:organisation-detail',
                     kwargs={'organisation_id': organisation_id})
         )
 
@@ -328,7 +329,7 @@ class OrganisationSendSmsView(TemplateView):
             data['cell_number'])
 
         redirect_url = '{0}?{1}'.format(
-            reverse('organisation-detail',
+            reverse('molo.servicedirectory:organisation-detail',
                     kwargs={'organisation_id': organisation_id}),
             query_params.urlencode()
         )
