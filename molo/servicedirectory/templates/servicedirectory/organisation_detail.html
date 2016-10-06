@@ -14,26 +14,25 @@
     </div>
     {% endif %}
 
-    <h1 class="sd-heading svc-org-name">{{ organisation.name }}</h1>
-    <h1 class="sd-heading org-services">Services</h1>
-    <div class="sd-service-categories">
+    <h1 class="heading heading--org-name">{{ organisation.name }}</h1>
+    <h2 class="heading heading--subtitle">Services</h2>
+    <ul class="service-link-list">
         {% for category in organisation.categories %}
-        <span class="category">
+        <li class="service-link-list__item">
             {{ category.name }}
-        </span><br/>
+        </li>
         {% endfor %}
-    </div>
+    </ul>
 
-    <h1 class="sd-heading service-keywords">What we do</h1>
-
-    <p class="sd-service-keywords">
-     {{ organisation.about }}
-    </p>
-
+   <h3 class="heading heading--subtitle heading--keywords">What we do</h1>
+    <ul class="service-link-list">
+        <li class="service-link-list__item service-link-list__item--keywords">
+          {{ organisation.about }}
+        </li>
+    </ul>
+   
     {% if organisation.telephone or organisation.email or organisation.web %}
-
-        <h1 class="sd-heading org-contact">Contact</h1>
-
+        <h3 class="heading heading--subtitle">Contact</h3>
         <p class="sd-org-contact">
             {% if organisation.telephone %}
             <span class="tel">
@@ -56,25 +55,20 @@
             </span>
             {% endif %}
         </p>
-
     {% endif %}
 
     {% if organisation.address %}
-        <h1 class="sd-heading org-address">Address</h1>
-
+       <h3 class="heading heading--subtitle">Address</h3>
         <p class="sd-org-address">
             {{ organisation.address }}
         </p>
-
     {% endif %}
 
     {% if organisation.availability_hours %}
-        <h1 class="sd-heading service-tradinghours">Trading Hours</h1>
-
+        <h3 class="heading heading--subtitle">Trading Hours</h3>
         <p class="sd-service-tradinghours">
             {{ organisation.availability_hours }}
         </p>
-
     {% endif %}
 
     {% if organisation.age_range_min and organisation.age_range_max %}
@@ -91,8 +85,7 @@
 
     <hr/>
 
-    <h1 class="sd-heading service-rating">How helpful was this?</h1>
-
+    <h4 class="heading heading--subtitle">How helpful was this?</h1>
     <form method="post" action="{% url 'molo.servicedirectory:organisation-rate' organisation.id %}">
         {% csrf_token %}
         <div class="org-rate-container">
