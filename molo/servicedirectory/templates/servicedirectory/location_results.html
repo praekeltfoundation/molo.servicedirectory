@@ -22,15 +22,9 @@
 
     <ul class="service-link-list">
         {% for prediction in autocomplete_suggestions.predictions %}
-<<<<<<< Updated upstream
-            <li>
-                <a href="{% url 'molo.servicedirectory:organisation-results' %}?place_id={{ prediction.place_id }}&location={{ location_term }}&search={{ search_term }}">{{ prediction.description }}</a>
-=======
-            <li class="service-link-list__item">
-                <a href="{% url 'organisation-results' %}?place_id={{ prediction.place_id }}&location={{ location_term }}&search={{ search_term }}">{{ prediction.description }}</a>
->>>>>>> Stashed changes
-                <br/>
-            </li>
+        <li class="service-link-list__item">
+            <a href="{% url 'molo.servicedirectory:organisation-results' %}?place_id={{ prediction.place_id }}&location={{ location_term }}&search={{ search_term }}">{{ prediction.description }}</a>
+        </li>
         {% endfor %}
     </ul>
 
