@@ -2,7 +2,9 @@
 
 {% block inner_content %}
 
-    <p class="sd-back"><a href="{{ change_location_url }}">< Back</a></p>
+    <a href="{{ change_location_url }}" class="call-to-action__nav-item call-to-action__nav-item--back">
+     &lt; Back
+    </a>
 
     <form action="{% url 'molo.servicedirectory:organisation-results' %}" method="get" class="sd-search-form">
 
