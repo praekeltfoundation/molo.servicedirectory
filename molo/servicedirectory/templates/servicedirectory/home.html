@@ -14,13 +14,13 @@
     <ul class="service-list">
         {% for keyword in category.keywords %}
         <li class="service-list__item">
-            <a href="{% url 'molo.servicedirectory:location-search' %}?search={{ keyword }}" class="sd-cat-keyword">{{ keyword }}</a>
+            <a href="{% url 'molo.servicedirectory:location-search' %}?search={{ keyword }}" class="service-directory__search-term">{{ keyword }}</a>
             {% if not forloop.last or and_more %}, {% endif %}
         </li>
         {% endfor %}
         <li class="service-list__item">
         {% if and_more %}
-            <a href="{% url 'molo.servicedirectory:home' %}?category={{ category.name }}" class="sd-cat-keyword">and more...</a>
+            <a href="{% url 'molo.servicedirectory:home' %}?category={{ category.name }}">and more...</a>
         {% endif %}
         </li>
     {% endfor %}
