@@ -1,7 +1,7 @@
 {% extends 'servicedirectory/content_base.html' %}
 
 {% block inner_content %}
-    <h1 class="heading heading--service-directory-subtitle">Do you want to send this service to yourself? It's free!</h1>
+    <h1 class="heading heading--service-dir-subtitle">Do you want to send this service to yourself? It's free!</h1>
     <form action="{% url 'molo.servicedirectory:organisation-sms' organisation_id %}" method="post" class="service-directory__form">
     {% csrf_token %}
         <fieldset>
