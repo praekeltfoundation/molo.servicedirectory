@@ -1,5 +1,4 @@
 {% extends 'servicedirectory/content_base.html' %}
-
 {% load staticfiles %}
 
 {% block extra_css %}
@@ -7,34 +6,32 @@
 {% endblock %}
 
 {% block inner_content %}
-
     {% if message %}
-    <div class="sd-msg">
+    <div class="service-directory__feedback-message">
         {{ message }}
     </div>
     {% endif %}
 
-    <h1 class="sd-heading svc-org-name">{{ organisation.name }}</h1>
-    <h1 class="sd-heading org-services">Services</h1>
-    <div class="sd-service-categories">
-        {% for category in organisation.categories %}
-        <span class="category">
+    <h1 class="heading heading--service-dir-organisation">{{ organisation.name }}</h1>
+    <h2 class="service-directory__title">Services</h2>
+    <ul class="service-list">
+    {% for category in organisation.categories %}
+        <li class="service-list__item">
             {{ category.name }}
-        </span><br/>
-        {% endfor %}
-    </div>
+        </li>
+    {% endfor %}
+    </ul>
 
-    <h1 class="sd-heading service-keywords">What we do</h1>
-
-    <p class="sd-service-keywords">
-     {{ organisation.about }}
-    </p>
-
+    <h3 class="service-directory__title">What we do</h3>
+    <ul class="service-list">
+        <li class="service-list__item">
+          {{ organisation.about }}
+        </li>
+    </ul>
+   
     {% if organisation.telephone or organisation.email or organisation.web %}
-
-        <h1 class="sd-heading org-contact">Contact</h1>
-
-        <p class="sd-org-contact">
+        <h3 class="service-directory__title">Contact</h3>
+        <h6 class="service-directory__contact">
             {% if organisation.telephone %}
             <span class="tel">
                 <a href="tel:{{ organisation.telephone }}">{{ organisation.telephone }}</a>
@@ -55,60 +52,56 @@
                 <a href="{{ organisation.web }}" target="_blank">{{ organisation.web }}</a>
             </span>
             {% endif %}
-        </p>
-
+        </h6>
     {% endif %}
 
     {% if organisation.address %}
-        <h1 class="sd-heading org-address">Address</h1>
-
-        <p class="sd-org-address">
+    <h3 class="service-directory__title">Address</h3>
+    <ul class="service-list">
+        <li class="service-list__item">
             {{ organisation.address }}
-        </p>
-
+        </li>
+    </ul>
     {% endif %}
 
     {% if organisation.availability_hours %}
-        <h1 class="sd-heading service-tradinghours">Trading Hours</h1>
-
-        <p class="sd-service-tradinghours">
+    <h3 class="service-directory__title">Trading Hours</h3>
+    <ul class="service-list">
+        <li class="service-list__item">
             {{ organisation.availability_hours }}
-        </p>
-
+        </li>
+    </ul>
     {% endif %}
 
     {% if organisation.age_range_min and organisation.age_range_max %}
-        <div class="sd-service-ages">
+    <ul class="service-list">
+        <li class="service-list__item">
             {{ organisation.age_range_min }}-{{ organisation.age_range_max }} years
-        </div>
+        </li>
+    </ul>
     {% endif %}
 
-    <a class="sd-report-link" href="{% url 'molo.servicedirectory:organisation-report' organisation.id %}?org_name={{ organisation.name | urlencode }}">Report incorrect info</a>
+    <a class="call-to-action__nav-item call-to-action__nav-item--report" href="{% url 'molo.servicedirectory:organisation-report' organisation.id %}?org_name={{ organisation.name | urlencode }}">Report incorrect info</a>
 
-    <a href="{% url 'molo.servicedirectory:organisation-sms' organisation.id %}" class="sd-sms-button primary">Send Service to Someone</a>
+    <a class="call-to-action__nav-item" href="{% url 'molo.servicedirectory:organisation-sms' organisation.id %}" class="sd-sms-button primary">Send Service to Someone</a>
 
-    <a href="{% url 'molo.servicedirectory:organisation-sms-self' organisation.id %}" class="sd-sms-button secondary">Send This Service to Yourself</a>
+    <a class="call-to-action__nav-item" href="{% url 'molo.servicedirectory:organisation-sms-self' organisation.id %}" class="sd-sms-button secondary">Send This Service to Yourself</a>
 
     <hr/>
-
-    <h1 class="sd-heading service-rating">How helpful was this?</h1>
-
-    <form method="post" action="{% url 'molo.servicedirectory:organisation-rate' organisation.id %}">
-        {% csrf_token %}
-        <div class="org-rate-container">
-            <div class="org-rate-faces">
-                <button type="submit" name="rating" value="good" class="smiley happy"></button>
-                <span>Very helpful</span>
-            </div>
-            <div class="org-rate-faces">
-                <button type="submit" name="rating" value="average" class="smiley neutral"></button>
-                <span>I'm neutral</span>
-            </div>
-            <div class="org-rate-faces">
-                <button type="submit" name="rating" value="poor" class="smiley sad"></button>
-                <span>Not helpful</span>
-            </div>
-        </div>
+    <h4 class="service-directory__title">How helpful was this?</h1>
+    <form method="post" action="{% url 'molo.servicedirectory:organisation-rate' organisation.id %}" class="service-directory__form">
+    {% csrf_token %}
+        <fieldset>
+            <button type="submit" name="rating" value="good" class="smiley happy"></button>
+            <label>Very helpful</label>
+        </fieldset>
+        <fieldset>
+            <button type="submit" name="rating" value="average" class="smiley neutral"></button>
+            <label>I'm neutral</label>
+        </fieldset>
+        <fieldset>
+            <button type="submit" name="rating" value="poor" class="smiley sad"></button>
+            <label>Not helpful</label>
+        </fieldset>
     </form>
-
 {% endblock %}

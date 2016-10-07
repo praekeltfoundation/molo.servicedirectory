@@ -2,31 +2,32 @@
 
 {% block inner_content %}
 
-    <h1 class="sd-heading report-info">
+    <h1 class="heading heading--service-dir-subtitle">
         Which of the following information is incorrect for <span class="svc-org-name">{{ organisation_name }}</span>?
     </h1>
-
-    <form method="post">
-        {% csrf_token %}
-        <div class="sd-option">
+    <form method="post" class="service-directory__form">
+    {% csrf_token %}
+        <fieldset>
             <input type="checkbox" id="contact_details" name="contact_details" value="true"/>
             <label for="contact_details">Contact Details</label>
-        </div>
-        <div class="sd-option">
+        </fieldset>
+        <fieldset>
             <input type="checkbox" id="address" name="address" value="true"/>
             <label for="address">Address</label>
-        </div>
-        <div class="sd-option">
+        </fieldset>
+        <fieldset>
             <input type="checkbox" id="trading_hours" name="trading_hours" value="true"/>
             <label for="trading_hours">Trading Hours</label>
-        </div>
-        <div class="sd-option">
+        </fieldset>
+        <fieldset>
             <input type="checkbox" id="other" name="other" value="true"/>
             <label for="other">Other</label>
-        </div>
-        <label for="other_detail" class="other_detail">If other, please specify:</label>
-        <textarea id="other_detail" name="other_detail" rows="3"></textarea>
-        <button type="submit" class="sd-report-btn">Send Report</button>
+        </fieldset>
+        <fieldset>
+            <label for="other_detail" class="other_detail">If other, please specify:</label>
+            <textarea id="other_detail" name="other_detail" rows="3"></textarea>
+        </fieldset>
+        <input type="submit" name="send-report" value="Send Report" />
     </form>
 
 {% endblock %}
