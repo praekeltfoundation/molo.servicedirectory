@@ -21,29 +21,22 @@
   {% endif %}
   </form>
 
-    <div class="service-directory__location">
+    <div class="service-directory-location">
      <h3 class="service-directory__title service-directory__title--current-address">{{ place_formatted_address }}</p>
      <a class="call-to-action__nav-item call-to-action__nav-item--change-search" href="{{ change_location_url }}">Change area</a>
     </div>
     <ul class="service-list service-list--results">
     {% for organisation in search_results %}
       <li class="service-list__item">
-        <a href="{% url 'molo.servicedirectory:organisation-detail' organisation.id %}" class="sd-service-result">
+        <a class="service-directory-location__detail-link" href="{% url 'molo.servicedirectory:organisation-detail' organisation.id %}">
             <h3 class="service-directory__title">{{ organisation.name }}</h3>
             {% if organisation.verified_as %}
-                <span class="sd-verified">[ Verified ]</span>
+              <span class="service-directory-location__verified">[ Verified ]</span>
             {% endif %}
         </a>
-
-        <p class="sd-service-keywords">
-            {{ organisation.keywords|join:", " }}
-        </p>
-
-        <p class="sd-service-location">
-            {{ organisation.address }}
-        </p>
-
-        <p class="sd-service-distance">{{ organisation.distance }}</p>
+        <span class="service-directory-location__keywords">{{ organisation.keywords|join:", " }}</span>
+        <span class="service-directory-location__address">{{ organisation.address }}</span>
+        <span class="service-directory-location__distance">{{ organisation.distance }}</span>
     </li>
     {% empty %}
     <li class="service-list__item service-list__item--no-result">
