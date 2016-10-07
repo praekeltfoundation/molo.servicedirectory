@@ -1,16 +1,11 @@
-
 <a href="{% url 'home' %}" class="call-to-action__nav-item call-to-action__nav-item--back">
-  &lt; Back
- </a>
-<p class="sd-heading search">
-    In which area would you like to find a service?
-</p>
+  &lt; Back</a>
 
-<form action="{% url 'molo.servicedirectory:location-results'  %}" method="get" class="sd-search-form">
-
+<h4 class="service-directory__title">In which area would you like to find a service?</h4>
+<form action="{% url 'molo.servicedirectory:location-results'  %}" method="get" class="service-directory__form">
+  <fieldset>
     <input type="text" name="location" value="{{ location_term }}"/>
-    <input type="submit" value="Search" />
-
-    <input type="hidden" name="search" value="{{ search_term }}" />
-
+  </fieldset>
+  <input type="submit" value="Search" />
+  <input type="hidden" name="search" value="{{ search_term }}" />
 </form>
