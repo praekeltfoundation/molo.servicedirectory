@@ -39,13 +39,13 @@
         <span class="service-dir-location__distance">{{ organisation.distance }}</span>
     </li>
     {% empty %}
-    <li class="service-list__item service-list__item--no-result">
+    <li class="service-list__item">
       <h3 class="service-directory__title">We couldn't find any services for <span class="service-directory__search-term">"{{ search_term }}"</span></h3>
       <p>Try one of the following things:</p>
       <p>Check your spelling</p>
       <a class="call-to-action__nav-item call-to-action__nav-item--change-search" href="{% url 'molo.servicedirectory:home' %}">Search for something else</a>
       <h3 class="service-directory__title">Search a category:</h3>
-      <ul class="service-list">
+      <ul class="service-list service-list--no-results">
         {% for category in categories_keywords %}
         <li class="service-list__item">
           <a href="{% url 'molo.servicedirectory:organisation-results' %}?search={{ category.name }}&location={{ location_term }}&place_id={{ place_id }}{% if place_latlng %}&place_latlng={{ place_latlng }}{% endif %}{% if place_formatted_address %}&place_formatted_address={{ place_formatted_address }}{% endif %}">

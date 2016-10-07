@@ -24,14 +24,14 @@
 
     <h3 class="service-directory__title">What we do</h3>
     <ul class="service-list">
-        <li class="service-list__item service-link-list__item--keywords">
+        <li class="service-list__item">
           {{ organisation.about }}
         </li>
     </ul>
    
     {% if organisation.telephone or organisation.email or organisation.web %}
         <h3 class="service-directory__title">Contact</h3>
-        <p class="sd-org-contact">
+        <h6 class="service-directory__contact">
             {% if organisation.telephone %}
             <span class="tel">
                 <a href="tel:{{ organisation.telephone }}">{{ organisation.telephone }}</a>
@@ -52,7 +52,7 @@
                 <a href="{{ organisation.web }}" target="_blank">{{ organisation.web }}</a>
             </span>
             {% endif %}
-        </p>
+        </h6>
     {% endif %}
 
     {% if organisation.address %}
