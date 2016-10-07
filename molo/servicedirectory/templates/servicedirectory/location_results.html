@@ -1,32 +1,24 @@
 {% extends 'servicedirectory/content_base.html' %}
 
 {% block inner_content %}
-
     {% include 'servicedirectory/includes/location_search_form.html' %}
-
     {% if autocomplete_suggestions.status != 'OK' %}
-
-        <p class="sd-message{% if autocomplete_suggestions.status != 'ZERO_RESULTS' %} error{% endif %}">
+        <h3 class="service-directory__title {% if autocomplete_suggestions.status != 'ZERO_RESULTS' %} error{% endif %}">
         {% if autocomplete_suggestions.status == 'ZERO_RESULTS' %}
             No results. Please try changing your search.
         {% else %}
             {{ autocomplete_suggestions.error_message }}
         {% endif %}
-        </p>
-
+        </h3>
     {% else %}
-        <hr>
-        <h6 class="sd-heading choose-location">Choose a location:</h6>
+        <h3 class="service-directory__title">Choose a location:</h3>
     {% endif %}
 
-
-    <ul class="sd-search-results">
-        {% for prediction in autocomplete_suggestions.predictions %}
-            <li>
-                <a href="{% url 'molo.servicedirectory:organisation-results' %}?place_id={{ prediction.place_id }}&location={{ location_term }}&search={{ search_term }}">{{ prediction.description }}</a>
-                <br/>
-            </li>
-        {% endfor %}
+    <ul class="service-list">
+    {% for prediction in autocomplete_suggestions.predictions %}
+        <li class="service-list__item">
+            <a class="service-directory__search-term service-directory__search-term--prediction" href="{% url 'molo.servicedirectory:organisation-results' %}?place_id={{ prediction.place_id }}&location={{ location_term }}&search={{ search_term }}">{{ prediction.description }}</a>
+        </li>
+    {% endfor %}
     </ul>
-
 {% endblock %}
