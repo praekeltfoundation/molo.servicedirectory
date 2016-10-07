@@ -21,18 +21,15 @@
   {% endif %}
   </form>
 
-    <div class="sd-location">
-      <p class="sd-current-address">{{ place_formatted_address }}</p>
-      <a class="sd-change-area" href="{{ change_location_url }}">Change area</a>
+    <div class="service-directory__location">
+     <h3 class="service-directory__title service-directory__title--current-address">{{ place_formatted_address }}</p>
+     <a class="call-to-action__nav-item call-to-action__nav-item--change-search" href="{{ change_location_url }}">Change area</a>
     </div>
-
-    <hr/>
-
+    <ul class="service-list service-list--results">
     {% for organisation in search_results %}
+      <li class="service-list__item">
         <a href="{% url 'molo.servicedirectory:organisation-detail' organisation.id %}" class="sd-service-result">
-            <h1 class="sd-heading svc-org-name">
-                {{ organisation.name }}
-            </h1>
+            <h3 class="service-directory__title">{{ organisation.name }}</h3>
             {% if organisation.verified_as %}
                 <span class="sd-verified">[ Verified ]</span>
             {% endif %}
@@ -47,37 +44,27 @@
         </p>
 
         <p class="sd-service-distance">{{ organisation.distance }}</p>
-        <div style="clear:both"></div>
-
+    </li>
     {% empty %}
-
-        <div class="sd-no-search-results">
-            <p>
-                We couldn't find any services for <strong>"{{ search_term }}"</strong>
-            </p>
-            <p>
-                Try one of the following things:
-                <ul>
-                    <li>
-                        Check your spelling
-                    </li>
-                    <li>
-                        <a href="{% url 'molo.servicedirectory:home' %}">Search for something else</a>
-                    </li>
-                    <li>
-                        Search a category:
-                        {% for category in categories_keywords %}
-                            <a href="{% url 'molo.servicedirectory:organisation-results' %}?search={{ category.name }}&location={{ location_term }}&place_id={{ place_id }}{% if place_latlng %}&place_latlng={{ place_latlng }}{% endif %}{% if place_formatted_address %}&place_formatted_address={{ place_formatted_address }}{% endif %}">
-                                {{ category.name }}
-                            </a>{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                    </li>
-                </ul>
-            </p>
-        </div>
-
+    <li class="service-list__item service-list__item--no-result">
+      <h3 class="service-directory__title">We couldn't find any services for <span class="hightlight">"{{ search_term }}"</span></h3>
+      <p>Try one of the following things:</p>
+      <p>Check your spelling</p>
+      <a class="call-to-action__nav-item call-to-action__nav-item--change-search" href="{% url 'molo.servicedirectory:home' %}">Search for something else</a>
+      <h3 class="service-directory__title">Search a category:</h3>
+      <ul class="service-list">
+        {% for category in categories_keywords %}
+        <li class="service-list__item">
+          <a href="{% url 'molo.servicedirectory:organisation-results' %}?search={{ category.name }}&location={{ location_term }}&place_id={{ place_id }}{% if place_latlng %}&place_latlng={{ place_latlng }}{% endif %}{% if place_formatted_address %}&place_formatted_address={{ place_formatted_address }}{% endif %}">
+            {{ category.name }}
+          </a>
+        </li>
+        <li class="service-list__item">
+          </a>{% if not forloop.last %}, {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+      </li>
     {% endfor %}
-
-    <hr>
-
+    </ul>
 {% endblock %}
