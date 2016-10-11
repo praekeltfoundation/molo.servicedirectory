@@ -21,14 +21,7 @@
         </li>
     {% endfor %}
     </ul>
-
-    <h3 class="service-directory__title">What we do</h3>
-    <ul class="service-list">
-        <li class="service-list__item">
-          {{ organisation.about }}
-        </li>
-    </ul>
-   
+    
     {% if organisation.telephone or organisation.email or organisation.web %}
         <h3 class="service-directory__title">Contact</h3>
         <h6 class="service-directory__contact">
