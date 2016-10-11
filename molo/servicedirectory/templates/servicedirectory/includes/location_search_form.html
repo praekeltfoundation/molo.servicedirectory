@@ -1,9 +1,9 @@
 <a href="{% url 'home' %}" class="call-to-action__nav-item call-to-action__nav-item--back">
   &lt; Back</a>
 
-<h4 class="service-directory__title">In which area would you like to find a service?</h4>
 <form action="{% url 'molo.servicedirectory:location-results'  %}" method="get" class="service-directory__form">
   <fieldset>
+    <label>In which area would you like to find a service?</label>
     <input type="text" name="location" value="{{ location_term }}"/>
   </fieldset>
   <input type="submit" value="Search" />
