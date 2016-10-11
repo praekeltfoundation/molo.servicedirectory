@@ -22,7 +22,8 @@
   </form>
 
     <div class="service-dir-location">
-     <h3 class="service-directory__title service-directory__title--current-address">{{ place_formatted_address }}</p>
+     <h3 class="service-directory__title service-directory__title--current-address">
+     {{ place_formatted_address }}</h3>
      <a class="call-to-action__nav-item call-to-action__nav-item--change-search" href="{{ change_location_url }}">Change area</a>
     </div>
     <ul class="service-list service-list--results">
@@ -39,7 +40,10 @@
     </li>
     {% empty %}
     <li class="service-list__item">
-      <h3 class="service-directory__title">We couldn't find any services for <span class="service-directory__search-term">"{{ search_term }}"</span></h3>
+      <h3 class="service-directory__title">
+        We couldn't find any services for 
+        <span class="service-directory__search-term">"{{ search_term }}"</span>
+      </h3>
       <p>Try one of the following things:</p>
       <p>Check your spelling</p>
       <a class="call-to-action__nav-item call-to-action__nav-item--change-search" href="{% url 'molo.servicedirectory:home' %}">Search for something else</a>
