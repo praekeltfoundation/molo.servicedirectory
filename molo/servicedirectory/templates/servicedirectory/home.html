@@ -1,9 +1,9 @@
 {% extends 'servicedirectory/content_base.html' %}
 
 {% block inner_content %}
-    <h2 class="heading heading--service-dir-subtitle">Search by typing something, or choose a category below:</h2>
     <form action="{% url 'molo.servicedirectory:location-search' %}" method="get" class="service-directory__form">
         <fieldset>
+        <label class="heading heading--service-dir-subtitle">Search by typing something, or choose a category below:</label>
         <input type="text" name="search" placeholder="I'm looking for..." />
         </fieldset>
         <input type="submit" value="Search" />
