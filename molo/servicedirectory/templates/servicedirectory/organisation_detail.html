@@ -81,9 +81,9 @@
     <a class="call-to-action__nav-item" href="{% url 'molo.servicedirectory:organisation-sms-self' organisation.id %}" class="sd-sms-button secondary">Send This Service to Yourself</a>
 
     <hr/>
-    <h4 class="service-directory__title">How helpful was this?</h1>
     <form method="post" action="{% url 'molo.servicedirectory:organisation-rate' organisation.id %}" class="service-directory__form">
     {% csrf_token %}
+    <label class="service-directory__title">How helpful was this?</label>
         <fieldset>
             <button type="submit" name="rating" value="good" class="smiley happy"></button>
             <label>Very helpful</label>
