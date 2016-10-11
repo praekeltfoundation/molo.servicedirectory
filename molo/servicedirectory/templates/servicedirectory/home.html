@@ -1,9 +1,9 @@
 {% extends 'servicedirectory/content_base.html' %}
 
 {% block inner_content %}
-    <h2 class="heading heading--service-dir-subtitle">Search by typing something, or choose a category below:</h2>
     <form action="{% url 'molo.servicedirectory:location-search' %}" method="get" class="service-directory__form">
         <fieldset>
+        <label class="heading heading--service-dir-subtitle">Search by typing something, or choose a category below:</label>
         <input type="text" name="search" placeholder="I'm looking for..." />
         </fieldset>
         <input type="submit" value="Search" />
@@ -15,7 +15,6 @@
         {% for keyword in category.keywords %}
         <li class="service-list__item">
             <a href="{% url 'molo.servicedirectory:location-search' %}?search={{ keyword }}" class="service-directory__search-term">{{ keyword }}</a>
-            {% if not forloop.last or and_more %}, {% endif %}
         </li>
         {% endfor %}
         <li class="service-list__item">
