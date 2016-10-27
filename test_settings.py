@@ -26,7 +26,7 @@ HAYSTACK_SIGNAL_PROCESSOR = 'molo.servicedirectory.signal_processors' \
 WAGTAILSEARCH_BACKENDS = {
     'default': {
         'BACKEND': (
-            'molo.core.wagtailsearch.backends.elasticsearch2'
+            'molo.core.wagtailsearch.backends.elasticsearch'
         ),
         'INDEX': 'testapp',
     },
