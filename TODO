@@ -3,8 +3,6 @@
   supposed to remove any dependency on django.contrib.gis
   See https://github.com/makinacorpus/django-geojson/issues/75
 
-* Copy sample import files from service-directory
-
 * Case insensitive for non-postgres DBs (eg: using collation in MySQL)
   Automate as far as possible using migrations (conditional)
   See models.CaseInsensitiveTextField and its usages
