@@ -1,7 +1,8 @@
 * Update README
-  Add note about gdal-bin being required even though django-geojson is
-  supposed to remove any dependency on django.contrib.gis
-  See https://github.com/makinacorpus/django-geojson/issues/75
+  - Add note about gdal-bin being required even though django-geojson is
+    supposed to remove any dependency on django.contrib.gis
+    See https://github.com/makinacorpus/django-geojson/issues/75
+  - Update README.txt in /docs/import_examples/
 
 * Case insensitive for non-postgres DBs (eg: using collation in MySQL)
   Automate as far as possible using migrations (conditional)
