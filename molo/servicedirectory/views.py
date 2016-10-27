@@ -1,10 +1,11 @@
 import json
 import urllib2
 
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.http import QueryDict, HttpResponseRedirect
 from django.views.generic import TemplateView, View
-from molo.servicedirectory import settings, api
+from molo.servicedirectory import api
 
 
 def make_request_to_google_api(url, querydict):
