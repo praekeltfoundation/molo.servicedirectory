@@ -1,6 +1,6 @@
 molo.core
 django-geojson [field]
-django-leaflet==0.18.0
+django-leaflet
 django-import-export
 
 elasticsearch<2.0.0
