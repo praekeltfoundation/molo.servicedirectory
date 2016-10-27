@@ -23,6 +23,15 @@ HAYSTACK_CONNECTIONS = {
 HAYSTACK_SIGNAL_PROCESSOR = 'molo.servicedirectory.signal_processors' \
                             '.BatchingSignalProcessor'
 
+WAGTAILSEARCH_BACKENDS = {
+    'default': {
+        'BACKEND': (
+            'molo.core.wagtailsearch.backends.elasticsearch2'
+        ),
+        'INDEX': 'testapp',
+    },
+}
+
 GOOGLE_PLACES_API_SERVER_KEY = 'AIzaSyCAqZ-dr0pUNEe1TrV7jFLjD6-IXb8xCJI'
 
 VUMI_GO_ACCOUNT_KEY = '32bbb5f26d724c4f9b9a79b230aaab6c'
