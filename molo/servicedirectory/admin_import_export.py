@@ -105,7 +105,7 @@ class CustomModelResource(resources.ModelResource):
 
 
 class PointWidget(Widget):
-    def clean(self, value):
+    def clean(self, value, row=None, *args, **kwargs):
         try:
             lat, lng = value.split(',')
             lat = float(lat)
@@ -119,7 +119,7 @@ class PointWidget(Widget):
 
         return json.loads(point.geojson)
 
-    def render(self, value):
+    def render(self, value, obj=None):
         if not value:
             return ''
 
