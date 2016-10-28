@@ -2,7 +2,6 @@ import json
 
 from django.contrib.gis.geos import GEOSGeometry
 from django.db import models
-from django.utils.functional import cached_property
 from djgeojson.fields import PointField
 
 
@@ -105,7 +104,7 @@ class Organisation(models.Model):
     def __unicode__(self):
         return self.name
 
-    @cached_property
+    @property
     def location_point(self):
         try:
             point = GEOSGeometry(json.dumps(self.location))

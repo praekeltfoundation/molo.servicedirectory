@@ -158,6 +158,9 @@ class OrganisationTestCase(TestCase):
             'Test Category' in organisations[0].formatted_categories()
         )
         self.assertTrue('test' in organisations[0].formatted_keywords())
+        self.assertEqual(
+            '-33.891937, 18.505496', organisations[0].location_coords
+        )
 
     def test_update(self):
         organisations = Organisation.objects.filter(name='Test Org')
@@ -169,6 +172,19 @@ class OrganisationTestCase(TestCase):
         organisation.refresh_from_db()
 
         self.assertEqual('Changed Org', organisation.name)
+
+    def test_setting_location_updates_location_point(self):
+        organisations = Organisation.objects.filter(name='Test Org')
+
+        organisation = organisations[0]
+
+        self.assertEqual('-33.891937, 18.505496', organisation.location_coords)
+
+        new_point = Point(18.505496, -34, srid=4326)
+
+        organisation.location = json.loads(new_point.geojson)
+
+        self.assertEqual(new_point, organisation.location_point)
 
 
 class OrganisationIncorrectInformationReportTestCase(TestCase):
