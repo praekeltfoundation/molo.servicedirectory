@@ -33,7 +33,7 @@ INSERT INTO "servicedirectory_country" (name,iso_code) VALUES('South Africa','ZA
 INSERT INTO "_vars" VALUES ('sa_country_id', last_insert_rowid());
 
 --organisation
-INSERT INTO "servicedirectory_organisation" (name,about,address,telephone,emergency_telephone,email,web,verified_as,opening_hours,country_id,location,facility_code) VALUES('Healthcare Co','Something about them','202 The Gatehouse, Century Way, Century City','0215522159','','blueteam@labs.ws','http://www.afrolabs.co.za','','',(SELECT Value FROM _vars WHERE Name = 'sa_country_id'),'SRID=4326;POINT (18.5054960000000008 -33.8919369999999986)','');
+INSERT INTO "servicedirectory_organisation" (name,about,address,telephone,emergency_telephone,email,web,verified_as,opening_hours,country_id,location,facility_code) VALUES('Healthcare Co','Something about them','202 The Gatehouse, Century Way, Century City','0215522159','','blueteam@labs.ws','http://www.afrolabs.co.za','','',(SELECT Value FROM _vars WHERE Name = 'sa_country_id'),'{"type":"Point","coordinates":[18.505496,-33.891937]}','');
 INSERT INTO "_vars" VALUES ('healthcareco_org_id', last_insert_rowid());
 
 --organisation_category
