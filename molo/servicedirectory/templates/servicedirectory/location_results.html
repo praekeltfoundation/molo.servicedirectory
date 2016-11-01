@@ -1,5 +1,7 @@
 {% extends 'servicedirectory/content_base.html' %}
 
+{% load i18n %}
+
 {% block inner_content %}
 
     {% include 'servicedirectory/includes/location_search_form.html' %}
@@ -8,7 +10,7 @@
 
         <p class="sd-message{% if autocomplete_suggestions.status != 'ZERO_RESULTS' %} error{% endif %}">
         {% if autocomplete_suggestions.status == 'ZERO_RESULTS' %}
-            No results. Please try changing your search.
+            {% trans "No results. Please try changing your search." %}
         {% else %}
             {{ autocomplete_suggestions.error_message }}
         {% endif %}
@@ -16,7 +18,7 @@
 
     {% else %}
         <hr>
-        <h6 class="sd-heading choose-location">Choose a location:</h6>
+        <h6 class="sd-heading choose-location">{% trans "Choose a location:" %}</h6>
     {% endif %}
 
 

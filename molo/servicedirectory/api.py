@@ -4,6 +4,7 @@ from UniversalAnalytics import Tracker
 from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.db.models.query import Prefetch
+from django.utils.translation import ugettext as _
 from go_http import HttpApiSender
 from molo.servicedirectory.haystack_elasticsearch_raw_query.\
     custom_elasticsearch import ConfigurableSearchQuerySet
@@ -236,15 +237,12 @@ def sms_organisation(request_path, cell_number, organisation_url,
         )
 
         if your_name:
-            message = '{0} has sent you a link: {1}'.format(
-                your_name,
-                organisation_url
-            )
+            message = _('%(name) has sent you a link: %(url)') % \
+                {'name': your_name, 'url': organisation_url}
             analytics_label = 'send'
         else:
-            message = 'You have sent yourself a link: {0}'.format(
-                organisation_url
-            )
+            message = _('You have sent yourself a link: %(url)') % \
+                {'url': organisation_url}
             analytics_label = 'save'
 
         sender.send_text(cell_number, message)

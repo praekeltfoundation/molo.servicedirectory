@@ -1,13 +1,15 @@
 {% extends 'servicedirectory/content_base.html' %}
 
+{% load i18n %}
+
 {% block inner_content %}
 
-    <p class="sd-help-text search">Search by typing something, or choose a category below:</p>
+    <p class="sd-help-text search">{% trans "Search by typing something, or choose a category below:" %}</p>
 
     <form action="{% url 'molo.servicedirectory:location-search' %}" method="get" class="sd-search-form">
 
-        <input type="text" name="search" placeholder="I'm looking for..." />
-        <input type="submit" value="Search" />
+        <input type="text" name="search" placeholder="{% trans "I'm looking for..." %}" />
+        <input type="submit" value="{% trans "Search" %}" />
 
         <br/>
     </form>
@@ -21,7 +23,7 @@
                     <a href="{% url 'molo.servicedirectory:location-search' %}?q={{ keyword }}" class="sd-cat-keyword">{{ keyword }}</a>{% if not forloop.last or and_more %}, {% endif %}
                 {% endfor %}
                 {% if and_more %}
-                    <a href="{% url 'molo.servicedirectory:home' %}?category={{ category.name }}" class="sd-cat-keyword">and more...</a>
+                    <a href="{% url 'molo.servicedirectory:home' %}?category={{ category.name }}" class="sd-cat-keyword">{% trans "and more..." %}</a>
                 {% endif %}
             </h1>
         {% endfor %}

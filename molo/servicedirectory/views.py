@@ -4,6 +4,7 @@ import urllib2
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.http import QueryDict, HttpResponseRedirect
+from django.utils.translation import ugettext as _
 from django.views.generic import TemplateView, View
 from molo.servicedirectory import api
 
@@ -195,8 +196,8 @@ class OrganisationReportIncorrectInformationView(TemplateView):
                                 request.POST.get('other_detail', None))
 
         query_params = QueryDict('', mutable=True)
-        query_params['msg'] = 'Thanks! We\'ve received your report and will' \
-                              ' look into it.'
+        query_params['msg'] = _('Thanks! We\'ve received your report and will'
+                                ' look into it.')
 
         redirect_url = '{0}?{1}'.format(
             reverse('molo.servicedirectory:organisation-detail',
@@ -215,9 +216,9 @@ class OrganisationRateView(View):
                               request.POST['rating'])
 
         query_params = QueryDict('', mutable=True)
-        query_params['msg'] = 'Thanks for telling us how helpful this service'\
-                              ' was. You can always update your response when'\
-                              ' you change your mind.'
+        query_params['msg'] = _('Thanks for telling us how helpful this'
+                                ' service was. You can always update your'
+                                ' response when you change your mind.')
 
         redirect_url = '{0}?{1}'.format(
             reverse('molo.servicedirectory:organisation-detail',
@@ -246,9 +247,9 @@ class OrganisationSendSmsView(TemplateView):
                              request.POST.get('your_name', None))
 
         query_params = QueryDict('', mutable=True)
-        query_params['msg'] = 'Thanks! We''ve sent an SMS with a link for' \
-                              ' this service to {0}.'.format(
-            request.POST['cell_number'])
+        query_params['msg'] = _('Thanks! We\'ve sent an SMS with a link for'
+                                ' this service to %(cell_number).') % \
+            {'cell_number': request.POST['cell_number']}
 
         redirect_url = '{0}?{1}'.format(
             reverse('molo.servicedirectory:organisation-detail',

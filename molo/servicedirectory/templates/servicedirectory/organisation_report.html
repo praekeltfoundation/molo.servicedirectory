@@ -1,32 +1,34 @@
 {% extends 'servicedirectory/content_base.html' %}
 
+{% load i18n %}
+
 {% block inner_content %}
 
     <h1 class="sd-heading report-info">
-        Which of the following information is incorrect for <span class="svc-org-name">{{ organisation_name }}</span>?
+        {% trans "Which of the following information is incorrect for" %} <span class="svc-org-name">{{ organisation_name }}</span>?
     </h1>
 
     <form method="post">
         {% csrf_token %}
         <div class="sd-option">
             <input type="checkbox" id="contact_details" name="contact_details" value="true"/>
-            <label for="contact_details">Contact Details</label>
+            <label for="contact_details">{% trans "Contact Details" %}</label>
         </div>
         <div class="sd-option">
             <input type="checkbox" id="address" name="address" value="true"/>
-            <label for="address">Address</label>
+            <label for="address">{% trans "Address" %}</label>
         </div>
         <div class="sd-option">
             <input type="checkbox" id="trading_hours" name="trading_hours" value="true"/>
-            <label for="trading_hours">Trading Hours</label>
+            <label for="trading_hours">{% trans "Trading Hours" %}</label>
         </div>
         <div class="sd-option">
             <input type="checkbox" id="other" name="other" value="true"/>
-            <label for="other">Other</label>
+            <label for="other">{% trans "Other" %}</label>
         </div>
-        <label for="other_detail" class="other_detail">If other, please specify:</label>
+        <label for="other_detail" class="other_detail">{% trans "If other, please specify:" %}</label>
         <textarea id="other_detail" name="other_detail" rows="3"></textarea>
-        <button type="submit" class="sd-report-btn">Send Report</button>
+        <button type="submit" class="sd-report-btn">{% trans "Send Report" %}</button>
     </form>
 
 {% endblock %}

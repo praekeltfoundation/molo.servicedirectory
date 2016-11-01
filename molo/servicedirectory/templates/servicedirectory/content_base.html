@@ -1,8 +1,13 @@
 {% extends 'base.html' %}
+
+{% load i18n %}
+
 {% block content %}
     <div class="sd-banner">
         <div class="sd-img-container"></div>
-        <h1 class="sd-heading find-a-service">Find a Service{% if search_term %}: {{ search_term }} {% endif %}</h1>
+        <h1 class="sd-heading find-a-service">
+            {% trans "Find a Service" %}{% if search_term %}: {{ search_term }} {% endif %}
+        </h1>
     </div>
     <div class="sd-container">
         {% block inner_content %}{% endblock %}
