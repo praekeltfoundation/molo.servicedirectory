@@ -10,12 +10,22 @@ class CaseInsensitiveTextField(models.TextField):
     See
     http://stackoverflow.com/a/26192509
     http://www.postgresql.org/docs/9.5/static/citext.html
+    http://stackoverflow.com/a/973785
     https://docs.djangoproject.com/en/1.9/howto/custom-model-fields/#custom-database-types
     """
     def db_type(self, connection):
-        if connection.settings_dict['ENGINE'] == \
-                'django.db.backends.postgresql':
+        if connection.settings_dict['ENGINE'].startswith(
+                'django.db.backends.postgresql'):
             return 'citext'
+
+        if connection.settings_dict['ENGINE'].startswith(
+                'django.db.backends.sqlite'):
+            # Only works for ASCII, see https://sqlite.org/faq.html#q18
+            # Also, it would be better to do this in migrations but there
+            # is no ALTER COLUMN in SQLite, we'd rather not write SQL and
+            # hopefully you're not using SQLite in production...
+            return 'text collate nocase'
+
         else:
             return super(CaseInsensitiveTextField, self).db_type(connection)
 
