@@ -12,7 +12,7 @@
 
     <form action="{% url 'molo.servicedirectory:organisation-results' %}" method="get" class="sd-search-form">
 
-        <input type="text" name="search" value="{{ search_term }}" />
+        <input type="text" name="q" value="{{ search_term }}" />
         <input type="submit" value="{% trans "Search" %}" />
 
         <input type="hidden" name="location" value="{{ location_term }}" />

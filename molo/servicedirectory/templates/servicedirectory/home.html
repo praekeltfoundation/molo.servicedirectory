@@ -8,7 +8,7 @@
 
     <form action="{% url 'molo.servicedirectory:location-search' %}" method="get" class="sd-search-form">
 
-        <input type="text" name="search" placeholder="{% trans "I'm looking for..." %}" />
+        <input type="text" name="q" placeholder="{% trans "I'm looking for..." %}" />
         <input type="submit" value="{% trans "Search" %}" />
 
         <br/>
