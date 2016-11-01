@@ -9,8 +9,10 @@ cache:
 env:
   - TZ=UTC
 
-install:
+before_install:
   - pip install --upgrade pip
+
+install:
   - pip install coveralls
   - pip install wheel
   - pip install -r requirements-dev.txt
