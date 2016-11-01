@@ -4,12 +4,6 @@
     See https://github.com/makinacorpus/django-geojson/issues/75
   - Update README.txt in /docs/import_examples/
 
-* Case insensitive for non-postgres DBs (eg: using collation in MySQL)
-  Automate as far as possible using migrations (conditional)
-  See models.CaseInsensitiveTextField and its usages
-
-* Add citext extension creation into migration for postgres (conditional)
-
 * Django Admin (less important as Wagtail Admin integration is on the cards):
   - Change "Enter valid JSON" help-text for location field in django-admin
     Also change validation message (if no location is set)
