@@ -9,6 +9,10 @@ cache:
 env:
   - TZ=UTC
 
+# https://docs.travis-ci.com/user/database-setup/#ElasticSearch
+services:
+  - elasticsearch
+
 before_install:
   - pip install --upgrade pip
 
@@ -17,6 +21,9 @@ install:
   - pip install wheel
   - pip install -r requirements-dev.txt
   - pip install -e .
+
+before_script:
+  - sleep 10  # ElasticSearch may take a few seconds to start and may not be available when the script is executed.
 
 script:
   - flake8 molo
