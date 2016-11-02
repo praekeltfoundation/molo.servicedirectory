@@ -1,3 +1,7 @@
+gunicorn
+dj-database-url
+raven
+
 molo.core
 django-geojson [field]
 django-leaflet
