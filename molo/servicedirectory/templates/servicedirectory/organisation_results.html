@@ -36,7 +36,9 @@
             {% endif %}
         </a>
         <span class="service-dir-location__address">{{ organisation.address }}</span>
+        {% if organisation.distance %}
         <span class="service-dir-location__distance">{{ organisation.distance }}</span>
+        {% endif %}
     </li>
     {% empty %}
     <li class="service-list__item">
