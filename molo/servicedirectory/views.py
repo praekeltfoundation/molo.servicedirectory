@@ -1,12 +1,13 @@
 import base64
 import json
-import urllib2
 
 from django.core.urlresolvers import reverse
 from django.http import QueryDict, HttpResponseRedirect
 from django.views.generic import TemplateView, View
 from molo.servicedirectory import settings
 from molo.core.models import SiteSettings
+
+from six.moves.urllib.request import Request, urlopen
 
 
 def get_service_directory_api_username(request):
@@ -37,7 +38,7 @@ def make_request_to_servicedirectory_api(url, request, data=None):
     if data is not None:
         data = json.dumps(data)
 
-    api_request = urllib2.Request(url, data=data)
+    api_request = Request(url, data=data)
 
     basic_auth_username = get_service_directory_api_username(request)
     basic_auth_password = get_service_directory_api_password(request)
@@ -47,7 +48,7 @@ def make_request_to_servicedirectory_api(url, request, data=None):
     api_request.add_header("Authorization", "Basic {0}".format(base64string))
     api_request.add_header("Content-Type", "application/json")
 
-    response = urllib2.urlopen(api_request).read()
+    response = urlopen(api_request).read()
 
     json_result = json.loads(response)
 
@@ -57,9 +58,9 @@ def make_request_to_servicedirectory_api(url, request, data=None):
 def make_request_to_google_api(url, querydict):
     full_url = '{0}?{1}'.format(url, querydict.urlencode())
 
-    api_request = urllib2.Request(full_url)
+    api_request = Request(full_url)
 
-    serialized_data = urllib2.urlopen(api_request).read()
+    serialized_data = urlopen(api_request).read()
 
     json_result = json.loads(serialized_data)
 
