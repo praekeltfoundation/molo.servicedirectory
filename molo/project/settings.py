@@ -65,6 +65,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                'molo.servicedirectory.context_processors'
+                '.enable_service_directory_context',
             ],
         },
     },
