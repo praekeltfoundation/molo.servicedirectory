@@ -24,8 +24,8 @@ def enable_service_directory_context(request):
         )
 
         ctx.update({
-            'SERVICE_DIRECTORY_RADIUS': int(radius),
             'SERVICE_DIRECTORY_RADIUS_OPTIONS': options,
+            'SERVICE_DIRECTORY_RADIUS': int(radius) if radius else None,
         })
 
     return ctx
