@@ -1,28 +1,54 @@
 import base64
 import json
-import urllib2
 
 from django.core.urlresolvers import reverse
 from django.http import QueryDict, HttpResponseRedirect
 from django.views.generic import TemplateView, View
 from molo.servicedirectory import settings
+from molo.core.models import SiteSettings
+
+from six.moves.urllib.request import Request, urlopen
 
 
-def make_request_to_servicedirectory_api(url, data=None):
+def get_service_directory_api_username(request):
+    site_settings = SiteSettings.for_site(request.site)
+    return (site_settings.service_directory_api_username or
+            settings.SERVICE_DIRECTORY_API_USERNAME)
+
+
+def get_service_directory_api_password(request):
+    site_settings = SiteSettings.for_site(request.site)
+    return (site_settings.service_directory_api_password or
+            settings.SERVICE_DIRECTORY_API_PASSWORD)
+
+
+def get_service_directory_api_base_url(request):
+    site_settings = SiteSettings.for_site(request.site)
+    return (site_settings.service_directory_api_base_url or
+            settings.SERVICE_DIRECTORY_API_BASE_URL)
+
+
+def get_google_places_api_server_key(request):
+    site_settings = SiteSettings.for_site(request.site)
+    return (site_settings.google_places_api_server_key or
+            settings.GOOGLE_PLACES_API_SERVER_KEY)
+
+
+def make_request_to_servicedirectory_api(url, request, data=None):
     if data is not None:
         data = json.dumps(data)
 
-    api_request = urllib2.Request(url, data=data)
+    api_request = Request(url, data=data)
 
-    basic_auth_username = settings.SERVICE_DIRECTORY_API_USERNAME
-    basic_auth_password = settings.SERVICE_DIRECTORY_API_PASSWORD
+    basic_auth_username = get_service_directory_api_username(request)
+    basic_auth_password = get_service_directory_api_password(request)
     base64string = base64.encodestring(
         '{0}:{1}'.format(basic_auth_username, basic_auth_password)
     ).replace('\n', '')
     api_request.add_header("Authorization", "Basic {0}".format(base64string))
     api_request.add_header("Content-Type", "application/json")
 
-    response = urllib2.urlopen(api_request).read()
+    response = urlopen(api_request).read()
 
     json_result = json.loads(response)
 
@@ -32,9 +58,9 @@ def make_request_to_servicedirectory_api(url, data=None):
 def make_request_to_google_api(url, querydict):
     full_url = '{0}?{1}'.format(url, querydict.urlencode())
 
-    api_request = urllib2.Request(full_url)
+    api_request = Request(full_url)
 
-    serialized_data = urllib2.urlopen(api_request).read()
+    serialized_data = urlopen(api_request).read()
 
     json_result = json.loads(serialized_data)
 
@@ -51,10 +77,11 @@ class HomeView(TemplateView):
 
         if not category:
             categories_keywords_url = '{0}homepage_categories_keywords/'\
-                .format(settings.SERVICE_DIRECTORY_API_BASE_URL)
+                .format(get_service_directory_api_base_url(self.request))
 
             categories_keywords = make_request_to_servicedirectory_api(
-                categories_keywords_url
+                categories_keywords_url,
+                self.request
             )
 
         else:
@@ -62,12 +89,13 @@ class HomeView(TemplateView):
             service_directory_query_parms['category'] = category
 
             keywords_url = '{0}keywords/?{1}'.format(
-                settings.SERVICE_DIRECTORY_API_BASE_URL,
+                get_service_directory_api_base_url(self.request),
                 service_directory_query_parms.urlencode()
             )
 
             keywords = make_request_to_servicedirectory_api(
-                keywords_url
+                keywords_url,
+                self.request
             )
 
             categories_keywords = [
@@ -107,7 +135,8 @@ class LocationResultsView(TemplateView):
         google_query_parms = QueryDict('', mutable=True)
         google_query_parms['input'] = location_term
         google_query_parms['types'] = 'geocode'
-        google_query_parms['key'] = settings.GOOGLE_PLACES_API_SERVER_KEY
+        google_query_parms['key'] = get_google_places_api_server_key(
+            self.request)
 
         url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json'
 
@@ -138,10 +167,17 @@ class OrganisationResultsView(TemplateView):
             'place_formatted_address', None
         )
 
+        site_settings = SiteSettings.for_site(self.request.site)
+
+        radius = site_settings.default_service_directory_radius
+        if radius:
+            radius = self.request.GET.get('radius', radius)
+
         if place_latlng is None:
             google_query_parms = QueryDict('', mutable=True)
             google_query_parms['placeid'] = place_id
-            google_query_parms['key'] = settings.GOOGLE_PLACES_API_SERVER_KEY
+            google_query_parms['key'] = get_google_places_api_server_key(
+                self.request)
 
             url = 'https://maps.googleapis.com/maps/api/place/details/json'
             place_details = make_request_to_google_api(url, google_query_parms)
@@ -161,6 +197,7 @@ class OrganisationResultsView(TemplateView):
                 )
 
         service_directory_query_parms = QueryDict('', mutable=True)
+        service_directory_query_parms['radius'] = radius
         service_directory_query_parms['search_term'] = search_term
 
         if place_latlng is not None:
@@ -171,20 +208,22 @@ class OrganisationResultsView(TemplateView):
                 place_formatted_address
 
         url = '{0}search/?{1}'.format(
-            settings.SERVICE_DIRECTORY_API_BASE_URL,
+            get_service_directory_api_base_url(self.request),
             service_directory_query_parms.urlencode()
         )
-        search_results = make_request_to_servicedirectory_api(url)
+        search_results = make_request_to_servicedirectory_api(
+            url, self.request)
 
         categories_keywords = []
         if not search_results:
             # TODO: consider caching the categories and keywords when we fetch
             # them for the home page, then retrieving them from the cache here
             categories_keywords_url = '{0}homepage_categories_keywords/'\
-                .format(settings.SERVICE_DIRECTORY_API_BASE_URL)
+                .format(get_service_directory_api_base_url(self.request))
 
             categories_keywords = make_request_to_servicedirectory_api(
-                categories_keywords_url
+                categories_keywords_url,
+                self.request
             )
 
         location_query_parms = QueryDict('', mutable=True)
@@ -215,13 +254,13 @@ class OrganisationDetailView(TemplateView):
         )
 
         service_directory_api_base_url =\
-            settings.SERVICE_DIRECTORY_API_BASE_URL
+            get_service_directory_api_base_url(self.request)
         organisation_id = self.kwargs['organisation_id']
 
         url = '{0}organisation/{1}/'.format(service_directory_api_base_url,
                                             organisation_id)
 
-        json_result = make_request_to_servicedirectory_api(url)
+        json_result = make_request_to_servicedirectory_api(url, self.request)
 
         context['organisation'] = json_result
         context['message'] = self.request.GET.get('msg', None)
@@ -244,7 +283,7 @@ class OrganisationReportIncorrectInformationView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         service_directory_api_base_url =\
-            settings.SERVICE_DIRECTORY_API_BASE_URL
+            get_service_directory_api_base_url(self.request)
         organisation_id = kwargs['organisation_id']
 
         url = '{0}organisation/{1}/report/'.format(
@@ -256,7 +295,7 @@ class OrganisationReportIncorrectInformationView(TemplateView):
         if 'csrfmiddlewaretoken' in data:
             data.pop('csrfmiddlewaretoken')  # no point passing this to the API
 
-        make_request_to_servicedirectory_api(url, data=data)
+        make_request_to_servicedirectory_api(url, self.request, data=data)
 
         query_params = QueryDict('', mutable=True)
         query_params['msg'] = 'Thanks! We\'ve received your report and will' \
@@ -274,7 +313,7 @@ class OrganisationReportIncorrectInformationView(TemplateView):
 class OrganisationRateView(View):
     def post(self, request, *args, **kwargs):
         service_directory_api_base_url =\
-            settings.SERVICE_DIRECTORY_API_BASE_URL
+            get_service_directory_api_base_url(request)
         organisation_id = kwargs['organisation_id']
 
         url = '{0}organisation/{1}/rate/'.format(
@@ -286,7 +325,7 @@ class OrganisationRateView(View):
         if 'csrfmiddlewaretoken' in data:
             data.pop('csrfmiddlewaretoken')  # no point passing this to the API
 
-        make_request_to_servicedirectory_api(url, data=data)
+        make_request_to_servicedirectory_api(url, request, data=data)
 
         query_params = QueryDict('', mutable=True)
         query_params['msg'] = 'Thanks for telling us how helpful this service'\
@@ -307,7 +346,7 @@ class OrganisationSendSmsView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         service_directory_api_base_url =\
-            settings.SERVICE_DIRECTORY_API_BASE_URL
+            get_service_directory_api_base_url(self.request)
         organisation_id = kwargs['organisation_id']
 
         url = '{0}organisation/sms/'.format(service_directory_api_base_url)
@@ -321,7 +360,7 @@ class OrganisationSendSmsView(TemplateView):
         if 'csrfmiddlewaretoken' in data:
             data.pop('csrfmiddlewaretoken')  # no point passing this to the API
 
-        make_request_to_servicedirectory_api(url, data=data)
+        make_request_to_servicedirectory_api(url, request, data=data)
 
         query_params = QueryDict('', mutable=True)
         query_params['msg'] = 'Thanks! We''ve sent an SMS with a link for' \
