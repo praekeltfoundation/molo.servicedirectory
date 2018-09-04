@@ -6,6 +6,20 @@
     <label>In which area would you like to find a service?</label>
     <input type="text" name="location" value="{{ location_term }}"/>
   </fieldset>
+
+  {% if SERVICE_DIRECTORY_RADIUS  %}
+  <fieldset>
+    <label class="service-dir-hero-label">Show me results within __ KMs away</label>
+    <select name="radius" value="{{ radius }}" >
+      {% for value, label in SERVICE_DIRECTORY_RADIUS_OPTIONS  %}
+      <option {% ifequal value  SERVICE_DIRECTORY_RADIUS %}selected="selected"{% endifequal %} value="{{ value }}">
+        {{ label }}
+      </option>
+      {% endfor %}
+    </select>
+  <fieldset>
+  {% endif %}
+
   <input type="submit" value="Search" />
   <input type="hidden" name="search" value="{{ search_term }}" />
 </form>

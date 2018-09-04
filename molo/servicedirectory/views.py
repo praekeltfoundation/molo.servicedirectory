@@ -167,6 +167,12 @@ class OrganisationResultsView(TemplateView):
             'place_formatted_address', None
         )
 
+        site_settings = SiteSettings.for_site(self.request.site)
+
+        radius = site_settings.default_service_directory_radius
+        if radius:
+            radius = self.request.GET.get('radius', radius)
+
         if place_latlng is None:
             google_query_parms = QueryDict('', mutable=True)
             google_query_parms['placeid'] = place_id
@@ -191,6 +197,7 @@ class OrganisationResultsView(TemplateView):
                 )
 
         service_directory_query_parms = QueryDict('', mutable=True)
+        service_directory_query_parms['radius'] = radius
         service_directory_query_parms['search_term'] = search_term
 
         if place_latlng is not None:
