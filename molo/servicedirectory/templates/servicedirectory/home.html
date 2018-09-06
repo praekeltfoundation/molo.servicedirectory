@@ -6,8 +6,24 @@
         <label class="heading heading--service-dir-subtitle">Search by typing something, or choose a category below:</label>
         <input type="text" name="search" placeholder="I'm looking for..." />
         </fieldset>
+
+        {% if SERVICE_DIRECTORY_MULTI_CATEGORY_SELECT  %}
+            <fieldset>
+            <div>Select Service Categories</div>
+            {% for category in categories_keywords %}
+                <label class="">
+                    {{ category.name|title }}
+                    <input type="checkbox" name="categories[]" value="{{ category.pk }}" />
+                </label>
+            {% endfor %}
+            </fieldset>
+        {% endif %}
+
         <input type="submit" value="Search" />
     </form>
+
+    {% if not SERVICE_DIRECTORY_MULTI_CATEGORY_SELECT  %}
+
     <div class="service-directory__listings">
     {% for category in categories_keywords %}
     <a class="service-directory__title" href="{% url 'molo.servicedirectory:location-search' %}?search={{ category.name }}">{{ category.name }}</a>
@@ -24,4 +40,6 @@
         </li>
     {% endfor %}
     </div>
+
+    {% endif %}
 {% endblock %}
