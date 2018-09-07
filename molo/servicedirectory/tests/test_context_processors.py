@@ -18,6 +18,7 @@ class TestContextProcessors(MoloTestCaseMixin, TestCase):
             site=site,
             enable_service_directory=True,
             default_service_directory_radius=25,
+            enable_multi_category_service_directory_search=True,
         )
         request = RequestFactory()
         request.GET = {'search': 'test'}
@@ -29,6 +30,7 @@ class TestContextProcessors(MoloTestCaseMixin, TestCase):
                 'SERVICE_DIRECTORY_RADIUS':
                     site_setting.default_service_directory_radius,
                 'ENABLE_SERVICE_DIRECTORY': True,
+                'SERVICE_DIRECTORY_MULTI_CATEGORY_SELECT': True,
                 'SERVICE_DIRECTORY_RADIUS_OPTIONS': (
                     (5, '5 KM'), (10, '10 KM'), (15, '15 KM'),
                     (20, '20 KM'), (25, '25 KM'), (30, '30 KM'),
