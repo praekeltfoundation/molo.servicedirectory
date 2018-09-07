@@ -1,5 +1,10 @@
 CHANGE LOG
 ==========
+6.1.2
+-----
+
+- Add keyword, category and country filtering to service-directory api
+
 6.1.1
 -----
 
