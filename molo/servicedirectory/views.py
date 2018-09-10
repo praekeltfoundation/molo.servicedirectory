@@ -162,6 +162,8 @@ class OrganisationResultsView(TemplateView):
         search_term = self.request.GET['search']
         location_term = self.request.GET['location']
         place_id = self.request.GET['place_id']
+        keywords = self.request.GET.get('keywords')
+        categories = self.request.GET.get('categories')
         place_latlng = self.request.GET.get('place_latlng', None)
         place_formatted_address = self.request.GET.get(
             'place_formatted_address', None
@@ -200,8 +202,14 @@ class OrganisationResultsView(TemplateView):
         service_directory_query_parms['radius'] = radius
         service_directory_query_parms['search_term'] = search_term
 
-        if place_latlng is not None:
+        if keywords:
+            service_directory_query_parms['keywords'] = keywords
+
+        if place_latlng:
             service_directory_query_parms['location'] = place_latlng
+
+        if categories:
+            service_directory_query_parms['categories'] = place_latlng
 
         if place_formatted_address is not None:
             service_directory_query_parms['place_name'] =\
