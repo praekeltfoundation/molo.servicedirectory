@@ -18,7 +18,7 @@ class MockOrganisation(object):
     pk = 1
 
 
-def mock_make_request_to_servicedirectory_api(url=None, request=None, data=None):
+def mock_make_request_to_servicedirectory_api(*args, **kwargs):
     return []
 
 
