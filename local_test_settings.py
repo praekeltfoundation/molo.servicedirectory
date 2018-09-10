@@ -1,6 +1,7 @@
 import dj_database_url
 
 from os.path import abspath, dirname, join
+from molo.project.settings import *
 
 
 PROJECT_ROOT = dirname(dirname(dirname(abspath(__file__))))
@@ -8,9 +9,7 @@ PROJECT_ROOT = dirname(dirname(dirname(abspath(__file__))))
 DATABASES = {'default': dj_database_url.config(
     default='sqlite:///%s' % (join(PROJECT_ROOT, 'db.sqlite3'),))}
 
-INSTALLED_APPS = [
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
+INSTALLED_APPS += [
     'django.contrib.sites',
 
     'molo.core',
