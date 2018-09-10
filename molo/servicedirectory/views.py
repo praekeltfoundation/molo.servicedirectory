@@ -117,7 +117,7 @@ class LocationSearchView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(LocationSearchView, self).get_context_data(**kwargs)
 
-        search_term = self.request.GET['search']
+        search_term = self.request.GET.get('search')
         context['search_term'] = search_term
 
         return context
@@ -159,9 +159,9 @@ class OrganisationResultsView(TemplateView):
             **kwargs
         )
 
-        search_term = self.request.GET['search']
-        location_term = self.request.GET['location']
-        place_id = self.request.GET['place_id']
+        search_term = self.request.GET.get('search')
+        location_term = self.request.GET.get('location')
+        place_id = self.request.GET.get('place_id')
         keywords = self.request.GET.get('keywords')
         categories = self.request.GET.get('categories')
         place_latlng = self.request.GET.get('place_latlng', None)
