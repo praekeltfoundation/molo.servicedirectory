@@ -129,8 +129,8 @@ class LocationResultsView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(LocationResultsView, self).get_context_data(**kwargs)
 
-        search_term = self.request.GET['search']
-        location_term = self.request.GET['location']
+        search_term = self.request.GET.get('search')
+        location_term = self.request.GET.get('location')
 
         google_query_parms = QueryDict('', mutable=True)
         google_query_parms['input'] = location_term
@@ -283,7 +283,7 @@ class OrganisationReportIncorrectInformationView(TemplateView):
         context = super(OrganisationReportIncorrectInformationView, self).\
             get_context_data(**kwargs)
 
-        organisation_name = self.request.GET['org_name']
+        organisation_name = self.request.GET.get('org_name')
 
         context['organisation_name'] = organisation_name
 
