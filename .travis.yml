@@ -17,7 +17,7 @@ install:
 script:
   - molo scaffold testapp --require molo.servicedirectory --include molo.servicedirectory ^servicedirectory/
   - pip install -e testapp
-  - flake8
+  - flake8 --ignore=F403 local_test_settings.py
   - py.test --cov=molo --cov-report=term
 
 after_success:
