@@ -159,11 +159,11 @@ class OrganisationResultsView(TemplateView):
             **kwargs
         )
 
-        search_term = self.request.GET.get('search')
-        location_term = self.request.GET.get('location')
-        place_id = self.request.GET.get('place_id')
         keywords = self.request.GET.get('keywords')
+        place_id = self.request.GET.get('place_id')
+        search_term = self.request.GET.get('search')
         categories = self.request.GET.get('categories')
+        location_term = self.request.GET.get('location')
         place_latlng = self.request.GET.get('place_latlng', None)
         place_formatted_address = self.request.GET.get(
             'place_formatted_address', None
