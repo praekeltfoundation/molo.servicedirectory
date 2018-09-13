@@ -209,7 +209,7 @@ class OrganisationResultsView(TemplateView):
             service_directory_query_parms['location'] = place_latlng
 
         if categories:
-            service_directory_query_parms['categories'] = place_latlng
+            service_directory_query_parms['categories'] = categories
 
         if place_formatted_address is not None:
             service_directory_query_parms['place_name'] =\

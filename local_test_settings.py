@@ -1,5 +1,5 @@
 
-from testapp.settings.base import *
+from testapp.settings.base import *  # noqa: F403
 
 
 PROJECT_ROOT = dirname(dirname(dirname(abspath(__file__))))

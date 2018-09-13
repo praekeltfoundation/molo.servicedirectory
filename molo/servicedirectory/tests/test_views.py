@@ -1,3 +1,4 @@
+import re
 from mock import patch
 
 from django.core.urlresolvers import reverse
@@ -18,13 +19,20 @@ class MockOrganisation(object):
     pk = 1
 
 
-def mock_make_request_to_servicedirectory_api(*args, **kwargs):
-    return []
+def mock_make_request_to_servicedirectory_api(return_value):
+
+    class MyMock(object):
+        def read(self):
+            url = return_value.get_full_url()
+            # in case id's is required by url reversing
+            if re.search('organisation/\d+/', url):
+                return '{"id": 1}'
+            return '{}'
+    return MyMock()
 
 
 @patch(
-    'molo.servicedirectory.views.'
-    'make_request_to_servicedirectory_api',
+    'six.moves.urllib.request.urlopen',
     new=mock_make_request_to_servicedirectory_api
 )
 class TestViews(TestCase, MoloTestCaseMixin):
@@ -63,7 +71,7 @@ class TestViews(TestCase, MoloTestCaseMixin):
         )
 
     def test_home_view(self):
-        response = self.client.get(reverse('home'))
+        response = self.client.get(reverse('molo.servicedirectory:home'))
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(
@@ -71,7 +79,7 @@ class TestViews(TestCase, MoloTestCaseMixin):
 
     def test_location_search_view(self):
         data = {}
-        response = self.client.get(reverse('location-search'), data=data)
+        response = self.client.get(reverse('molo.servicedirectory:location-search'), data=data)
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(
@@ -79,7 +87,10 @@ class TestViews(TestCase, MoloTestCaseMixin):
 
     def test_location_results_view(self):
         data = {}
-        response = self.client.get(reverse('location-results'), data=data)
+        response = self.client.get(
+            reverse('molo.servicedirectory:location-results'),
+            data=data
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(
@@ -87,7 +98,10 @@ class TestViews(TestCase, MoloTestCaseMixin):
 
     def test_organisation_results_view(self):
         data = {}
-        response = self.client.get(reverse('organisation-results'), data=data)
+        response = self.client.get(
+            reverse('molo.servicedirectory:organisation-results'),
+            data=data
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(
@@ -98,8 +112,8 @@ class TestViews(TestCase, MoloTestCaseMixin):
         data = {}
         response = self.client.get(
             reverse(
-                'organisation-detail',
-                kwargs=dict(organisation_id=org.pk)),
+                'molo.servicedirectory:organisation-detail',
+                kwargs=dict(organisation_id=org.pk,)),
             data=data
         )
 
@@ -112,8 +126,8 @@ class TestViews(TestCase, MoloTestCaseMixin):
         data = {}
         response = self.client.get(
             reverse(
-                'organisation-report',
-                kwargs=dict(organisation_id=org.pk)),
+                'molo.servicedirectory:organisation-report',
+                kwargs=dict(organisation_id=org.pk, )),
             data=data
         )
 
