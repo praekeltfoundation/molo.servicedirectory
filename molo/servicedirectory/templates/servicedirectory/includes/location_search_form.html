@@ -1,9 +1,10 @@
-<a href="{% url 'home' %}" class="call-to-action__nav-item call-to-action__nav-item--back">
+<a href="{% url 'molo.servicedirectory:home' %}" class="call-to-action__nav-item call-to-action__nav-item--back">
   &lt; Back</a>
 
 <form action="{% url 'molo.servicedirectory:location-results'  %}" method="get" class="service-directory__form">
   <fieldset>
     <label>In which area would you like to find a service?</label>
+    <input type="text" name="location" value="{{ location_term }}"/>
     <input type="text" name="location" value="{{ location_term }}"/>
   </fieldset>
 
@@ -19,6 +20,15 @@
     </select>
   <fieldset>
   {% endif %}
+
+  {% for category in categories  %}
+    <input type="hidden" name="categories[]" value="{{ category }}">
+  {% endfor %}
+
+  {% for keyword in keywords  %}
+    <input type="hidden" name="keywords[]" value="{{ keyword }}">
+  {% endfor %}
+
 
   <input type="submit" value="Search" />
   <input type="hidden" name="search" value="{{ search_term }}" />

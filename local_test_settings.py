@@ -10,3 +10,8 @@ DATABASES = {'default': dj_database_url.config(
 ROOT_URLCONF = 'molo.project.urls'
 
 SECRET_KEY = 'test'
+
+TEMPLATES[0]['OPTIONS']['context_processors'] += [
+    'molo.servicedirectory.context_processors'
+    '.enable_service_directory_context',
+]

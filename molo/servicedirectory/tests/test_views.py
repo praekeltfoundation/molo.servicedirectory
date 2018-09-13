@@ -1,13 +1,12 @@
 import re
 from mock import patch
 
+from django.test import TestCase
 from django.core.urlresolvers import reverse
-from django.test import TestCase, RequestFactory
 from django.contrib.contenttypes.models import ContentType
 
-from molo.core.models import Site, Main
 from molo.core.tests.base import MoloTestCaseMixin
-from molo.servicedirectory.views import get_service_directory_api_username
+from molo.core.models import Site, Main, SiteSettings
 
 
 class MockSiteSettings(object):
@@ -54,45 +53,99 @@ class TestViews(TestCase, MoloTestCaseMixin):
         )
         self.main.save_revision().publish()
         self.main.save()
-        self.site = Site.objects.create(
-            hostname='test.com',
-            root_page=self.main
-        )
-        self.request = RequestFactory()
 
-    @patch('molo.core.models.SiteSettings.for_site')
-    def test_service_directory_api_username_returns_settings(self, site_patch):
-        site_patch.return_value = MockSiteSettings()
-        request = RequestFactory()
-        request.site = None
-        self.assertEqual(
-            get_service_directory_api_username(request),
-            'root',
-        )
+        self.site = Site.objects.first()
+        self.site.hostname = 'test.com',
+        self.site.root_page = self.main
+        self.site.save()
+
+        self.site_settings = SiteSettings.for_site(self.site)
+        self.site_settings.enable_service_directory = True
+        self.site_settings. \
+            default_service_directory_radius = 25
+        self.site_settings. \
+            enable_multi_category_service_directory_search = True
+        self.site_settings.save()
 
     def test_home_view(self):
-        response = self.client.get(reverse('molo.servicedirectory:home'))
+        data = {'categories[]': [1, 2], 'keywords[]': ['key1', 'key2']}
+        response = self.client.get(
+            reverse('molo.servicedirectory:home'), data=data)
 
+        context = response.context_data
         self.assertEqual(response.status_code, 200)
+        self.assertTrue(context['categories'], [1, 2])
+        self.assertTrue(context['keywords'], ['key1', 'key2'])
+
+        self.assertEqual(
+            response.context['ENABLE_SERVICE_DIRECTORY'],
+            self.site_settings.enable_service_directory
+        )
+
+        multi_sel = 'SERVICE_DIRECTORY_MULTI_CATEGORY_SELECT'
+        self.assertEqual(
+            response.context[multi_sel],
+            self.site_settings.
+                enable_multi_category_service_directory_search
+        )
+
+        self.assertTrue(
+            self.site_settings.enable_service_directory)
+
+        self.assertTrue(
+            self.site_settings.
+                enable_multi_category_service_directory_search)
+
+        # self.assertContains(
+        #     response, 'type="hidden" name="keywords[]" value="key1"')
+        # self.assertContains(
+        #     response, 'type="hidden" name="keywords[]" value="key2"')
         self.assertTemplateUsed(
             response, 'servicedirectory/home.html')
 
     def test_location_search_view(self):
-        data = {}
-        response = self.client.get(reverse('molo.servicedirectory:location-search'), data=data)
+        data = {'categories[]': [1, 2], 'keywords[]': ['key1', 'key2']}
+        response = self.client.get(
+            reverse('molo.servicedirectory:location-search'), data=data)
 
+        context = response.context_data
         self.assertEqual(response.status_code, 200)
+        self.assertTrue(context['categories'], [1, 2])
+        self.assertTrue(context['keywords'], ['key1', 'key2'])
+
+        # self.assertContains(
+        #     response, 'type="hidden" name="categories[]" value="1"')
+        # self.assertContains(
+        #     response, 'type="hidden" name="categories[]" value="2"')
+        # self.assertContains(
+        #     response, 'type="hidden" name="keywords[]" value="key1"')
+        # self.assertContains(
+        #     response, 'type="hidden" name="keywords[]" value="key2"')
+
         self.assertTemplateUsed(
             response, 'servicedirectory/location_search.html')
 
     def test_location_results_view(self):
-        data = {}
+        data = {'categories[]': [1, 2], 'keywords[]': ['key1', 'key2']}
         response = self.client.get(
             reverse('molo.servicedirectory:location-results'),
             data=data
         )
 
+        context = response.context_data
         self.assertEqual(response.status_code, 200)
+        self.assertTrue(context['categories'], [1, 2])
+        self.assertTrue(context['keywords'], ['key1', 'key2'])
+
+        # self.assertContains(
+        #     response, 'type="hidden" name="categories[]" value="1"')
+        # self.assertContains(
+        #     response, 'type="hidden" name="categories[]" value="2"')
+        # self.assertContains(
+        #     response, 'type="hidden" name="keywords[]" value="key1"')
+        # self.assertContains(
+        #     response, 'type="hidden" name="keywords[]" value="key2"')
+
         self.assertTemplateUsed(
             response, 'servicedirectory/location_results.html')
 

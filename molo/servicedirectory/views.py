@@ -74,6 +74,8 @@ class HomeView(TemplateView):
         context = super(HomeView, self).get_context_data(**kwargs)
 
         category = self.request.GET.get('category', None)
+        keywords = self.request.GET.getlist('keywords[]', [])
+        categories = self.request.GET.getlist('categories[]', [])
 
         if not category:
             categories_keywords_url = '{0}homepage_categories_keywords/'\
@@ -105,9 +107,10 @@ class HomeView(TemplateView):
                 }
             ]
 
-        context['categories_keywords'] = categories_keywords
+        context['keywords'] = keywords
+        context['categories'] = categories
         context['and_more'] = not category
-
+        context['categories_keywords'] = categories_keywords
         return context
 
 
@@ -116,10 +119,14 @@ class LocationSearchView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(LocationSearchView, self).get_context_data(**kwargs)
-
+        
         search_term = self.request.GET.get('search')
-        context['search_term'] = search_term
+        keywords = self.request.GET.getlist('keywords[]', [])
+        categories = self.request.GET.getlist('categories[]', [])
 
+        context['keywords'] = keywords
+        context['categories'] = categories
+        context['search_term'] = search_term
         return context
 
 
@@ -131,6 +138,8 @@ class LocationResultsView(TemplateView):
 
         search_term = self.request.GET.get('search')
         location_term = self.request.GET.get('location')
+        keywords = self.request.GET.getlist('keywords[]', [])
+        categories = self.request.GET.getlist('categories[]', [])
 
         google_query_parms = QueryDict('', mutable=True)
         google_query_parms['input'] = location_term
@@ -144,6 +153,8 @@ class LocationResultsView(TemplateView):
             url, google_query_parms
         )
 
+        context['keywords'] = keywords
+        context['categories'] = categories
         context['search_term'] = search_term
         context['location_term'] = location_term
         context['autocomplete_suggestions'] = autocomplete_suggestions
@@ -159,11 +170,11 @@ class OrganisationResultsView(TemplateView):
             **kwargs
         )
 
-        keywords = self.request.GET.get('keywords')
         place_id = self.request.GET.get('place_id')
         search_term = self.request.GET.get('search')
-        categories = self.request.GET.get('categories')
         location_term = self.request.GET.get('location')
+        keywords = self.request.GET.getlist('keywords[]', [])
+        categories = self.request.GET.getlist('categories[]', [])
         place_latlng = self.request.GET.get('place_latlng', None)
         place_formatted_address = self.request.GET.get(
             'place_formatted_address', None
@@ -238,10 +249,12 @@ class OrganisationResultsView(TemplateView):
         location_query_parms['location'] = location_term
         location_query_parms['search'] = search_term
 
-        context['search_term'] = search_term
-        context['location_term'] = location_term
         context['place_id'] = place_id
+        context['keywords'] = keywords
+        context['categories'] = categories
+        context['search_term'] = search_term
         context['place_latlng'] = place_latlng
+        context['location_term'] = location_term
         context['place_formatted_address'] = place_formatted_address
         context['change_location_url'] = '{0}?{1}'.format(
             reverse('molo.servicedirectory:location-results'),
