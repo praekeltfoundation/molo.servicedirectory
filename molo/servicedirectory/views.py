@@ -249,7 +249,7 @@ class OrganisationResultsView(TemplateView):
         location_query_parms['search'] = search_term
 
         context['place_id'] = place_id
-        context['keywords_filter'] = keywords
+        context['keywords'] = keywords
         context['search_term'] = search_term
         context['place_latlng'] = place_latlng
         context['location_term'] = location_term

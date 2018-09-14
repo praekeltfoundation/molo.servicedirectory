@@ -21,6 +21,7 @@
   <fieldset>
   {% endif %}
 
+  {% if SERVICE_DIRECTORY_MULTI_CATEGORY_SELECT  %}
   {% for category in categories  %}
     <input type="hidden" name="categories[]" value="{{ category }}">
   {% endfor %}
@@ -28,6 +29,7 @@
   {% for keyword in keywords  %}
     <input type="hidden" name="keywords[]" value="{{ keyword }}">
   {% endfor %}
+  {% endif %}
 
 
   <input type="submit" value="Search" />

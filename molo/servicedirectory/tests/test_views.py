@@ -160,13 +160,26 @@ class TestViews(TestCase, MoloTestCaseMixin):
             response, 'servicedirectory/location_results.html')
 
     def test_organisation_results_view(self):
-        data = {}
+        data = {'categories[]': [1, 2], 'keywords[]': ['key1', 'key2']}
         response = self.client.get(
             reverse('molo.servicedirectory:organisation-results'),
             data=data
         )
 
+        context = response.context_data
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(context['categories'], [1, 2])
+        self.assertEqual(context['keywords'], ['key1', 'key2'])
+
+        self.assertContains(
+            response, 'type="hidden" name="categories[]" value="1"')
+        self.assertContains(
+            response, 'type="hidden" name="categories[]" value="2"')
+        self.assertContains(
+            response, 'type="hidden" name="keywords[]" value="key1"')
+        self.assertContains(
+            response, 'type="hidden" name="keywords[]" value="key2"')
+
         self.assertTemplateUsed(
             response, 'servicedirectory/organisation_results.html')
 

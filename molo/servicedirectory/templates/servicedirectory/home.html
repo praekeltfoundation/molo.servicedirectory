@@ -21,13 +21,12 @@
                 </label>
             {% endfor %}
             </fieldset>
-        {% endif %}
-
 
           {% for keyword in keywords  %}
             <input type="hidden" name="keywords[]" value="{{ keyword }}">
           {% endfor %}
 
+        {% endif %}
 
         <input type="submit" value="Search" />
     </form>
