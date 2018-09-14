@@ -86,7 +86,7 @@ class TestViews(TestCase, MoloTestCaseMixin):
         self.assertEqual(
             response.context[multi_sel],
             self.site_settings.
-                enable_multi_category_service_directory_search
+            enable_multi_category_service_directory_search
         )
 
         self.assertTrue(
@@ -94,7 +94,7 @@ class TestViews(TestCase, MoloTestCaseMixin):
 
         self.assertTrue(
             self.site_settings.
-                enable_multi_category_service_directory_search)
+            enable_multi_category_service_directory_search)
 
         # self.assertContains(
         #     response, 'type="hidden" name="keywords[]" value="key1"')

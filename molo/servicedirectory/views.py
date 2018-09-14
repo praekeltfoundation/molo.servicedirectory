@@ -92,8 +92,7 @@ class HomeView(TemplateView):
 
             keywords_url = '{0}keywords/?{1}'.format(
                 get_service_directory_api_base_url(self.request),
-                service_directory_query_parms.urlencode()
-            )
+                service_directory_query_parms.urlencode())
 
             keywords = make_request_to_servicedirectory_api(
                 keywords_url,
@@ -119,7 +118,6 @@ class LocationSearchView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(LocationSearchView, self).get_context_data(**kwargs)
-        
         search_term = self.request.GET.get('search')
         keywords = self.request.GET.getlist('keywords[]', [])
         categories = self.request.GET.getlist('categories[]', [])
