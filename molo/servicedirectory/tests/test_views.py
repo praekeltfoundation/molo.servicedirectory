@@ -74,8 +74,8 @@ class TestViews(TestCase, MoloTestCaseMixin):
 
         context = response.context_data
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(context['categories'], [1, 2])
-        self.assertTrue(context['keywords'], ['key1', 'key2'])
+        self.assertEqual(context['categories'], [1, 2])
+        self.assertEqual(context['keywords'], ['key1', 'key2'])
 
         self.assertEqual(
             response.context['ENABLE_SERVICE_DIRECTORY'],
@@ -88,14 +88,23 @@ class TestViews(TestCase, MoloTestCaseMixin):
             self.site_settings.
             enable_multi_category_service_directory_search
         )
+        self.assertEqual(
+            True,
+            self.site_settings.
+            enable_multi_category_service_directory_search
+        )
 
         self.assertTrue(
             self.site_settings.enable_service_directory)
 
         self.assertTrue(
+            self.site_settings.default_service_directory_radius)
+
+        self.assertTrue(
             self.site_settings.
             enable_multi_category_service_directory_search)
 
+        self.assertContains(response, 'Select Service Categories')
         # self.assertContains(
         #     response, 'type="hidden" name="keywords[]" value="key1"')
         # self.assertContains(
@@ -110,8 +119,8 @@ class TestViews(TestCase, MoloTestCaseMixin):
 
         context = response.context_data
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(context['categories'], [1, 2])
-        self.assertTrue(context['keywords'], ['key1', 'key2'])
+        self.assertEqual(context['categories'], [1, 2])
+        self.assertEqual(context['keywords'], ['key1', 'key2'])
 
         # self.assertContains(
         #     response, 'type="hidden" name="categories[]" value="1"')
@@ -134,8 +143,8 @@ class TestViews(TestCase, MoloTestCaseMixin):
 
         context = response.context_data
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(context['categories'], [1, 2])
-        self.assertTrue(context['keywords'], ['key1', 'key2'])
+        self.assertEqual(context['categories'], [1, 2])
+        self.assertEqual(context['keywords'], ['key1', 'key2'])
 
         # self.assertContains(
         #     response, 'type="hidden" name="categories[]" value="1"')
