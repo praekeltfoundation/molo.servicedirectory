@@ -105,10 +105,11 @@ class TestViews(TestCase, MoloTestCaseMixin):
             enable_multi_category_service_directory_search)
 
         self.assertContains(response, 'Select Service Categories')
-        # self.assertContains(
-        #     response, 'type="hidden" name="keywords[]" value="key1"')
-        # self.assertContains(
-        #     response, 'type="hidden" name="keywords[]" value="key2"')
+
+        self.assertContains(
+            response, 'type="hidden" name="keywords[]" value="key1"')
+        self.assertContains(
+            response, 'type="hidden" name="keywords[]" value="key2"')
         self.assertTemplateUsed(
             response, 'servicedirectory/home.html')
 
@@ -122,14 +123,14 @@ class TestViews(TestCase, MoloTestCaseMixin):
         self.assertEqual(context['categories'], [1, 2])
         self.assertEqual(context['keywords'], ['key1', 'key2'])
 
-        # self.assertContains(
-        #     response, 'type="hidden" name="categories[]" value="1"')
-        # self.assertContains(
-        #     response, 'type="hidden" name="categories[]" value="2"')
-        # self.assertContains(
-        #     response, 'type="hidden" name="keywords[]" value="key1"')
-        # self.assertContains(
-        #     response, 'type="hidden" name="keywords[]" value="key2"')
+        self.assertContains(
+            response, 'type="hidden" name="categories[]" value="1"')
+        self.assertContains(
+            response, 'type="hidden" name="categories[]" value="2"')
+        self.assertContains(
+            response, 'type="hidden" name="keywords[]" value="key1"')
+        self.assertContains(
+            response, 'type="hidden" name="keywords[]" value="key2"')
 
         self.assertTemplateUsed(
             response, 'servicedirectory/location_search.html')
@@ -146,14 +147,14 @@ class TestViews(TestCase, MoloTestCaseMixin):
         self.assertEqual(context['categories'], [1, 2])
         self.assertEqual(context['keywords'], ['key1', 'key2'])
 
-        # self.assertContains(
-        #     response, 'type="hidden" name="categories[]" value="1"')
-        # self.assertContains(
-        #     response, 'type="hidden" name="categories[]" value="2"')
-        # self.assertContains(
-        #     response, 'type="hidden" name="keywords[]" value="key1"')
-        # self.assertContains(
-        #     response, 'type="hidden" name="keywords[]" value="key2"')
+        self.assertContains(
+            response, 'type="hidden" name="categories[]" value="1"')
+        self.assertContains(
+            response, 'type="hidden" name="categories[]" value="2"')
+        self.assertContains(
+            response, 'type="hidden" name="keywords[]" value="key1"')
+        self.assertContains(
+            response, 'type="hidden" name="keywords[]" value="key2"')
 
         self.assertTemplateUsed(
             response, 'servicedirectory/location_results.html')

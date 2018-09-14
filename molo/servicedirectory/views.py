@@ -40,11 +40,10 @@ def make_request_to_servicedirectory_api(url, request, data=None):
 
     api_request = Request(url, data=data)
 
-    basic_auth_username = get_service_directory_api_username(request)
-    basic_auth_password = get_service_directory_api_password(request)
+    username = get_service_directory_api_username(request)
+    password = get_service_directory_api_password(request)
     base64string = base64.encodestring(
-        '{0}:{1}'.format(basic_auth_username, basic_auth_password)
-    ).replace('\n', '')
+        ('%s:%s' % (username, password)).encode()).decode().replace('\n', '')
     api_request.add_header("Authorization", "Basic {0}".format(base64string))
     api_request.add_header("Content-Type", "application/json")
 
