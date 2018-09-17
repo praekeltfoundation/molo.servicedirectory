@@ -13,6 +13,12 @@ def enable_service_directory_context(request):
             site_settings.default_service_directory_radius
         )
 
+        if isinstance(radius, (str, unicode)) and radius.isdigit():
+            radius = int(radius)
+
+        if radius and not isinstance(radius, int):
+            radius = site_settings.default_service_directory_radius
+
         multi_category_select = site_settings.\
             enable_multi_category_service_directory_search
 
@@ -27,8 +33,8 @@ def enable_service_directory_context(request):
         )
 
         ctx.update({
+            'SERVICE_DIRECTORY_RADIUS': radius,
             'SERVICE_DIRECTORY_RADIUS_OPTIONS': options,
-            'SERVICE_DIRECTORY_RADIUS': int(radius) if radius else None,
             'SERVICE_DIRECTORY_MULTI_CATEGORY_SELECT': multi_category_select,
         })
 
