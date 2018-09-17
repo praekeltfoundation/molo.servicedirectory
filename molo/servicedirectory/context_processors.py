@@ -13,7 +13,7 @@ def enable_service_directory_context(request):
             site_settings.default_service_directory_radius
         )
 
-        if isinstance(radius, (str, unicode)) and radius.isdigit():
+        if isinstance(radius, str) and radius.isdigit():
             radius = int(radius)
 
         if radius and not isinstance(radius, int):
