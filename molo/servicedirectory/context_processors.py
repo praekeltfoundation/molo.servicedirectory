@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.utils.six import string_types
 from molo.core.models import SiteSettings
 
 
@@ -13,13 +14,13 @@ def enable_service_directory_context(request):
             site_settings.default_service_directory_radius
         )
 
-        if isinstance(radius, str) and radius.isdigit():
+        if isinstance(radius, string_types) and radius.isdigit():
             radius = int(radius)
 
         if radius and not isinstance(radius, int):
             radius = site_settings.default_service_directory_radius
 
-        multi_category_select = site_settings.\
+        multi_category_select = site_settings. \
             enable_multi_category_service_directory_search
 
         options = getattr(
