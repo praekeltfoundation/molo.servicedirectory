@@ -8,18 +8,7 @@
     <input type="text" name="location" value="{{ location_term }}"/>
   </fieldset>
 
-  {% if SERVICE_DIRECTORY_RADIUS  %}
-  <fieldset>
-    <label class="service-dir-hero-label">Show me results within __ KMs away</label>
-    <select name="radius" value="{{ radius }}" >
-      {% for value, label in SERVICE_DIRECTORY_RADIUS_OPTIONS  %}
-      <option {% ifequal value  SERVICE_DIRECTORY_RADIUS %}selected="selected"{% endifequal %} value="{{ value }}">
-        {{ label }}
-      </option>
-      {% endfor %}
-    </select>
-  <fieldset>
-  {% endif %}
+
 
   {% if SERVICE_DIRECTORY_MULTI_CATEGORY_SELECT  %}
   {% for category in categories  %}
