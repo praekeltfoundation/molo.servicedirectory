@@ -12,6 +12,16 @@
   <input type="hidden" name="location" value="{{ location_term }}" />
   <input type="hidden" name="place_id" value="{{ place_id }}" />
 
+  {% if SERVICE_DIRECTORY_MULTI_CATEGORY_SELECT  %}
+  {% for category in categories  %}
+    <input type="hidden" name="categories[]" value="{{ category }}">
+  {% endfor %}
+
+  {% for keyword in keywords  %}
+    <input type="hidden" name="keywords[]" value="{{ keyword }}">
+  {% endfor %}
+  {% endif %}
+
   {% if place_latlng %}
     <input type="hidden" name="place_latlng" value="{{ place_latlng }}">
   {% endif %}

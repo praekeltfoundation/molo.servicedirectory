@@ -11,12 +11,22 @@
             <fieldset>
             <div>Select Service Categories</div>
             {% for category in categories_keywords %}
+                {% for keyword in category.keywords %}
                 <label class="">
-                    {{ category.name|title }}
-                    <input type="checkbox" name="categories[]" value="{{ category.pk }}" />
+                    {{ keyword|title }}
+                    <input type="checkbox"
+                           {% if keyword in keywords %}checked="checked"{% endif %}
+                           name="keywords[]"
+                           value="{{ keyword }}" />
                 </label>
+                {% endfor %}
             {% endfor %}
             </fieldset>
+
+          {% for category in categories  %}
+            <input type="hidden" name="categories[]" value="{{ category }}">
+          {% endfor %}
+
         {% endif %}
 
         <input type="submit" value="Search" />

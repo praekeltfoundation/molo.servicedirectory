@@ -40,11 +40,10 @@ def make_request_to_servicedirectory_api(url, request, data=None):
 
     api_request = Request(url, data=data)
 
-    basic_auth_username = get_service_directory_api_username(request)
-    basic_auth_password = get_service_directory_api_password(request)
+    username = get_service_directory_api_username(request)
+    password = get_service_directory_api_password(request)
     base64string = base64.encodestring(
-        '{0}:{1}'.format(basic_auth_username, basic_auth_password)
-    ).replace('\n', '')
+        ('%s:%s' % (username, password)).encode()).decode().replace('\n', '')
     api_request.add_header("Authorization", "Basic {0}".format(base64string))
     api_request.add_header("Content-Type", "application/json")
 
@@ -74,6 +73,8 @@ class HomeView(TemplateView):
         context = super(HomeView, self).get_context_data(**kwargs)
 
         category = self.request.GET.get('category', None)
+        keywords = self.request.GET.getlist('keywords[]', [])
+        categories = self.request.GET.getlist('categories[]', [])
 
         if not category:
             categories_keywords_url = '{0}homepage_categories_keywords/'\
@@ -90,8 +91,7 @@ class HomeView(TemplateView):
 
             keywords_url = '{0}keywords/?{1}'.format(
                 get_service_directory_api_base_url(self.request),
-                service_directory_query_parms.urlencode()
-            )
+                service_directory_query_parms.urlencode())
 
             keywords = make_request_to_servicedirectory_api(
                 keywords_url,
@@ -105,9 +105,10 @@ class HomeView(TemplateView):
                 }
             ]
 
-        context['categories_keywords'] = categories_keywords
+        context['keywords'] = keywords
         context['and_more'] = not category
-
+        context['categories'] = [int(i) for i in categories]
+        context['categories_keywords'] = categories_keywords
         return context
 
 
@@ -116,10 +117,14 @@ class LocationSearchView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(LocationSearchView, self).get_context_data(**kwargs)
+        search_term = self.request.GET.get('search')
+        keywords = self.request.GET.getlist('keywords[]', [])
+        categories = self.request.GET.getlist('categories[]', [])
 
-        search_term = self.request.GET['search']
+        context['keywords'] = keywords
+        context['categories'] = categories
         context['search_term'] = search_term
-
+        context['categories'] = [int(i) for i in categories]
         return context
 
 
@@ -129,8 +134,10 @@ class LocationResultsView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(LocationResultsView, self).get_context_data(**kwargs)
 
-        search_term = self.request.GET['search']
-        location_term = self.request.GET['location']
+        search_term = self.request.GET.get('search')
+        location_term = self.request.GET.get('location')
+        keywords = self.request.GET.getlist('keywords[]', [])
+        categories = self.request.GET.getlist('categories[]', [])
 
         google_query_parms = QueryDict('', mutable=True)
         google_query_parms['input'] = location_term
@@ -144,8 +151,11 @@ class LocationResultsView(TemplateView):
             url, google_query_parms
         )
 
+        context['keywords'] = keywords
+        context['categories'] = categories
         context['search_term'] = search_term
         context['location_term'] = location_term
+        context['categories'] = [int(i) for i in categories]
         context['autocomplete_suggestions'] = autocomplete_suggestions
 
         return context
@@ -159,9 +169,11 @@ class OrganisationResultsView(TemplateView):
             **kwargs
         )
 
-        search_term = self.request.GET['search']
-        location_term = self.request.GET['location']
-        place_id = self.request.GET['place_id']
+        place_id = self.request.GET.get('place_id')
+        search_term = self.request.GET.get('search')
+        location_term = self.request.GET.get('location')
+        keywords = self.request.GET.getlist('keywords[]', [])
+        categories = self.request.GET.getlist('categories[]', [])
         place_latlng = self.request.GET.get('place_latlng', None)
         place_formatted_address = self.request.GET.get(
             'place_formatted_address', None
@@ -200,8 +212,14 @@ class OrganisationResultsView(TemplateView):
         service_directory_query_parms['radius'] = radius
         service_directory_query_parms['search_term'] = search_term
 
-        if place_latlng is not None:
+        if keywords:
+            service_directory_query_parms['keywords'] = keywords
+
+        if place_latlng:
             service_directory_query_parms['location'] = place_latlng
+
+        if categories:
+            service_directory_query_parms['categories'] = categories
 
         if place_formatted_address is not None:
             service_directory_query_parms['place_name'] =\
@@ -230,10 +248,12 @@ class OrganisationResultsView(TemplateView):
         location_query_parms['location'] = location_term
         location_query_parms['search'] = search_term
 
-        context['search_term'] = search_term
-        context['location_term'] = location_term
         context['place_id'] = place_id
+        context['keywords'] = keywords
+        context['search_term'] = search_term
         context['place_latlng'] = place_latlng
+        context['location_term'] = location_term
+        context['categories'] = [int(i) for i in categories]
         context['place_formatted_address'] = place_formatted_address
         context['change_location_url'] = '{0}?{1}'.format(
             reverse('molo.servicedirectory:location-results'),
@@ -275,7 +295,7 @@ class OrganisationReportIncorrectInformationView(TemplateView):
         context = super(OrganisationReportIncorrectInformationView, self).\
             get_context_data(**kwargs)
 
-        organisation_name = self.request.GET['org_name']
+        organisation_name = self.request.GET.get('org_name')
 
         context['organisation_name'] = organisation_name
 
