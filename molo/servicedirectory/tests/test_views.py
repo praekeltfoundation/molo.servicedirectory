@@ -107,9 +107,9 @@ class TestViews(TestCase, MoloTestCaseMixin):
         self.assertContains(response, 'Select Service Categories')
 
         self.assertContains(
-            response, 'type="hidden" name="keywords[]" value="key1"')
+            response, 'type="hidden" name="categories[]" value="1"')
         self.assertContains(
-            response, 'type="hidden" name="keywords[]" value="key2"')
+            response, 'type="hidden" name="categories[]" value="2"')
         self.assertTemplateUsed(
             response, 'servicedirectory/home.html')
 
