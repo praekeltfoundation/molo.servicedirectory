@@ -7,7 +7,7 @@ def enable_service_directory_context(request):
     enabled = site_settings.enable_service_directory
     ctx = dict(ENABLE_SERVICE_DIRECTORY=enabled)
 
-    if enabled and 'servicedirectory' in request.path:
+    if enabled:
         radius = request.GET.get(
             'radius',
             site_settings.default_service_directory_radius
