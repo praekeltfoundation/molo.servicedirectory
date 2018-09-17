@@ -1,5 +1,11 @@
 CHANGE LOG
 ==========
+6.1.4
+-----
+
+- Move the radius filter form input to the organisation result page
+
+
 6.1.3
 -----
 
