@@ -1,5 +1,10 @@
 CHANGE LOG
 ==========
+6.1.3
+-----
+
+- Bug fixes to keyword and category filtering to service-directory api
+
 6.1.2
 -----
 
