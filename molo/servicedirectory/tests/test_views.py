@@ -219,3 +219,22 @@ class TestViews(TestCase, MoloTestCaseMixin):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(
             response, 'servicedirectory/organisation_report.html')
+
+    def test_invalid_search_params(self):
+        data = {
+            'radius': 'abc',
+            'categories[]': ['abc', 'xyz'],
+            'keywords[]': ['key1', 'key2']
+        }
+        response = self.client.get(
+            reverse('molo.servicedirectory:location-search'), data=data)
+
+        context = response.context_data
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(context['categories'], [])
+        self.assertEqual(context['keywords'], ['key1', 'key2'])
+
+        self.assertEqual(
+            response.context['SERVICE_DIRECTORY_RADIUS'], 25)
+        self.assertTemplateUsed(
+            response, 'servicedirectory/location_search.html')
