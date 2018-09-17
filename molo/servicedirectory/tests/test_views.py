@@ -146,6 +146,8 @@ class TestViews(TestCase, MoloTestCaseMixin):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(context['categories'], [1, 2])
         self.assertEqual(context['keywords'], ['key1', 'key2'])
+        self.assertEqual(
+            response.context['SERVICE_DIRECTORY_RADIUS'], 25)
 
         self.assertContains(
             response, 'type="hidden" name="categories[]" value="1"')
@@ -168,8 +170,11 @@ class TestViews(TestCase, MoloTestCaseMixin):
 
         context = response.context_data
         self.assertEqual(response.status_code, 200)
+
         self.assertEqual(context['categories'], [1, 2])
         self.assertEqual(context['keywords'], ['key1', 'key2'])
+        self.assertEqual(
+            response.context['SERVICE_DIRECTORY_RADIUS'], 25)
 
         self.assertContains(
             response, 'type="hidden" name="categories[]" value="1"')
