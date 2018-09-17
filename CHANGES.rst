@@ -1,5 +1,10 @@
 CHANGE LOG
 ==========
+6.1.5
+-----
+
+- Add validation on radius and category filter inputs
+
 6.1.4
 -----
 

@@ -107,7 +107,7 @@ class HomeView(TemplateView):
 
         context['keywords'] = keywords
         context['and_more'] = not category
-        context['categories'] = [int(i) for i in categories]
+        context['categories'] = [int(i) for i in categories if i.isdigit()]
         context['categories_keywords'] = categories_keywords
         return context
 
@@ -124,7 +124,7 @@ class LocationSearchView(TemplateView):
         context['keywords'] = keywords
         context['categories'] = categories
         context['search_term'] = search_term
-        context['categories'] = [int(i) for i in categories]
+        context['categories'] = [int(i) for i in categories if i.isdigit()]
         return context
 
 
@@ -155,7 +155,7 @@ class LocationResultsView(TemplateView):
         context['categories'] = categories
         context['search_term'] = search_term
         context['location_term'] = location_term
-        context['categories'] = [int(i) for i in categories]
+        context['categories'] = [int(i) for i in categories if i.isdigit()]
         context['autocomplete_suggestions'] = autocomplete_suggestions
 
         return context
@@ -253,7 +253,7 @@ class OrganisationResultsView(TemplateView):
         context['search_term'] = search_term
         context['place_latlng'] = place_latlng
         context['location_term'] = location_term
-        context['categories'] = [int(i) for i in categories]
+        context['categories'] = [int(i) for i in categories if i.isdigit()]
         context['place_formatted_address'] = place_formatted_address
         context['change_location_url'] = '{0}?{1}'.format(
             reverse('molo.servicedirectory:location-results'),
