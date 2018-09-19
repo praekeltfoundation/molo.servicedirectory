@@ -72,18 +72,25 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
 
+        keyword_list = None
         category = self.request.GET.get('category', None)
         keywords = self.request.GET.getlist('keywords[]', [])
         categories = self.request.GET.getlist('categories[]', [])
+
+        site_settings = SiteSettings.for_site(self.request.site)
+        if site_settings.enable_multi_category_service_directory_search:
+            keywords_url = '{0}keywords/'.format(
+                get_service_directory_api_base_url(self.request))
+
+            keyword_list = make_request_to_servicedirectory_api(
+                keywords_url, self.request, data={'show_on_home_page': True})
 
         if not category:
             categories_keywords_url = '{0}homepage_categories_keywords/'\
                 .format(get_service_directory_api_base_url(self.request))
 
             categories_keywords = make_request_to_servicedirectory_api(
-                categories_keywords_url,
-                self.request
-            )
+                categories_keywords_url, self.request)
 
         else:
             service_directory_query_parms = QueryDict('', mutable=True)
@@ -94,21 +101,18 @@ class HomeView(TemplateView):
                 service_directory_query_parms.urlencode())
 
             keywords = make_request_to_servicedirectory_api(
-                keywords_url,
-                self.request
-            )
+                keywords_url, self.request)
 
-            categories_keywords = [
-                {
-                    'name': category,
-                    'keywords': [keyword['name'] for keyword in keywords]
-                }
-            ]
+            categories_keywords = [{
+                'name': category,
+                'keywords': [keyword['name'] for keyword in keywords]
+            }]
 
         context['keywords'] = keywords
         context['and_more'] = not category
-        context['categories'] = [int(i) for i in categories if i.isdigit()]
+        context['keyword_list'] = keyword_list
         context['categories_keywords'] = categories_keywords
+        context['categories'] = [int(i) for i in categories if i.isdigit()]
         return context
 
 
@@ -122,7 +126,6 @@ class LocationSearchView(TemplateView):
         categories = self.request.GET.getlist('categories[]', [])
 
         context['keywords'] = keywords
-        context['categories'] = categories
         context['search_term'] = search_term
         context['categories'] = [int(i) for i in categories if i.isdigit()]
         return context
