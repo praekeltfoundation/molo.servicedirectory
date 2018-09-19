@@ -79,11 +79,11 @@ class HomeView(TemplateView):
 
         site_settings = SiteSettings.for_site(self.request.site)
         if site_settings.enable_multi_category_service_directory_search:
-            keywords_url = '{0}keywords/'.format(
+            keywords_url = '{0}keywords?show_on_home_page=True'.format(
                 get_service_directory_api_base_url(self.request))
 
             keyword_list = make_request_to_servicedirectory_api(
-                keywords_url, self.request, data={'show_on_home_page': True})
+                keywords_url, self.request)
 
         if not category:
             categories_keywords_url = '{0}homepage_categories_keywords/'\
