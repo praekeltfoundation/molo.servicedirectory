@@ -75,6 +75,7 @@ class TestViews(TestCase, MoloTestCaseMixin):
         context = response.context_data
         self.assertEqual(response.status_code, 200)
         self.assertEqual(context['categories'], [1, 2])
+        self.assertTrue('keyword_list' in context.keys())
         self.assertEqual(context['keywords'], ['key1', 'key2'])
 
         self.assertEqual(
