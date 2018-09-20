@@ -9,18 +9,16 @@
 
         {% if SERVICE_DIRECTORY_MULTI_CATEGORY_SELECT  %}
             <fieldset>
-            <div>Select Service Categories</div>
-            {% for category in categories_keywords %}
-                {% for keyword in category.keywords %}
+                <div>Select Service Categories</div>
+                {% for keyword in keyword_list %}
                 <label class="">
-                    {{ keyword|title }}
+                    {{ keyword.name|title }}
                     <input type="checkbox"
-                           {% if keyword in keywords %}checked="checked"{% endif %}
+                           {% if keyword.name in keywords %}checked="checked"{% endif %}
                            name="keywords[]"
-                           value="{{ keyword }}" />
+                           value="{{ keyword.name }}" />
                 </label>
                 {% endfor %}
-            {% endfor %}
             </fieldset>
 
           {% for category in categories  %}

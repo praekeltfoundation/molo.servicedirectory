@@ -1,5 +1,10 @@
 CHANGE LOG
 ==========
+6.1.6
+-----
+
+- Add a show_in_home_page keyword filter to keyword api request
+
 6.1.5
 -----
 
