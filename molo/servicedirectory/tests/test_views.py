@@ -2,7 +2,6 @@ import re
 from mock import patch
 
 from django.test import TestCase
-from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.contrib.contenttypes.models import ContentType
 
