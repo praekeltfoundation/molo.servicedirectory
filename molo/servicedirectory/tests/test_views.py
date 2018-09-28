@@ -2,6 +2,7 @@ import re
 from mock import patch
 
 from django.test import TestCase
+from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.contrib.contenttypes.models import ContentType
 
@@ -150,6 +151,10 @@ class TestViews(TestCase, MoloTestCaseMixin):
             reverse('molo.servicedirectory:location-search'),
             response.url,
         )
+        self.assertIn(
+            'Please select a location',
+            response.cookies['messages'].value
+        )
 
     def test_location_results_view(self):
         data = {
@@ -188,6 +193,10 @@ class TestViews(TestCase, MoloTestCaseMixin):
         self.assertIn(
             reverse('molo.servicedirectory:home'),
             response.url
+        )
+        self.assertIn(
+            'Please select at least one category or service',
+            response.cookies['messages'].value
         )
 
     def test_organisation_results_view(self):
