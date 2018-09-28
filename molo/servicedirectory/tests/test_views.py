@@ -136,8 +136,31 @@ class TestViews(TestCase, MoloTestCaseMixin):
         self.assertTemplateUsed(
             response, 'servicedirectory/location_search.html')
 
+    def test_location_results_view_missing_location(self):
+        data = {
+            'categories[]': [1, 2],
+            'keywords[]': ['key1', 'key2']
+        }
+        response = self.client.get(
+            reverse('molo.servicedirectory:location-results'),
+            data=data
+        )
+
+        self.assertIn(
+            reverse('molo.servicedirectory:location-search'),
+            response.url,
+        )
+        self.assertIn(
+            'Please select a location',
+            response.cookies['messages'].value
+        )
+
     def test_location_results_view(self):
-        data = {'categories[]': [1, 2], 'keywords[]': ['key1', 'key2']}
+        data = {
+            'location': 'test',
+            'categories[]': [1, 2],
+            'keywords[]': ['key1', 'key2']
+        }
         response = self.client.get(
             reverse('molo.servicedirectory:location-results'),
             data=data
@@ -161,6 +184,19 @@ class TestViews(TestCase, MoloTestCaseMixin):
 
         self.assertTemplateUsed(
             response, 'servicedirectory/location_results.html')
+
+    def test_organisation_results_view_no_search_params(self):
+        response = self.client.get(
+            reverse('molo.servicedirectory:organisation-results')
+        )
+        self.assertIn(
+            reverse('molo.servicedirectory:home'),
+            response.url
+        )
+        self.assertIn(
+            'Please select at least one category or service',
+            response.cookies['messages'].value
+        )
 
     def test_organisation_results_view(self):
         data = {
