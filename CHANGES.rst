@@ -1,5 +1,10 @@
 CHANGE LOG
 ==========
+6.1.7
+-----
+
+- Add location and keyword/category validation
+
 6.1.6
 -----
 
