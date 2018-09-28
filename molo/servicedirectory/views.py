@@ -1,11 +1,14 @@
-import base64
 import json
+import base64
 
+from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.http import QueryDict, HttpResponseRedirect
 from django.views.generic import TemplateView, View
-from molo.servicedirectory import settings
+from django.http import QueryDict, HttpResponseRedirect
+from django.utils.translation import ugettext_lazy as _
+
 from molo.core.models import SiteSettings
+from molo.servicedirectory import settings
 
 from six.moves.urllib.request import Request, urlopen
 
@@ -119,6 +122,30 @@ class HomeView(TemplateView):
 class LocationSearchView(TemplateView):
     template_name = 'servicedirectory/location_search.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        site_settings = SiteSettings.for_site(self.request.site)
+
+        multi_category_select = site_settings. \
+            enable_multi_category_service_directory_search
+
+        keywords = self.request.GET.getlist('keywords[]', [])
+        categories = self.request.GET.getlist('categories[]', [])
+
+        if multi_category_select and not any([keywords, categories]):
+            messages.add_message(
+                request, messages.ERROR,
+                _("Please select at least one category or service")
+            )
+
+            search_url = '{}?{}'.format(
+                reverse('molo.servicedirectory:home'),
+                self.request.GET.urlencode()
+            )
+            return HttpResponseRedirect(redirect_to=search_url)
+
+        return super(LocationSearchView, self)\
+            .dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super(LocationSearchView, self).get_context_data(**kwargs)
         search_term = self.request.GET.get('search')
@@ -133,6 +160,22 @@ class LocationSearchView(TemplateView):
 
 class LocationResultsView(TemplateView):
     template_name = 'servicedirectory/location_results.html'
+
+    def dispatch(self, request, *args, **kwargs):
+
+        if not self.request.GET.get('location'):
+            messages.add_message(
+                request, messages.ERROR, _("Please select a location")
+            )
+
+            search_url = '{}?{}'.format(
+                reverse('molo.servicedirectory:location-search'),
+                self.request.GET.urlencode()
+            )
+            return HttpResponseRedirect(redirect_to=search_url)
+
+        return super(LocationResultsView, self)\
+            .dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(LocationResultsView, self).get_context_data(**kwargs)
@@ -166,6 +209,30 @@ class LocationResultsView(TemplateView):
 
 class OrganisationResultsView(TemplateView):
     template_name = 'servicedirectory/organisation_results.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        site_settings = SiteSettings.for_site(self.request.site)
+
+        multi_category_select = site_settings. \
+            enable_multi_category_service_directory_search
+
+        keywords = self.request.GET.getlist('keywords[]', [])
+        categories = self.request.GET.getlist('categories[]', [])
+
+        if multi_category_select and not any([keywords, categories]):
+            messages.add_message(
+                request, messages.ERROR,
+                _("Please select at least one category or service")
+            )
+
+            search_url = '{}?{}'.format(
+                reverse('molo.servicedirectory:home'),
+                self.request.GET.urlencode()
+            )
+            return HttpResponseRedirect(redirect_to=search_url)
+
+        return super(OrganisationResultsView, self)\
+            .dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(OrganisationResultsView, self).get_context_data(
