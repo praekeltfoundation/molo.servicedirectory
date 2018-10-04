@@ -282,14 +282,14 @@ class OrganisationResultsView(TemplateView):
         service_directory_query_parms['radius'] = radius
         service_directory_query_parms['search_term'] = search_term
 
-        if keywords:
-            service_directory_query_parms['keywords'] = keywords
+        for keyword in keywords:
+            service_directory_query_parms['keywords[]'] = keyword
 
         if place_latlng:
             service_directory_query_parms['location'] = place_latlng
 
-        if categories:
-            service_directory_query_parms['categories'] = categories
+        for category in categories:
+            service_directory_query_parms['categories[]'] = category
 
         if place_formatted_address is not None:
             service_directory_query_parms['place_name'] =\
