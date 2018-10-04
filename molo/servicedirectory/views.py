@@ -149,11 +149,13 @@ class LocationSearchView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(LocationSearchView, self).get_context_data(**kwargs)
         search_term = self.request.GET.get('search')
+        location_term = self.request.GET.get('location', '')
         keywords = self.request.GET.getlist('keywords[]', [])
         categories = self.request.GET.getlist('categories[]', [])
 
         context['keywords'] = keywords
         context['search_term'] = search_term
+        context['location_term'] = location_term
         context['categories'] = [int(i) for i in categories if i.isdigit()]
         return context
 
