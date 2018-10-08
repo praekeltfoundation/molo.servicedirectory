@@ -76,8 +76,8 @@ class StepDataMixin(object):
         self.radius = site_settings.default_service_directory_radius
         self.place_id = self.request.GET.get('place_id')
         self.search_term = self.request.GET.get('search')
-        self.location_term = self.request.GET.get('location')
         self.category = self.request.GET.get('category', None)
+        self.location_term = self.request.GET.get('location', '')
         self.radius = self.request.GET.get('radius', self.radius)
         self.keywords = self.request.GET.getlist('keywords[]', [])
         self.place_latlng = self.request.GET.get('place_latlng', None)
@@ -283,14 +283,8 @@ class OrganisationResultsView(StepDataMixin, TemplateView):
         service_directory_query_parms['radius'] = self.radius
         service_directory_query_parms['search_term'] = self.search_term
 
-        if self.keywords:
-            service_directory_query_parms['keywords'] = self.keywords
-
         if self.place_latlng:
             service_directory_query_parms['location'] = self.place_latlng
-
-        if self.categories:
-            service_directory_query_parms['categories'] = self.categories
 
         if self.all_categories:
             service_directory_query_parms[
@@ -304,6 +298,13 @@ class OrganisationResultsView(StepDataMixin, TemplateView):
             get_service_directory_api_base_url(self.request),
             service_directory_query_parms.urlencode()
         )
+
+        for keyword in self.keywords:
+            url += '&keywords[]={}'.format(keyword)
+
+        for category in self.categories:
+            url += '&categories[]={}'.format(category)
+
         search_results = make_request_to_servicedirectory_api(
             url, self.request)
 
