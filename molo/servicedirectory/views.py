@@ -69,16 +69,46 @@ def make_request_to_google_api(url, querydict):
     return json_result
 
 
-class HomeView(TemplateView):
+class StepDataMixin(object):
+
+    def get_data(self):
+        site_settings = SiteSettings.for_site(self.request.site)
+        self.radius = site_settings.default_service_directory_radius
+        self.place_id = self.request.GET.get('place_id')
+        self.search_term = self.request.GET.get('search')
+        self.category = self.request.GET.get('category', None)
+        self.location_term = self.request.GET.get('location', '')
+        self.radius = self.request.GET.get('radius', self.radius)
+        self.keywords = self.request.GET.getlist('keywords[]', [])
+        self.place_latlng = self.request.GET.get('place_latlng', None)
+        self.categories = self.request.GET.getlist('categories[]', [])
+        self.all_categories = self.request.GET.getlist('all_categories')
+        self.place_formatted_address = self.request.GET.get(
+            'place_formatted_address', None
+        )
+
+    def get_form_data_context(self):
+        context = dict()
+        context['place_id'] = self.place_id
+        context['keywords'] = self.keywords
+        context['search_term'] = self.search_term
+        context['place_latlng'] = self.place_latlng
+        context['location_term'] = self.location_term
+        context['categories'] = [
+            int(i) for i in self.categories if i.isdigit()
+        ]
+        return context
+
+
+class HomeView(StepDataMixin, TemplateView):
     template_name = 'servicedirectory/home.html'
 
     def get_context_data(self, **kwargs):
+        self.get_data()
         context = super(HomeView, self).get_context_data(**kwargs)
 
+        keywords = []
         keyword_list = None
-        category = self.request.GET.get('category', None)
-        keywords = self.request.GET.getlist('keywords[]', [])
-        categories = self.request.GET.getlist('categories[]', [])
 
         site_settings = SiteSettings.for_site(self.request.site)
         if site_settings.enable_multi_category_service_directory_search:
@@ -88,7 +118,7 @@ class HomeView(TemplateView):
             keyword_list = make_request_to_servicedirectory_api(
                 keywords_url, self.request)
 
-        if not category:
+        if not self.category:
             categories_keywords_url = '{0}homepage_categories_keywords/'\
                 .format(get_service_directory_api_base_url(self.request))
 
@@ -97,7 +127,7 @@ class HomeView(TemplateView):
 
         else:
             service_directory_query_parms = QueryDict('', mutable=True)
-            service_directory_query_parms['category'] = category
+            service_directory_query_parms['category'] = self.category
 
             keywords_url = '{0}keywords/?{1}'.format(
                 get_service_directory_api_base_url(self.request),
@@ -107,19 +137,19 @@ class HomeView(TemplateView):
                 keywords_url, self.request)
 
             categories_keywords = [{
-                'name': category,
+                'name': self.category,
                 'keywords': [keyword['name'] for keyword in keywords]
             }]
 
         context['keywords'] = keywords
-        context['and_more'] = not category
+        context['and_more'] = not self.category
         context['keyword_list'] = keyword_list
         context['categories_keywords'] = categories_keywords
-        context['categories'] = [int(i) for i in categories if i.isdigit()]
+        context.update(self.get_form_data_context())
         return context
 
 
-class LocationSearchView(TemplateView):
+class LocationSearchView(StepDataMixin, TemplateView):
     template_name = 'servicedirectory/location_search.html'
 
     def dispatch(self, request, *args, **kwargs):
@@ -147,18 +177,13 @@ class LocationSearchView(TemplateView):
             .dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
+        self.get_data()
         context = super(LocationSearchView, self).get_context_data(**kwargs)
-        search_term = self.request.GET.get('search')
-        keywords = self.request.GET.getlist('keywords[]', [])
-        categories = self.request.GET.getlist('categories[]', [])
-
-        context['keywords'] = keywords
-        context['search_term'] = search_term
-        context['categories'] = [int(i) for i in categories if i.isdigit()]
+        context.update(self.get_form_data_context())
         return context
 
 
-class LocationResultsView(TemplateView):
+class LocationResultsView(StepDataMixin, TemplateView):
     template_name = 'servicedirectory/location_results.html'
 
     def dispatch(self, request, *args, **kwargs):
@@ -178,15 +203,11 @@ class LocationResultsView(TemplateView):
             .dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
+        self.get_data()
         context = super(LocationResultsView, self).get_context_data(**kwargs)
 
-        search_term = self.request.GET.get('search')
-        location_term = self.request.GET.get('location')
-        keywords = self.request.GET.getlist('keywords[]', [])
-        categories = self.request.GET.getlist('categories[]', [])
-
         google_query_parms = QueryDict('', mutable=True)
-        google_query_parms['input'] = location_term
+        google_query_parms['input'] = self.location_term
         google_query_parms['types'] = 'geocode'
         google_query_parms['key'] = get_google_places_api_server_key(
             self.request)
@@ -197,17 +218,12 @@ class LocationResultsView(TemplateView):
             url, google_query_parms
         )
 
-        context['keywords'] = keywords
-        context['categories'] = categories
-        context['search_term'] = search_term
-        context['location_term'] = location_term
-        context['categories'] = [int(i) for i in categories if i.isdigit()]
         context['autocomplete_suggestions'] = autocomplete_suggestions
-
+        context.update(self.get_form_data_context())
         return context
 
 
-class OrganisationResultsView(TemplateView):
+class OrganisationResultsView(StepDataMixin, TemplateView):
     template_name = 'servicedirectory/organisation_results.html'
 
     def dispatch(self, request, *args, **kwargs):
@@ -235,29 +251,14 @@ class OrganisationResultsView(TemplateView):
             .dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
+        self.get_data()
         context = super(OrganisationResultsView, self).get_context_data(
             **kwargs
         )
 
-        place_id = self.request.GET.get('place_id')
-        search_term = self.request.GET.get('search')
-        location_term = self.request.GET.get('location')
-        keywords = self.request.GET.getlist('keywords[]', [])
-        categories = self.request.GET.getlist('categories[]', [])
-        place_latlng = self.request.GET.get('place_latlng', None)
-        place_formatted_address = self.request.GET.get(
-            'place_formatted_address', None
-        )
-
-        site_settings = SiteSettings.for_site(self.request.site)
-
-        radius = site_settings.default_service_directory_radius
-        if radius:
-            radius = self.request.GET.get('radius', radius)
-
-        if place_latlng is None:
+        if self.place_latlng is None:
             google_query_parms = QueryDict('', mutable=True)
-            google_query_parms['placeid'] = place_id
+            google_query_parms['placeid'] = self.place_id
             google_query_parms['key'] = get_google_places_api_server_key(
                 self.request)
 
@@ -266,39 +267,44 @@ class OrganisationResultsView(TemplateView):
 
             place_details_result = place_details.get('result', {})
 
-            place_formatted_address = place_details_result.get(
+            self.place_formatted_address = place_details_result.get(
                 'formatted_address', None
             )
-            place_location = place_details_result.get(
+            self.place_location = place_details_result.get(
                 'geometry', {}
             ).get('location', None)
 
-            if place_location:
-                place_latlng = '{0},{1}'.format(
-                    place_location['lat'], place_location['lng']
+            if self.place_location:
+                self.place_latlng = '{0},{1}'.format(
+                    self.place_location['lat'], self.place_location['lng']
                 )
 
         service_directory_query_parms = QueryDict('', mutable=True)
-        service_directory_query_parms['radius'] = radius
-        service_directory_query_parms['search_term'] = search_term
+        service_directory_query_parms['radius'] = self.radius
+        service_directory_query_parms['search_term'] = self.search_term
 
-        if keywords:
-            service_directory_query_parms['keywords'] = keywords
+        if self.place_latlng:
+            service_directory_query_parms['location'] = self.place_latlng
 
-        if place_latlng:
-            service_directory_query_parms['location'] = place_latlng
+        if self.all_categories:
+            service_directory_query_parms[
+                'all_categories'] = self.all_categories
 
-        if categories:
-            service_directory_query_parms['categories'] = categories
-
-        if place_formatted_address is not None:
+        if self.place_formatted_address is not None:
             service_directory_query_parms['place_name'] =\
-                place_formatted_address
+                self.place_formatted_address
 
         url = '{0}search/?{1}'.format(
             get_service_directory_api_base_url(self.request),
             service_directory_query_parms.urlencode()
         )
+
+        for keyword in self.keywords:
+            url += '&keywords[]={}'.format(keyword)
+
+        for category in self.categories:
+            url += '&categories[]={}'.format(category)
+
         search_results = make_request_to_servicedirectory_api(
             url, self.request)
 
@@ -315,23 +321,17 @@ class OrganisationResultsView(TemplateView):
             )
 
         location_query_parms = QueryDict('', mutable=True)
-        location_query_parms['location'] = location_term
-        location_query_parms['search'] = search_term
+        location_query_parms['location'] = self.location_term
+        location_query_parms['search'] = self.search_term
 
-        context['place_id'] = place_id
-        context['keywords'] = keywords
-        context['search_term'] = search_term
-        context['place_latlng'] = place_latlng
-        context['location_term'] = location_term
-        context['categories'] = [int(i) for i in categories if i.isdigit()]
-        context['place_formatted_address'] = place_formatted_address
+        context['place_formatted_address'] = self.place_formatted_address
         context['change_location_url'] = '{0}?{1}'.format(
             reverse('molo.servicedirectory:location-results'),
             location_query_parms.urlencode()
         )
         context['search_results'] = search_results
         context['categories_keywords'] = categories_keywords
-
+        context.update(self.get_form_data_context())
         return context
 
 

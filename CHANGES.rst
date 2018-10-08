@@ -1,5 +1,10 @@
 CHANGE LOG
 ==========
+6.1.8
+-----
+
+- Persist all form step data in view context
+
 6.1.7
 -----
 
