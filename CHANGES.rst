@@ -1,6 +1,6 @@
 CHANGE LOG
 ==========
-6.1.8
+7.0.1
 -----
 
 - Molo version 7 support
