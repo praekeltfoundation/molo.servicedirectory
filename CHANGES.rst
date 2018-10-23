@@ -1,5 +1,11 @@
 CHANGE LOG
 ==========
+7.0.3
+-----
+
+- Service-directory Api call fix for multi select keywords and categories
+
+
 7.0.1
 -----
 
