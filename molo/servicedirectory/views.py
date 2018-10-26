@@ -301,7 +301,7 @@ class OrganisationResultsView(StepDataMixin, TemplateView):
         )
 
         for keyword in self.keywords:
-            url += '&categories[]={}'.format(urlquote(keyword))
+            url += '&keywords[]={}'.format(urlquote(keyword))
 
         for category in self.categories:
             url += '&categories[]={}'.format(urlquote(category))
