@@ -1,5 +1,10 @@
 CHANGE LOG
 ==========
+6.1.9
+-----
+
+- url encode keyword and categories url api params
+
 6.1.8
 -----
 
