@@ -2,6 +2,7 @@ import json
 import base64
 
 from django.contrib import messages
+from django.utils.http import urlquote
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView, View
 from django.http import QueryDict, HttpResponseRedirect
@@ -300,10 +301,10 @@ class OrganisationResultsView(StepDataMixin, TemplateView):
         )
 
         for keyword in self.keywords:
-            url += '&keywords[]={}'.format(keyword)
+            url += '&categories[]={}'.format(urlquote(keyword))
 
         for category in self.categories:
-            url += '&categories[]={}'.format(category)
+            url += '&categories[]={}'.format(urlquote(category))
 
         search_results = make_request_to_servicedirectory_api(
             url, self.request)
