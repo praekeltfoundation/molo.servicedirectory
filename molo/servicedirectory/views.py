@@ -336,10 +336,11 @@ class OrganisationResultsView(StepDataMixin, TemplateView):
         return context
 
 
-class OrganisationDetailView(TemplateView):
+class OrganisationDetailView(StepDataMixin, TemplateView):
     template_name = 'servicedirectory/organisation_detail.html'
 
     def get_context_data(self, **kwargs):
+        self.get_data()
         context = super(OrganisationDetailView, self).get_context_data(
             **kwargs
         )
@@ -355,21 +356,22 @@ class OrganisationDetailView(TemplateView):
 
         context['organisation'] = json_result
         context['message'] = self.request.GET.get('msg', None)
-
+        context.update(self.get_form_data_context())
         return context
 
 
-class OrganisationReportIncorrectInformationView(TemplateView):
+class OrganisationReportIncorrectInformationView(StepDataMixin, TemplateView):
     template_name = 'servicedirectory/organisation_report.html'
 
     def get_context_data(self, **kwargs):
+        self.get_data()
         context = super(OrganisationReportIncorrectInformationView, self).\
             get_context_data(**kwargs)
 
         organisation_name = self.request.GET.get('org_name')
 
         context['organisation_name'] = organisation_name
-
+        context.update(self.get_form_data_context())
         return context
 
     def post(self, request, *args, **kwargs):

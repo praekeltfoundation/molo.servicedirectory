@@ -211,9 +211,9 @@ class TestViews(TestCase, MoloTestCaseMixin):
 
         context = response.context_data
         self.assertEqual(response.status_code, 200)
-
         self.assertEqual(context['categories'], [1, 2])
         self.assertEqual(context['keywords'], ['key1', 'key2'])
+        self.assertEqual(response.context['SERVICE_DIRECTORY_RADIUS'], 5)
         self.assertEqual(
             response.context['SERVICE_DIRECTORY_RADIUS'], 5)
 
@@ -231,7 +231,11 @@ class TestViews(TestCase, MoloTestCaseMixin):
 
     def test_organisation_detail_view(self):
         org = MockOrganisation()
-        data = {}
+        data = {
+            'radius': 5,
+            'categories[]': [1, 2],
+            'keywords[]': ['key1', 'key2']
+        }
         response = self.client.get(
             reverse(
                 'molo.servicedirectory:organisation-detail',
@@ -240,12 +244,19 @@ class TestViews(TestCase, MoloTestCaseMixin):
         )
 
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context_data['categories'], [1, 2])
+        self.assertEqual(response.context['SERVICE_DIRECTORY_RADIUS'], 5)
+        self.assertEqual(response.context_data['keywords'], ['key1', 'key2'])
         self.assertTemplateUsed(
             response, 'servicedirectory/organisation_detail.html')
 
     def test_organisation_report_view(self):
         org = MockOrganisation()
-        data = {}
+        data = {
+            'radius': 5,
+            'categories[]': [1, 2],
+            'keywords[]': ['key1', 'key2']
+        }
         response = self.client.get(
             reverse(
                 'molo.servicedirectory:organisation-report',
@@ -254,6 +265,9 @@ class TestViews(TestCase, MoloTestCaseMixin):
         )
 
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context_data['categories'], [1, 2])
+        self.assertEqual(response.context['SERVICE_DIRECTORY_RADIUS'], 5)
+        self.assertEqual(response.context_data['keywords'], ['key1', 'key2'])
         self.assertTemplateUsed(
             response, 'servicedirectory/organisation_report.html')
 
