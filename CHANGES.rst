@@ -1,5 +1,10 @@
 CHANGE LOG
 ==========
+6.1.10
+------
+
+- persist url params in ReportIncorrectInformationView and OrganisationDetailView
+
 6.1.9
 -----
 
