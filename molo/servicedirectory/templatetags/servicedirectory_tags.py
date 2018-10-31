@@ -14,6 +14,7 @@ def url_params(request):
         'location',
         'place_latlng',
         'all_categories',
+        'place_formatted_address',
         'keywords[]',
         'categories[]',
     ]

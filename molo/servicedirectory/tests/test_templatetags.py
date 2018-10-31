@@ -17,6 +17,7 @@ class TestTemplateTagsProcessors(MoloTestCaseMixin, TestCase):
             'all_categories': True,
             'keywords[]': 'keyword',
             'categories[]': 'category',
+            'place_formatted_address': 'formatted_address',
         }
         request = RequestFactory().get('/', data=data)
         str_params = servicedirectory_tags.url_params(request)
