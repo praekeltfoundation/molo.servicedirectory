@@ -349,8 +349,11 @@ class OrganisationDetailView(StepDataMixin, TemplateView):
             get_service_directory_api_base_url(self.request)
         organisation_id = self.kwargs['organisation_id']
 
-        url = '{0}organisation/{1}/'.format(service_directory_api_base_url,
-                                            organisation_id)
+        url = '{0}organisation/{1}/?location={2}'.format(
+            service_directory_api_base_url,
+            organisation_id,
+            self.place_latlng,
+        )
 
         json_result = make_request_to_servicedirectory_api(url, self.request)
 
