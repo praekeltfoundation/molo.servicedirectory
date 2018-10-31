@@ -1,5 +1,10 @@
 CHANGE LOG
 ==========
+6.1.11
+------
+
+- Add servicedirectory_tags template tags
+
 6.1.10
 ------
 
