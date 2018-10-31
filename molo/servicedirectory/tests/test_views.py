@@ -234,6 +234,7 @@ class TestViews(TestCase, MoloTestCaseMixin):
         data = {
             'radius': 5,
             'categories[]': [1, 2],
+            'place_latlng': '-1,1',
             'keywords[]': ['key1', 'key2']
         }
         response = self.client.get(
@@ -244,6 +245,7 @@ class TestViews(TestCase, MoloTestCaseMixin):
         )
 
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context_data['place_latlng'], '-1,1')
         self.assertEqual(response.context_data['categories'], [1, 2])
         self.assertEqual(response.context['SERVICE_DIRECTORY_RADIUS'], 5)
         self.assertEqual(response.context_data['keywords'], ['key1', 'key2'])

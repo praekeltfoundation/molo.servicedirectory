@@ -83,7 +83,7 @@ class StepDataMixin(object):
         self.keywords = self.request.GET.getlist('keywords[]', [])
         self.place_latlng = self.request.GET.get('place_latlng', None)
         self.categories = self.request.GET.getlist('categories[]', [])
-        self.all_categories = self.request.GET.getlist('all_categories')
+        self.all_categories = self.request.GET.get('all_categories')
         self.place_formatted_address = self.request.GET.get(
             'place_formatted_address', None
         )
@@ -349,8 +349,11 @@ class OrganisationDetailView(StepDataMixin, TemplateView):
             get_service_directory_api_base_url(self.request)
         organisation_id = self.kwargs['organisation_id']
 
-        url = '{0}organisation/{1}/'.format(service_directory_api_base_url,
-                                            organisation_id)
+        url = '{0}organisation/{1}/?location={2}'.format(
+            service_directory_api_base_url,
+            organisation_id,
+            self.place_latlng,
+        )
 
         json_result = make_request_to_servicedirectory_api(url, self.request)
 
