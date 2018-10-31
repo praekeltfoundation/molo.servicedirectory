@@ -83,7 +83,7 @@ class StepDataMixin(object):
         self.keywords = self.request.GET.getlist('keywords[]', [])
         self.place_latlng = self.request.GET.get('place_latlng', None)
         self.categories = self.request.GET.getlist('categories[]', [])
-        self.all_categories = self.request.GET.getlist('all_categories')
+        self.all_categories = self.request.GET.get('all_categories')
         self.place_formatted_address = self.request.GET.get(
             'place_formatted_address', None
         )
