@@ -18,21 +18,34 @@ class MockOrganisation(object):
     pk = 1
 
 
-def mock_make_request_to_servicedirectory_api(return_value):
+def mock_make_request_to_api(return_value):
 
     class MyMock(object):
         def read(self):
+            return_json = '{}'
             url = return_value.get_full_url()
             # in case id's is required by url reversing
             if re.search('organisation/\d+/', url):
-                return '{"id": 1}'
-            return '{}'
+                return_json = '{"id": 1}'
+
+            elif re.search('googleapis.com', url):
+                return_json = '''{"result": {
+                    "geometry": {
+                        "location": {
+                                "lat": -33.92215060000001,
+                                 "lng": 18.4250626
+                             }
+                        }
+                    }
+                }
+                '''
+            return return_json
     return MyMock()
 
 
 @patch(
     'six.moves.urllib.request.urlopen',
-    new=mock_make_request_to_servicedirectory_api
+    new=mock_make_request_to_api
 )
 class TestViews(TestCase, MoloTestCaseMixin):
     def setUp(self):
@@ -200,6 +213,7 @@ class TestViews(TestCase, MoloTestCaseMixin):
 
     def test_organisation_results_view(self):
         data = {
+            'location': 'cape town',
             'radius': 5,
             'categories[]': [1, 2],
             'keywords[]': ['key1', 'key2']
@@ -216,6 +230,12 @@ class TestViews(TestCase, MoloTestCaseMixin):
         self.assertEqual(response.context['SERVICE_DIRECTORY_RADIUS'], 5)
         self.assertEqual(
             response.context['SERVICE_DIRECTORY_RADIUS'], 5)
+
+        # check mutated get var contains place_latlng
+        self.assertEquals(
+            response.wsgi_request.GET['place_latlng'],
+            '-33.9221506,18.4250626'
+        )
 
         self.assertContains(
             response, 'type="hidden" name="categories[]" value="1"')
