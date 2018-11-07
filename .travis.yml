@@ -31,6 +31,7 @@ deploy:
     secure: "qpQHCSL241+jZwGRwW4I4sYtpGgAJX900aipB60HXVJr8jORkhxBtfV3GMl4GNK1Y6Iga7RMwYCGJJ5ZbmIV5hCBGa15m0VZ7aFKrU8ot89zUf03nHyX2vFzGort66Yew3QTWChqO0L4L6q/kjrgQ6BFQsn5JTHqNdZVLAVvx3v+mHfhCXzKAm4NkNgfiw3G2dEJitn280EppimTgMLwmZjOtotfzzExBAIs7ugwaLeFAhfjf3f7FLSzX3B5E2U2TSfvyecXLOH/O20kllkOtoR5wzxalbNWCv8/K1s1d1AQhnuXZW/jvsquZekXQJCXAQo+cQ/rg+2zGyK09L1ds9ag/Xl/5zwJZvcwy/P+uBEbBAkb+dLXDWe8z+AZfU9HEkcmdoQSOHPHWmDPIWtVB03DJ+dIo1HhpPNVWzYltY0npPaikj+Ije/s4hWAUNZMsuz4sSiiRTE3ucQFtoKu+ujcZKptA/HRdGJ4IXL+X3KRlBJ3iLEBSTw78PA/wGMyEOzFaL0/3QY4hOrWyfBxrfmHszY0kDXeLi7xgQNToXzO7J2lH5PgH6Fx5fH5liwsnAlxo0aSuoBRNbP0sn0j3AkpysNmfvQC1rYkeHfV/PJa5hJuII9Eh4BIwU88vjhMGfaxVMgLJfQhOEtKwEH+CczkXHZqmXoUe/5smecDIjI="
   on:
     tags: true
+    python: "2.7"
     all_branches: true
 
 notifications:
