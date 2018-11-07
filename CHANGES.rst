@@ -1,5 +1,10 @@
 CHANGE LOG
 ==========
+6.1.13
+------
+
+- Update travis file
+
 6.1.12
 ------
 
