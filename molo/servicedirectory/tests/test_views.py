@@ -32,7 +32,7 @@ def mock_make_request_to_api(return_value):
                 return_json = '''{"result": {
                     "geometry": {
                         "location": {
-                                "lat": -33.92215060000001,
+                                "lat": -33.9221506,
                                  "lng": 18.4250626
                              }
                         }
