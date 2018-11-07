@@ -286,6 +286,10 @@ class OrganisationResultsView(StepDataMixin, TemplateView):
 
         if self.place_latlng:
             service_directory_query_parms['location'] = self.place_latlng
+            # update get params
+            if not self.request.GET._mutable:
+                self.request.GET._mutable = True
+            self.request.GET['place_latlng'] = self.place_latlng
 
         if self.all_categories:
             service_directory_query_parms[

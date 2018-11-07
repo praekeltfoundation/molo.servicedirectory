@@ -1,5 +1,10 @@
 CHANGE LOG
 ==========
+6.1.12
+------
+
+- Dynamically add place_latlng to get params
+
 6.1.11
 ------
 
