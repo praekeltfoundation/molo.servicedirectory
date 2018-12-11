@@ -1,5 +1,10 @@
 CHANGE LOG
 ==========
+6.1.14
+------
+
+- Remove radius field in API call if not set
+
 6.1.13
 ------
 
