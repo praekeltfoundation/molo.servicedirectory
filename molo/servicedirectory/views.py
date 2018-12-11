@@ -281,7 +281,8 @@ class OrganisationResultsView(StepDataMixin, TemplateView):
                 )
 
         service_directory_query_parms = QueryDict('', mutable=True)
-        service_directory_query_parms['radius'] = self.radius
+        if self.radius:
+            service_directory_query_parms['radius'] = self.radius
         service_directory_query_parms['search_term'] = self.search_term
 
         if self.place_latlng:
