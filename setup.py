@@ -27,7 +27,7 @@ setup(
     long_description=readme,
     author="Praekelt Foundation",
     author_email='dev@praekeltfoundation.org',
-    url='https://github.com/praekelt/molo.servicedirectory',
+    url='https://github.com/praekeltfoundation/molo.servicedirectory',
     packages=find_packages(exclude='molo.project'),
     namespace_packages=['molo'],
     include_package_data=True,
@@ -38,7 +38,6 @@ setup(
     classifiers=[
         'Intended Audience :: Developers',
         'Natural Language :: English',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.6',
     ]
 )
