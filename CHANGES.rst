@@ -1,5 +1,10 @@
 CHANGE LOG
 ==========
+8.0.0
+-----
+
+- Molo version 8 support and drop Python 2 support
+
 7.0.3
 -----
 
