@@ -3,7 +3,7 @@ import base64
 
 from django.contrib import messages
 from django.utils.http import urlquote
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.views.generic import TemplateView, View
 from django.http import QueryDict, HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
