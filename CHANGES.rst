@@ -1,5 +1,31 @@
 CHANGE LOG
 ==========
+10.0.0
+------
+
+- Molo version 10 support and Django 2.2 support
+
+8.0.0
+-----
+
+- Molo version 8 support and drop Python 2 support
+
+7.0.3
+-----
+
+- Service-directory Api call fix for multi select keywords and categories
+
+
+7.0.1
+-----
+
+- Molo version 7 support
+
+6.1.8
+-----
+
+- Persist all form step data in view context
+
 6.1.7
 -----
 

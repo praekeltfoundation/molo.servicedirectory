@@ -1,7 +1,6 @@
 sudo: false
 language: python
 python:
-  - "2.7"
   - "3.6"
 cache: 'pip'
 
@@ -28,10 +27,10 @@ deploy:
   distributions: sdist bdist_wheel
   user: Praekelt
   password:
-    secure: "qpQHCSL241+jZwGRwW4I4sYtpGgAJX900aipB60HXVJr8jORkhxBtfV3GMl4GNK1Y6Iga7RMwYCGJJ5ZbmIV5hCBGa15m0VZ7aFKrU8ot89zUf03nHyX2vFzGort66Yew3QTWChqO0L4L6q/kjrgQ6BFQsn5JTHqNdZVLAVvx3v+mHfhCXzKAm4NkNgfiw3G2dEJitn280EppimTgMLwmZjOtotfzzExBAIs7ugwaLeFAhfjf3f7FLSzX3B5E2U2TSfvyecXLOH/O20kllkOtoR5wzxalbNWCv8/K1s1d1AQhnuXZW/jvsquZekXQJCXAQo+cQ/rg+2zGyK09L1ds9ag/Xl/5zwJZvcwy/P+uBEbBAkb+dLXDWe8z+AZfU9HEkcmdoQSOHPHWmDPIWtVB03DJ+dIo1HhpPNVWzYltY0npPaikj+Ije/s4hWAUNZMsuz4sSiiRTE3ucQFtoKu+ujcZKptA/HRdGJ4IXL+X3KRlBJ3iLEBSTw78PA/wGMyEOzFaL0/3QY4hOrWyfBxrfmHszY0kDXeLi7xgQNToXzO7J2lH5PgH6Fx5fH5liwsnAlxo0aSuoBRNbP0sn0j3AkpysNmfvQC1rYkeHfV/PJa5hJuII9Eh4BIwU88vjhMGfaxVMgLJfQhOEtKwEH+CczkXHZqmXoUe/5smecDIjI="
+    secure: "ANT/oHJW8YUwFAAdTAbKNoOkaQkdlvUsMBsugghUMr8JVHOGlkbMQFjAoAgabHEot9l538msYvSRPpPh19XUirjEMwsMAP4Qg3mewe0dpib2ebFICtR7KqBARMpY6/AgrI29H3yDheZUu3jBAD2n1x+fWb1yRvFHkyKr9v/AXenOnYHJ/TGALgGytcGWO//IHTy7osTenjp7gqO9lrKFAfx/wpzXw2AABK+CrOcndpiw1sc/xJ5BDI91C5Y9tOESUX5YRXqWSAg2lMcuYav6pRcHvZF9BHD2QYA2iz8bpNIi+EI/3HRMNAZsQhYEBr+4Z2+V4TmoXc1XVz5IJ3NMvrALfxetJMwqSLOj8eShvckMEHa5Tu526Py/3YHI10WPC5DNExwD5/UoYjA3HIFgqCbUE7AM12rPMJzyWHJ08WB7GSZQDzq9orcRkl6w7m1aniMCfKfF9E7bYcd3BLYGE5/N0FwLtiFwkFiAW+Afe7LAcLMqlszjINA8do2TUYHlN8QtCyTVD+VNQN3GeM/VqbnJbMdkk9Zoz43sdGQYMl7ZatkdDtpeJbyWPGax8cvMHUSfbZhVlHSkOxJBlXMX9yufb7tWGZtMCyJwBZkjnBBx55eSSeaNydyKsRGN1Gg4aT5krixKf1nvwsWaLRFQlBsys1a3tfUSAJ1QHeK5Rs8="
   on:
     tags: true
-    all_branches: true
+    python: 3.6
 
 notifications:
   slack: praekeltfoundation:mgvd7PsJynKvMoximpSmuusw
