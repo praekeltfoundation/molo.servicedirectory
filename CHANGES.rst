@@ -1,5 +1,10 @@
 CHANGE LOG
 ==========
+10.0.0
+------
+
+- Molo version 10 support and Django 2.2 support
+
 8.0.0
 -----
 
