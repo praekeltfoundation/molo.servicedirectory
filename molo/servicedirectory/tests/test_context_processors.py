@@ -9,9 +9,10 @@ from molo.servicedirectory.context_processors \
 class TestContextProcessors(MoloTestCaseMixin, TestCase):
 
     def test_enable_service_directory_context(self):
+        self.mk_root()
         site = Site.objects.create(
             hostname='hostname', site_name='sitename',
-            root_page_id=1,
+            root_page_id=self.root.pk,
             is_default_site=True
         )
         site_setting = SiteSettings.objects.create(
