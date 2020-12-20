@@ -1,5 +1,5 @@
 {% extends 'servicedirectory/content_base.html' %}
-{% load staticfiles %}
+{% load static %}
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'servicedirectory/sd-base.css' %}"/>
@@ -21,7 +21,7 @@
         </li>
     {% endfor %}
     </ul>
-    
+
     {% if organisation.telephone or organisation.email or organisation.web %}
         <h3 class="service-directory__title">Contact</h3>
         <h6 class="service-directory__contact">
