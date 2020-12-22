@@ -24,7 +24,7 @@ def mock_make_request_to_servicedirectory_api(return_value):
         def read(self):
             url = return_value.get_full_url()
             # in case id's is required by url reversing
-            if re.search('organisation/\d+/', url):
+            if re.search(r'organisation/\d+/', url):
                 return '{"id": 1}'
             return '{}'
     return MyMock()
