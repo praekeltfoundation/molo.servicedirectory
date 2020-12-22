@@ -1,2 +1,2 @@
-molo.core>=10.0.0
+molo.core>=11.0.0
 six>=1,<2
