@@ -21,10 +21,10 @@ class TestContextProcessors(MoloTestCaseMixin, TestCase):
             default_service_directory_radius=25,
             enable_multi_category_service_directory_search=True,
         )
-        request = RequestFactory()
+        factory = RequestFactory()
+        request = factory.get('/customer/details')
         request.GET = {'search': 'test'}
         request.path = 'servicedirectory/'
-        request.get_host = 'localhost'
         ctx = enable_service_directory_context(request)
         self.assertEqual(
             ctx, {
