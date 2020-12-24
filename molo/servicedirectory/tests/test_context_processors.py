@@ -23,7 +23,6 @@ class TestContextProcessors(MoloTestCaseMixin, TestCase):
         )
         request = RequestFactory()
         request.GET = {'search': 'test'}
-        request.site = site
         request.path = 'servicedirectory/'
         ctx = enable_service_directory_context(request)
         self.assertEqual(

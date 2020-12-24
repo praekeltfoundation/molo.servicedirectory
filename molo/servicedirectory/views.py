@@ -118,7 +118,7 @@ class HomeView(StepDataMixin, TemplateView):
         keywords = []
         keyword_list = None
 
-        site = Site.find_for_request(request)
+        site = Site.find_for_request(self.request)
         site_settings = SiteSettings.for_site(site)
         if site_settings.enable_multi_category_service_directory_search:
             keywords_url = '{0}keywords?show_on_home_page=True'.format(
