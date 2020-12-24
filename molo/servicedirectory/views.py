@@ -13,27 +13,33 @@ from molo.servicedirectory import settings
 
 from six.moves.urllib.request import Request, urlopen
 
+from wagtail.core.models import Site
+
 
 def get_service_directory_api_username(request):
-    site_settings = SiteSettings.for_site(request.site)
+    site = Site.find_for_request(request)
+    site_settings = SiteSettings.for_site(site)
     return (site_settings.service_directory_api_username or
             settings.SERVICE_DIRECTORY_API_USERNAME)
 
 
 def get_service_directory_api_password(request):
-    site_settings = SiteSettings.for_site(request.site)
+    site = Site.find_for_request(request)
+    site_settings = SiteSettings.for_site(site)
     return (site_settings.service_directory_api_password or
             settings.SERVICE_DIRECTORY_API_PASSWORD)
 
 
 def get_service_directory_api_base_url(request):
-    site_settings = SiteSettings.for_site(request.site)
+    site = Site.find_for_request(request)
+    site_settings = SiteSettings.for_site(site)
     return (site_settings.service_directory_api_base_url or
             settings.SERVICE_DIRECTORY_API_BASE_URL)
 
 
 def get_google_places_api_server_key(request):
-    site_settings = SiteSettings.for_site(request.site)
+    site = Site.find_for_request(request)
+    site_settings = SiteSettings.for_site(site)
     return (site_settings.google_places_api_server_key or
             settings.GOOGLE_PLACES_API_SERVER_KEY)
 
@@ -73,7 +79,8 @@ def make_request_to_google_api(url, querydict):
 class StepDataMixin(object):
 
     def get_data(self):
-        site_settings = SiteSettings.for_site(self.request.site)
+        site = Site.find_for_request(self.request)
+        site_settings = SiteSettings.for_site(site)
         self.radius = site_settings.default_service_directory_radius
         self.place_id = self.request.GET.get('place_id')
         self.search_term = self.request.GET.get('search')
@@ -111,7 +118,8 @@ class HomeView(StepDataMixin, TemplateView):
         keywords = []
         keyword_list = None
 
-        site_settings = SiteSettings.for_site(self.request.site)
+        site = Site.find_for_request(self.request)
+        site_settings = SiteSettings.for_site(site)
         if site_settings.enable_multi_category_service_directory_search:
             keywords_url = '{0}keywords?show_on_home_page=True'.format(
                 get_service_directory_api_base_url(self.request))
@@ -154,7 +162,8 @@ class LocationSearchView(StepDataMixin, TemplateView):
     template_name = 'servicedirectory/location_search.html'
 
     def dispatch(self, request, *args, **kwargs):
-        site_settings = SiteSettings.for_site(self.request.site)
+        site = Site.find_for_request(self.request)
+        site_settings = SiteSettings.for_site(site)
 
         multi_category_select = site_settings. \
             enable_multi_category_service_directory_search
@@ -228,7 +237,8 @@ class OrganisationResultsView(StepDataMixin, TemplateView):
     template_name = 'servicedirectory/organisation_results.html'
 
     def dispatch(self, request, *args, **kwargs):
-        site_settings = SiteSettings.for_site(self.request.site)
+        site = Site.find_for_request(request)
+        site_settings = SiteSettings.for_site(site)
 
         multi_category_select = site_settings. \
             enable_multi_category_service_directory_search
