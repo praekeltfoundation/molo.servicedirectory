@@ -5,7 +5,7 @@ from wagtail.core.models import Site
 
 
 def enable_service_directory_context(request):
-    site = Site.find_for_request(request)
+    site = settings.site
     site_settings = SiteSettings.for_site(site)
     enabled = site_settings.enable_service_directory
     ctx = dict(ENABLE_SERVICE_DIRECTORY=enabled)

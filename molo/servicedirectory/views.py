@@ -2,6 +2,7 @@ import json
 import base64
 
 from django.contrib import messages
+from django.conf import settings
 from django.utils.http import urlquote
 from django.urls import reverse
 from django.views.generic import TemplateView, View
@@ -9,39 +10,37 @@ from django.http import QueryDict, HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
 
 from molo.core.models import SiteSettings
-from molo.servicedirectory import settings
+from molo.servicedirectory import settings as molo_settings
 
 from six.moves.urllib.request import Request, urlopen
 
-from wagtail.core.models import Site
-
 
 def get_service_directory_api_username(request):
-    site = Site.find_for_request(request)
+    site = settings.site
     site_settings = SiteSettings.for_site(site)
     return (site_settings.service_directory_api_username or
-            settings.SERVICE_DIRECTORY_API_USERNAME)
+            molo_settings.SERVICE_DIRECTORY_API_USERNAME)
 
 
 def get_service_directory_api_password(request):
-    site = Site.find_for_request(request)
+    site = settings.site
     site_settings = SiteSettings.for_site(site)
     return (site_settings.service_directory_api_password or
-            settings.SERVICE_DIRECTORY_API_PASSWORD)
+            molo_settings.SERVICE_DIRECTORY_API_PASSWORD)
 
 
 def get_service_directory_api_base_url(request):
-    site = Site.find_for_request(request)
+    site = settings.site
     site_settings = SiteSettings.for_site(site)
     return (site_settings.service_directory_api_base_url or
-            settings.SERVICE_DIRECTORY_API_BASE_URL)
+            molo_settings.SERVICE_DIRECTORY_API_BASE_URL)
 
 
 def get_google_places_api_server_key(request):
-    site = Site.find_for_request(request)
+    site = settings.site
     site_settings = SiteSettings.for_site(site)
     return (site_settings.google_places_api_server_key or
-            settings.GOOGLE_PLACES_API_SERVER_KEY)
+            molo_settings.GOOGLE_PLACES_API_SERVER_KEY)
 
 
 def make_request_to_servicedirectory_api(url, request, data=None):
@@ -79,7 +78,7 @@ def make_request_to_google_api(url, querydict):
 class StepDataMixin(object):
 
     def get_data(self):
-        site = Site.find_for_request(self.request)
+        site = settings.site
         site_settings = SiteSettings.for_site(site)
         self.radius = site_settings.default_service_directory_radius
         self.place_id = self.request.GET.get('place_id')
@@ -118,7 +117,7 @@ class HomeView(StepDataMixin, TemplateView):
         keywords = []
         keyword_list = None
 
-        site = Site.find_for_request(self.request)
+        site = settings.site
         site_settings = SiteSettings.for_site(site)
         if site_settings.enable_multi_category_service_directory_search:
             keywords_url = '{0}keywords?show_on_home_page=True'.format(
@@ -162,7 +161,7 @@ class LocationSearchView(StepDataMixin, TemplateView):
     template_name = 'servicedirectory/location_search.html'
 
     def dispatch(self, request, *args, **kwargs):
-        site = Site.find_for_request(self.request)
+        site = settings.site
         site_settings = SiteSettings.for_site(site)
 
         multi_category_select = site_settings. \
@@ -237,7 +236,7 @@ class OrganisationResultsView(StepDataMixin, TemplateView):
     template_name = 'servicedirectory/organisation_results.html'
 
     def dispatch(self, request, *args, **kwargs):
-        site = Site.find_for_request(request)
+        site = settings.site
         site_settings = SiteSettings.for_site(site)
 
         multi_category_select = site_settings. \
