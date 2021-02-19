@@ -1,7 +1,12 @@
 CHANGE LOG
 ==========
 
-10.0.1
+11.1.0
+------
+- Get site from wagtail cache
+
+
+11.0.0
 ------
 - Django 3 support
 
