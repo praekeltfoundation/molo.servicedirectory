@@ -16,28 +16,28 @@ from six.moves.urllib.request import Request, urlopen
 
 
 def get_service_directory_api_username(request):
-    site = settings.site
+    site = request._wagtail_site
     site_settings = SiteSettings.for_site(site)
     return (site_settings.service_directory_api_username or
             molo_settings.SERVICE_DIRECTORY_API_USERNAME)
 
 
 def get_service_directory_api_password(request):
-    site = settings.site
+    site = request._wagtail_site
     site_settings = SiteSettings.for_site(site)
     return (site_settings.service_directory_api_password or
             molo_settings.SERVICE_DIRECTORY_API_PASSWORD)
 
 
 def get_service_directory_api_base_url(request):
-    site = settings.site
+    site = request._wagtail_site
     site_settings = SiteSettings.for_site(site)
     return (site_settings.service_directory_api_base_url or
             molo_settings.SERVICE_DIRECTORY_API_BASE_URL)
 
 
 def get_google_places_api_server_key(request):
-    site = settings.site
+    site = request._wagtail_site
     site_settings = SiteSettings.for_site(site)
     return (site_settings.google_places_api_server_key or
             molo_settings.GOOGLE_PLACES_API_SERVER_KEY)
@@ -78,7 +78,7 @@ def make_request_to_google_api(url, querydict):
 class StepDataMixin(object):
 
     def get_data(self):
-        site = settings.site
+        site = self.request._wagtail_site
         site_settings = SiteSettings.for_site(site)
         self.radius = site_settings.default_service_directory_radius
         self.place_id = self.request.GET.get('place_id')
@@ -117,7 +117,7 @@ class HomeView(StepDataMixin, TemplateView):
         keywords = []
         keyword_list = None
 
-        site = settings.site
+        site = self.request._wagtail_site
         site_settings = SiteSettings.for_site(site)
         if site_settings.enable_multi_category_service_directory_search:
             keywords_url = '{0}keywords?show_on_home_page=True'.format(
@@ -161,7 +161,7 @@ class LocationSearchView(StepDataMixin, TemplateView):
     template_name = 'servicedirectory/location_search.html'
 
     def dispatch(self, request, *args, **kwargs):
-        site = settings.site
+        site = request._wagtail_site
         site_settings = SiteSettings.for_site(site)
 
         multi_category_select = site_settings. \
@@ -236,7 +236,7 @@ class OrganisationResultsView(StepDataMixin, TemplateView):
     template_name = 'servicedirectory/organisation_results.html'
 
     def dispatch(self, request, *args, **kwargs):
-        site = settings.site
+        site = request._wagtail_site
         site_settings = SiteSettings.for_site(site)
 
         multi_category_select = site_settings. \
