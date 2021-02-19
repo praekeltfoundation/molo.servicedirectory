@@ -2,7 +2,6 @@ import json
 import base64
 
 from django.contrib import messages
-from django.conf import settings
 from django.utils.http import urlquote
 from django.urls import reverse
 from django.views.generic import TemplateView, View
